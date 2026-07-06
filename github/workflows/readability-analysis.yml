@@ -1,0 +1,188 @@
+name: Readability Analysis
+
+# Asks Claude to review every pull request's diff for READABILITY — not bugs
+# (push-bug-analysis.yml owns those). The bar: a solo developer who juggles
+# multiple projects opens this code two months from now, without any context,
+# and understands it easily. Results are posted as a single PR comment that is
+# updated in place on each push.
+#
+# Same architecture as push-bug-analysis.yml: Claude only analyzes and writes
+# a report file; all GitHub plumbing is deterministic shell, and the model
+# never holds a GitHub token (prompt-injection safe). Needs the
+# CLAUDE_CODE_OAUTH_TOKEN repository secret (`claude setup-token`).
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: readability-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  analyze:
+    if: '!github.event.pull_request.draft || github.event.action == ''ready_for_review'''
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so the merge-base diff below always resolves.
+          fetch-depth: 0
+
+      - name: Resolve diff range
+        id: range
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          # Diff from the merge-base so the report covers exactly what the PR
+          # adds, even when base has moved on.
+          base=$(git merge-base "$BASE_SHA" "$HEAD_SHA" 2>/dev/null || echo "$BASE_SHA")
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+
+      - name: Analyze changes for readability
+        id: analysis
+        timeout-minutes: 14
+        uses: anthropics/claude-code-base-action@beta
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          model: claude-sonnet-5
+          max_turns: "50"
+          prompt: |
+            Run `git diff ${{ steps.range.outputs.base }} ${{ github.event.pull_request.head.sha }}`
+            in this repository to see everything this pull request changes.
+
+            Review the changed code for READABILITY only — do not report bugs
+            (another workflow owns that). The bar: a solo developer who works
+            on several projects opens this code TWO MONTHS from now, with no
+            memory of it, and must understand it easily. Evaluate:
+
+            - Names: do variables/functions/files say what they are and do,
+              removing the need for comments?
+            - Function size and shape: one job per function, early returns,
+              shallow nesting, low cognitive load per screen of code.
+            - Indirection: is every abstraction earning its keep, or does the
+              reader have to chase layers to find the actual behavior?
+            - Comments: only where they explain a non-obvious WHY; flag both
+              noise comments and missing why-comments on genuinely tricky code.
+            - Consistency: does the new code match the surrounding idiom, or
+              does it invent a second pattern for the same thing?
+            - Simplicity: could this be fewer lines, files, or concepts
+              without losing clarity? Is anything speculative (built for a
+              case that doesn't exist yet)?
+
+            Write the report in Brazilian Portuguese. Be direct: no filler,
+            no hedging. Use exactly this structure (GitHub-flavored Markdown):
+
+            ## 📖 Análise de legibilidade
+
+            **Veredito:** <nota A/B/C/D> — <uma frase: dá para entender este código daqui a 2 meses?>
+
+            If there are findings, add a summary table and one short section
+            per finding, numbered to match:
+
+            | # | Impacto | Arquivo | Problema |
+            |---|---------|---------|----------|
+            | 1 | alto | `src/exemplo.ts:42` | resumo em uma frase |
+
+            ### 1. <título direto> — `arquivo:linha`
+
+            <1 a 3 frases: por que isso dificulta a leitura futura.>
+
+            **Sugestão:**
+            ```ts
+            // a mesma trecho, reescrito de forma mais legível
+            ```
+
+            Impact scale: alto = o leitor futuro vai se perder ou entender
+            errado; médio = custa tempo e releitura; baixo = polimento.
+            Do not nitpick style the formatter already owns (indentation,
+            quotes, import order). Do not suggest speculative abstractions —
+            simpler and flatter beats "more elegant".
+
+            If the code reads well, after the veredito add a short section
+            **O que está bom** with 2 a 4 bullets (padrões que ajudam a
+            leitura) — and nothing else.
+
+            When you are done, use the Write tool to save the report to
+            `${{ github.workspace }}/readability-report.md`. A later workflow
+            step publishes that file verbatim as the PR comment — do not post
+            anything to GitHub yourself, and do not add any marker/HTML
+            comment or footer; the publishing step handles those.
+          allowed_tools: "Bash(git diff:*),Bash(git log:*),Bash(git show:*),Read,Grep,Glob,Write"
+
+      - name: Publish report as PR comment
+        # Also runs when the analyze step failed or timed out so the PR shows
+        # an explicit notice instead of silence.
+        if: success() || failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          REPORT_FILE: ${{ github.workspace }}/readability-report.md
+          ANALYSIS_OUTCOME: ${{ steps.analysis.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          marker='<!-- readability-analysis -->'
+          body_file="$RUNNER_TEMP/readability-comment.md"
+
+          missing_report=""
+          if [ "$ANALYSIS_OUTCOME" = "success" ] && [ ! -s "$REPORT_FILE" ]; then
+            missing_report=1
+          fi
+          if [ "$ANALYSIS_OUTCOME" = "success" ] && [ -z "$missing_report" ]; then
+            {
+              echo "$marker"
+              echo
+              cat "$REPORT_FILE"
+              printf '\n\n---\n<sub>🤖 Readability Analysis · `%.7s` · [ver execução](%s)</sub>\n' \
+                "$HEAD_SHA" "$RUN_URL"
+            } > "$body_file"
+          else
+            {
+              printf '%s\n\n' "$marker"
+              printf ':warning: A análise de legibilidade **não foi concluída** para `%.7s` (outcome: `%s`%s). Veja a [execução do workflow](%s).\n' \
+                "$HEAD_SHA" "$ANALYSIS_OUTCOME" "${missing_report:+, arquivo de relatório ausente}" "$RUN_URL"
+            } > "$body_file"
+          fi
+
+          # GitHub caps comment bodies at 65536 characters (see
+          # push-bug-analysis.yml for why truncation happens in Python).
+          python3 - "$body_file" <<'PY'
+          import sys
+          path = sys.argv[1]
+          data = open(path, "rb").read()
+          if len(data) > 65000:
+              text = data[:65000].decode("utf-8", errors="ignore")
+              with open(path, "w", encoding="utf-8") as f:
+                  f.write(text + "\n\n… (truncated)\n")
+          PY
+
+          # Update the existing marker comment in place, or create it.
+          comment_id=$(gh api \
+            "repos/$REPO_OWNER/$REPO_NAME/issues/$PR_NUMBER/comments" \
+            --paginate \
+            | jq -r --arg marker "$marker" \
+                '[.[] | select(.body | startswith($marker))][0].id // empty' \
+            | sed -n '1p')
+          if [ -n "$comment_id" ]; then
+            gh api --method PATCH \
+              "repos/$REPO_OWNER/$REPO_NAME/issues/comments/$comment_id" \
+              -F body=@"$body_file" --jq '.html_url'
+          else
+            gh api "repos/$REPO_OWNER/$REPO_NAME/issues/$PR_NUMBER/comments" \
+              -F body=@"$body_file" --jq '.html_url'
+          fi
+
+          if [ -n "$missing_report" ]; then
+            echo "::error::Claude did not write a report to $REPORT_FILE"
+            exit 1
+          fi

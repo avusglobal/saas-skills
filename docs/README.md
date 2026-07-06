@@ -1,0 +1,40 @@
+# Documentation system
+
+A project-agnostic documentation layout extracted from a production repo where 100% of the code is written by AI agents. Its goal is to make every non-obvious decision, lesson, and procedure **discoverable by an agent** before it repeats a mistake or re-litigates a decision.
+
+## Layout
+
+```
+docs/
+  INDEX.md            — map of all documentation (the onboarding entry point)
+  ARCHITECTURE.md     — stack, runtime, request flow (project-specific; write your own)
+  STRUCTURE.md        — source of truth for layout + conventions (project-specific; write your own)
+  adrs/               — Architecture Decision Records (Nygard format)
+    INDEX.md          — numbered table: # | Title | Status
+    0001-<slug>.md
+  learnings/          — non-obvious lessons captured during development
+    INDEX.md          — table: date | slug | title
+    <YYYY-MM-DD>-<slug>.md
+  runbooks/           — operational procedures (enablement, cutover, rotation)
+    <slug>.md
+  plans/              — optional: Plan → Phases → Changes → Tasks execution tree
+    (skip if your tracker — Linear, GitHub Issues — is the planning source of truth)
+  dependencies/       — optional: cross-domain task queue (same caveat)
+    tasks/<slug>.md
+```
+
+## Rules that make it work
+
+1. **One language for everything.** Pick one (English recommended) and enforce it in every doc, commit, and issue. Mixed-language docs rot fast and split search.
+2. **INDEX.md files are projections, never sources.** Every folder has an `INDEX.md` listing its children with status. They are regenerated from the files' frontmatter (the `sync` skill + PostToolUse hook automate this) — never hand-edit an INDEX to say something the source files don't.
+3. **ADRs record decisions, not designs.** Nygard format: Status / Context / Decision / Consequences. Number them (`0001-...`), never delete — supersede (link both ways) or amend (dated note under Status).
+4. **Learnings are surprise-only.** If it's in official docs or inferable from the code, it doesn't belong. Only what genuinely surprised you (a library quirk, a platform behavior, a dead end). Date-prefixed filename, frontmatter with `slug`, `date`, `relates_to`.
+5. **Runbooks are executable prose.** Numbered steps, environment matrix tables, troubleshooting section. Written so an agent (or a person at 3am) can follow them without asking anyone.
+6. **Onboarding is a numbered list in `docs/INDEX.md`.** New agent/session: read the root agent doc (`AGENTS.md`/`CLAUDE.md`), then STRUCTURE, then the templates, then the tracker. Keep it to 4–5 steps.
+
+## Templates
+
+- [templates/adr.md](./templates/adr.md)
+- [templates/learning.md](./templates/learning.md)
+- [templates/runbook.md](./templates/runbook.md)
+- [templates/INDEX.md](./templates/INDEX.md)
