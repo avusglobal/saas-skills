@@ -6,13 +6,14 @@ model: opus
 
 # Skill: `kit-sync`
 
-Brings this repository up to date with the kit. The kit installs by copy
-(`setup.sh`), so updates are an **AI-assisted three-way merge**: what the kit
-changed × what this repo customized.
+Brings this repository up to date with the kit. The kit installs via an AI
+following the install prompt in its README.md (no install script), so updates
+are likewise an **AI-assisted three-way merge**: what the kit changed × what
+this repo customized.
 
 - **Kit repo (knob):** `git@github.com:gruporezult/code-toolkit.git`, branch `main`.
 - **`.kit-version`** (repo root): the kit commit SHA this repo was last synced
-  to. Written by `setup.sh` on install and by every successful sync.
+  to. Written by the install prompt on install and by every successful sync.
 - **`docs/KIT-DEVIATIONS.md`** (optional): this repo's intentional divergences
   from the kit — one bullet per file/behavior, with the reason. Never
   overwritten by a sync.
