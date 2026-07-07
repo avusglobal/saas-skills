@@ -39,9 +39,12 @@ For what the code can't reveal — which of two coexisting patterns is
 canonical, where new features should live, what is deprecated, hard
 runtime constraints, boundaries between domains — ask **one question per
 turn** via `AskUserQuestion`, with your recommended answer as the first
-option labeled `(Recommended)`. Close with a one-paragraph summary of the
-agreed stack + architecture and **wait for the user to confirm it. Nothing
-is written before that confirmation.**
+option labeled `(Recommended)`. Every recommendation follows AGENTS.md
+rule #0's **stack bias**: one maintainer, no ops team — so easy to use, no
+maintenance, easy to configure, preferably auto-scaling
+(managed/serverless) options come first. Close with a one-paragraph
+summary of the agreed stack + architecture and **wait for the user to
+confirm it. Nothing is written before that confirmation.**
 
 ### 4. Write the two docs
 

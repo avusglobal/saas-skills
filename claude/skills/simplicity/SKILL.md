@@ -57,6 +57,12 @@ platform or stack already covers — steps 1–2 win), and once a library is
 picked, **add it to the stack table above** so every later change reuses the
 same one instead of introducing a competitor.
 
+The same logic applies one level up, to **infrastructure and services**
+(AGENTS.md rule #0's stack bias): this project has one maintainer and no
+ops team, so pick managed/serverless options that need no maintenance,
+scale on their own, and are configured in minutes — never something that
+must be provisioned, patched, monitored, or resized by hand.
+
 ## Avoid over-engineering
 
 - **No speculative abstractions.** Don't add an interface, factory, generic, or config option for a second case that doesn't exist yet (YAGNI). Solve the case in front of you.

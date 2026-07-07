@@ -8,7 +8,7 @@ model: opus
 
 Analyzes work, interviews the operator until clarity, and creates **Linear issues** (via the Linear MCP — connect it before planning). Every issue body follows the standard template in `docs/templates/issue.md`. Read your project's `AGENTS.md` and structure doc before planning.
 
-**Context rule (from AGENTS.md rule #0):** this project has **one developer working across multiple projects**. Plans must be simple to execute and simple to resume after weeks away — fewer moving parts beat elegant ones, and every issue must be understandable on its own without tribal knowledge.
+**Context rule (from AGENTS.md rule #0 — apply it to every plan and decision):** this project is maintained by **one developer who works on other projects during the day**. Plans must be executable efficiently in short sessions and simple to resume after weeks away — fewer moving parts beat elegant ones, and every issue must be understandable on its own without tribal knowledge. When a plan introduces new technology, apply the **stack bias**: easy to use, no maintenance, easy to configure, preferably auto-scaling (managed/serverless) — never something that needs provisioning, patching, or monitoring by hand.
 
 ## When to fire
 

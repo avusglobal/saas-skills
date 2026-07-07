@@ -7,12 +7,21 @@ the first thing every agent reads — keep it short and inviolable. -->
 
 ## Rule #0 — context this project lives in
 
-**One developer, many projects.** Everything here is optimized for a solo
-developer who juggles multiple projects and will come back to this code after
-weeks away. Every decision — architecture, tooling, planning, code style —
-must favor **simple to develop, simple to re-understand**. When two options
-tie, pick the one with less to remember. Two months from now, the code must
-explain itself (see the `simplicity` skill).
+**One developer, many projects.** This codebase is maintained by a single
+person who works on other projects during the day. Everything here is
+optimized for that reality: work happens in short, efficient sessions, and
+the code will be revisited after weeks away. Every decision — architecture,
+tooling, planning, code style — must favor **simple to develop, simple to
+re-understand**. When two options tie, pick the one with less to remember.
+Two months from now, the code must explain itself (see the `simplicity`
+skill).
+
+**Stack bias (applies to every technology decision — reuse it in all
+planning and ADRs):** prefer pieces that are easy to use, need **no
+maintenance**, are **easy to configure**, and preferably **scale on their
+own** — managed/serverless services over anything that must be provisioned,
+patched, monitored, or resized by hand. There is no ops team; a dependency
+that needs babysitting is a cost this project cannot pay.
 
 ## Language
 
