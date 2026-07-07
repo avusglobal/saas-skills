@@ -7,8 +7,8 @@ A project-agnostic documentation layout extracted from a production repo where 1
 ```
 docs/
   INDEX.md            — map of all documentation (the onboarding entry point)
-  ARCHITECTURE.md     — stack, runtime, request flow (project-specific; write your own)
-  STRUCTURE.md        — source of truth for layout + conventions (project-specific; write your own)
+  ARCHITECTURE.md     — stack, runtime, request flow (project-specific; the `architecture` skill generates and maintains it)
+  STRUCTURE.md        — source of truth for layout + conventions, where-to-change guide, file templates (kept by the `architecture` skill)
   adrs/               — Architecture Decision Records (Nygard format)
     INDEX.md          — numbered table: # | Title | Status
     0001-<slug>.md

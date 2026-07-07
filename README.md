@@ -55,6 +55,7 @@ Both analysis workflows need the `CLAUDE_CODE_OAUTH_TOKEN` secret (`claude setup
 | `simplicity` | generalized | The anti-over-engineering bias. Fill the stack table with *your* libraries when adopting. |
 | `plan` | generalized | Interview-driven planning into Linear: phases = issues, tasks = sub-issues (bodies follow `docs/templates/issue.md`), issue→branch→PR delivery, and every plan ends with the execution-lanes parallelism diagram. |
 | `implement` | generalized | `/implement <issue-id>` — executes one Linear issue end to end: fetch via the Linear MCP, refuse blocked work, branch in an isolated workspace, TDD loop (per the `tdd` skill), PR, watch CI to green. |
+| `architecture` | generalized | `/architecture` — deep stack/architecture analysis: explores the codebase, reuses a PRD/ADRs, interviews the user to common ground, then writes `docs/ARCHITECTURE.md` + `docs/STRUCTURE.md` (where-to-change guide + file templates) and wires AGENTS.md and the guard knobs. |
 | `tdd` | generalized | The test methodology behind the kit's TDD mandate: seams (where to test), the red-green loop, and named test anti-patterns with their tells. |
 | `design` | generalized | UI standard: **Kumo UI** (<https://kumo-ui.com/>) as-is, `data-mode` theming, and the mandatory list pattern — `DropdownMenu` row actions (icon + title, delete last in red after a separator) + [`DeleteResource`](https://kumo-ui.com/blocks/delete-resource/) confirmation. |
 | `guard` | generalized | Spec for the guard hook's 4 rules; pairs with `hooks/guard.sh`. |
@@ -79,9 +80,10 @@ Conventions (English-only, INDEX-as-projection, surprise-only learnings, ADR imm
 ## Adoption order (suggested)
 
 1. `./setup.sh` + fill `AGENTS.md`.
-2. `ci.yml` + `format.yml` — wire the package scripts.
-3. Docs system + `sync` skill (already active via hooks).
-4. `simplicity` (fill the stack table) + `guard` (configure the two knobs).
-5. `push-bug-analysis.yml` + `readability-analysis.yml` (create the OAuth token secret).
-6. `plan` + `implement` + `tdd` + `design` skills.
-7. From then on, updates flow via the `kit-sync` skill (see [Updating adopted repos](#updating-adopted-repos)).
+2. `/architecture` — analyze the stack, confirm it with you, and write `docs/ARCHITECTURE.md` + `docs/STRUCTURE.md` (file templates included); wires the AGENTS.md stack table and the guard knobs.
+3. `ci.yml` + `format.yml` — wire the package scripts.
+4. Docs system + `sync` skill (already active via hooks).
+5. `simplicity` (fill the stack table) + `guard` (configure the two knobs).
+6. `push-bug-analysis.yml` + `readability-analysis.yml` (create the OAuth token secret).
+7. `plan` + `implement` + `tdd` + `design` skills.
+8. From then on, updates flow via the `kit-sync` skill (see [Updating adopted repos](#updating-adopted-repos)).
