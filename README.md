@@ -19,6 +19,10 @@ Project-agnostic assets extracted from `messager.dev`, ready to become a standal
 | `docs/` | `docs/` | Documentation system: conventions + templates (ADR, learning, runbook, INDEX) |
 | `AGENTS.template.md` | `AGENTS.md` | Root agent doc template: solo-dev rule #0, delivery workflow, code/UI rules |
 
+## Updating adopted repos
+
+`setup.sh` records the installed kit commit in the target's `.kit-version`. When this kit gains new commits, open Claude Code in the adopted repo and run the **`kit-sync`** skill: it diffs the kit from `.kit-version` to the latest `main`, re-applies each change while preserving the repo's local adaptations (filled knobs, stack tables, commands), skips anything listed in that repo's `docs/KIT-DEVIATIONS.md`, bumps `.kit-version`, and delivers the result as a branch + PR (CI watched to green). Repos with specific needs record their intentional divergences in `docs/KIT-DEVIATIONS.md` — syncs never clobber them.
+
 ## Operating model (what the kit assumes)
 
 - **One developer, many projects** — everything favors *simple to develop, simple to re-understand two months later* (AGENTS.md rule #0).
@@ -53,6 +57,7 @@ Both analysis workflows need the `CLAUDE_CODE_OAUTH_TOKEN` secret (`claude setup
 | `design` | generalized | UI standard: **Kumo UI** (<https://kumo-ui.com/>) as-is, `data-mode` theming, and the mandatory list pattern — `DropdownMenu` row actions (icon + title, delete last in red after a separator) + [`DeleteResource`](https://kumo-ui.com/blocks/delete-resource/) confirmation. |
 | `guard` | generalized | Spec for the guard hook's 4 rules; pairs with `hooks/guard.sh`. |
 | `sync` | generalized | Keeps `docs/**/INDEX.md` as projections of files on disk. |
+| `kit-sync` | generalized | Updates an adopted repo with the kit's changes since its recorded `.kit-version`: AI-assisted three-way merge that preserves local adaptations and `docs/KIT-DEVIATIONS.md`, then opens a PR. |
 | `analyze-logs` | verbatim | evlog NDJSON log analysis. Applies to any TS project using [evlog](https://github.com/evlog). |
 | `build-audit-logs` | verbatim | Audit-trail building with evlog; framework-agnostic. |
 | `review-logging-patterns` | verbatim | Logging-pattern review + evlog adoption across ~15 frameworks. |
@@ -77,3 +82,4 @@ Conventions (English-only, INDEX-as-projection, surprise-only learnings, ADR imm
 4. `simplicity` (fill the stack table) + `guard` (configure the two knobs).
 5. `push-bug-analysis.yml` + `readability-analysis.yml` (create the OAuth token secret).
 6. `plan` + `design` skills.
+7. From then on, updates flow via the `kit-sync` skill (see [Updating adopted repos](#updating-adopted-repos)).

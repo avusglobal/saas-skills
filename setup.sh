@@ -23,6 +23,11 @@ cp -r "$KIT/claude/." "$TARGET/.claude/"
 cp -r "$KIT/docs/." "$TARGET/docs/"
 chmod +x "$TARGET/.claude/hooks/"*.sh
 
+# Record which kit commit this install corresponds to — the kit-sync skill
+# diffs from this SHA to apply future kit updates.
+git -C "$KIT" rev-parse HEAD > "$TARGET/.kit-version" 2>/dev/null \
+  || echo unknown > "$TARGET/.kit-version"
+
 if [ -f "$TARGET/AGENTS.md" ]; then
   echo "note: $TARGET/AGENTS.md already exists — left untouched (template at docs/AGENTS.template.md)"
   cp "$KIT/AGENTS.template.md" "$TARGET/docs/AGENTS.template.md"
@@ -48,4 +53,7 @@ it to walk the list (each file marks its own TODOs):
                               issues in (Linear is the tracker; connect the
                               Linear MCP). Issue body standard:
                               docs/templates/issue.md.
+ 8. Future updates          — when the kit repo changes, run the `kit-sync`
+                              skill here: it applies the kit diff since
+                              .kit-version and opens a PR.
 EOF
