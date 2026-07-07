@@ -16,8 +16,8 @@ explain itself (see the `simplicity` skill).
 
 ## Language
 
-Everything — code, comments, docs, commits, issues, PRs — in **<language,
-English recommended>**. One language only; mixed-language repos rot.
+Everything — code, comments, docs, commits, issues, PRs, CI reports — in
+**English**. One language only; mixed-language repos rot.
 
 ## Stack
 
@@ -38,14 +38,16 @@ Commands (also wired as package scripts and used verbatim by CI):
 
 ## Delivery workflow (inviolable)
 
-1. **Every unit of work is a GitHub issue.** Planning creates them (see the
+1. **Every unit of work is a Linear issue**, body following the standard
+   template in `docs/templates/issue.md`. Planning creates them (see the
    `plan` skill): phases become issues, a phase's tasks become sub-issues.
-2. **Every issue becomes exactly one branch**, worked on in an **isolated
-   workspace** (git worktree or a fresh clone/session) — never directly on
-   the default branch, never two issues on one branch.
+2. **Every issue becomes exactly one branch** (use Linear's suggested branch
+   name so the PR auto-links), worked on in an **isolated workspace** (git
+   worktree or a fresh clone/session) — never directly on the default
+   branch, never two issues on one branch.
 3. **Every branch is linked to exactly one pull request.** The PR merging is
-   what ships that functionality — nothing lands on the default branch except
-   through its PR.
+   what ships that functionality (and closes the Linear issue) — nothing
+   lands on the default branch except through its PR.
 4. **After every push, watch CI until it is green** (verify, format,
    bug-analysis, readability). Do not report work as done, move to the next
    task, or ask for review while CI is red or still running. If CI fails,
@@ -53,9 +55,10 @@ Commands (also wired as package scripts and used verbatim by CI):
 
 ## Planning
 
-Use the `plan` skill. Its contract: break work into phases only when needed
-(phase = issue, task = sub-issue), and always end with the execution order
-showing what runs in parallel:
+Use the `plan` skill. Its contract: all planning lives in Linear (phase =
+issue, task = sub-issue, bodies per `docs/templates/issue.md`; phases only
+when the work has natural stages), and every plan ends with the execution
+order showing what runs in parallel:
 
 ```
 TSK-1 ---------- TSK-3 ------- TSK-4
@@ -85,4 +88,5 @@ after a separator); deletions confirmed with Kumo's `DeleteResource` block.
 
 `docs/README.md` describes the system: ADRs for decisions, learnings for
 surprises, runbooks for operations, INDEX.md files kept by the `sync` skill.
-Record a learning whenever something genuinely surprised you.
+Record a learning whenever something genuinely surprised you. **No plans or
+task lists in docs/** — all task state lives in Linear.

@@ -17,20 +17,18 @@ docs/
     <YYYY-MM-DD>-<slug>.md
   runbooks/           — operational procedures (enablement, cutover, rotation)
     <slug>.md
-  plans/              — optional: Plan → Phases → Changes → Tasks execution tree
-    (skip if your tracker — Linear, GitHub Issues — is the planning source of truth)
-  dependencies/       — optional: cross-domain task queue (same caveat)
-    tasks/<slug>.md
+  templates/          — fill-in formats (ADR, learning, runbook, INDEX, issue)
 ```
 
 ## Rules that make it work
 
-1. **One language for everything.** Pick one (English recommended) and enforce it in every doc, commit, and issue. Mixed-language docs rot fast and split search.
-2. **INDEX.md files are projections, never sources.** Every folder has an `INDEX.md` listing its children with status. They are regenerated from the files' frontmatter (the `sync` skill + PostToolUse hook automate this) — never hand-edit an INDEX to say something the source files don't.
-3. **ADRs record decisions, not designs.** Nygard format: Status / Context / Decision / Consequences. Number them (`0001-...`), never delete — supersede (link both ways) or amend (dated note under Status).
-4. **Learnings are surprise-only.** If it's in official docs or inferable from the code, it doesn't belong. Only what genuinely surprised you (a library quirk, a platform behavior, a dead end). Date-prefixed filename, frontmatter with `slug`, `date`, `relates_to`.
-5. **Runbooks are executable prose.** Numbered steps, environment matrix tables, troubleshooting section. Written so an agent (or a person at 3am) can follow them without asking anyone.
-6. **Onboarding is a numbered list in `docs/INDEX.md`.** New agent/session: read the root agent doc (`AGENTS.md`/`CLAUDE.md`), then STRUCTURE, then the templates, then the tracker. Keep it to 4–5 steps.
+1. **One language for everything: English.** Enforce it in every doc, commit, issue, and CI report. Mixed-language docs rot fast and split search.
+2. **No plans, no dependencies — Linear owns all task state.** There is deliberately no `docs/plans/` or `docs/dependencies/`: every plan, phase, task, and cross-domain blocker is a **Linear issue** (mandatory body format in [templates/issue.md](./templates/issue.md)). docs/ records only decisions (ADRs), surprises (learnings), and procedures (runbooks). The moment a file starts tracking work state, it belongs in Linear, not here.
+3. **INDEX.md files are projections, never sources.** Every folder has an `INDEX.md` listing its children with status. They are regenerated from the files' frontmatter (the `sync` skill + PostToolUse hook automate this) — never hand-edit an INDEX to say something the source files don't.
+4. **ADRs record decisions, not designs.** Nygard format: Status / Context / Decision / Consequences. Number them (`0001-...`), never delete — supersede (link both ways) or amend (dated note under Status).
+5. **Learnings are surprise-only.** If it's in official docs or inferable from the code, it doesn't belong. Only what genuinely surprised you (a library quirk, a platform behavior, a dead end). Date-prefixed filename, frontmatter with `slug`, `date`, `relates_to`.
+6. **Runbooks are executable prose.** Numbered steps, environment matrix tables, troubleshooting section. Written so an agent (or a person at 3am) can follow them without asking anyone.
+7. **Onboarding is a numbered list in `docs/INDEX.md`.** New agent/session: read the root agent doc (`AGENTS.md`/`CLAUDE.md`), then STRUCTURE, then the templates, then the open issues in Linear. Keep it to 4–5 steps.
 
 ## Templates
 
@@ -38,3 +36,4 @@ docs/
 - [templates/learning.md](./templates/learning.md)
 - [templates/runbook.md](./templates/runbook.md)
 - [templates/INDEX.md](./templates/INDEX.md)
+- [templates/issue.md](./templates/issue.md) — the body format for **every Linear issue**

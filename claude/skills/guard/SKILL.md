@@ -45,10 +45,10 @@ If there's an "active task" (read from the session context, e.g., the agent is e
 - If `file_path` belongs to module `X` with `X ≠ Y` → **block**:
   ```
   Blocked: active task has domain=Y; you tried to edit module X.
-  Record a cross-domain dependency (dependency doc or blocker issue) with owner_domain: X, and continue without crossing the boundary.
+  Record a cross-domain blocker issue in Linear (owning domain X, blocking the active issue) and continue without crossing the boundary.
   ```
 
-**Heuristic for detecting the "active task":** look for a recent reference in the session context to a task/issue file that was opened/read. If no active task can be identified, this rule is skipped (does not block).
+**Heuristic for detecting the "active task":** look for a recent reference in the session context to a Linear issue being executed. If no active task can be identified, this rule is skipped (does not block).
 
 ## Output
 

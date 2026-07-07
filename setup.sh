@@ -44,6 +44,8 @@ it to walk the list (each file marks its own TODOs):
  4. .claude/hooks/guard.sh  — set FORBIDDEN_PATTERNS and MODULE_BASENAMES.
  5. .claude/hooks/session-start.sh — set the install/local-stack commands.
  6. .claude/skills/simplicity/SKILL.md — fill the stack table.
- 7. .claude/skills/plan/SKILL.md — confirm the GitHub repo is the tracker (default)
-                              or point it at Linear/other.
+ 7. .claude/skills/plan/SKILL.md — set the Linear team/project it creates
+                              issues in (Linear is the tracker; connect the
+                              Linear MCP). Issue body standard:
+                              docs/templates/issue.md.
 EOF

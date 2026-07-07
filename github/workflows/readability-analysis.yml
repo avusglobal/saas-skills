@@ -76,38 +76,38 @@ jobs:
               without losing clarity? Is anything speculative (built for a
               case that doesn't exist yet)?
 
-            Write the report in Brazilian Portuguese. Be direct: no filler,
+            Write the report in English. Be direct: no filler,
             no hedging. Use exactly this structure (GitHub-flavored Markdown):
 
-            ## 📖 Análise de legibilidade
+            ## 📖 Readability analysis
 
-            **Veredito:** <nota A/B/C/D> — <uma frase: dá para entender este código daqui a 2 meses?>
+            **Verdict:** <grade A/B/C/D> — <one sentence: will this code be understandable two months from now?>
 
             If there are findings, add a summary table and one short section
             per finding, numbered to match:
 
-            | # | Impacto | Arquivo | Problema |
-            |---|---------|---------|----------|
-            | 1 | alto | `src/exemplo.ts:42` | resumo em uma frase |
+            | # | Impact | File | Problem |
+            |---|--------|------|---------|
+            | 1 | high | `src/example.ts:42` | one-sentence summary |
 
-            ### 1. <título direto> — `arquivo:linha`
+            ### 1. <direct title> — `file:line`
 
-            <1 a 3 frases: por que isso dificulta a leitura futura.>
+            <1–3 sentences: why this hurts future readability.>
 
-            **Sugestão:**
+            **Suggestion:**
             ```ts
-            // a mesma trecho, reescrito de forma mais legível
+            // the same snippet, rewritten for readability
             ```
 
-            Impact scale: alto = o leitor futuro vai se perder ou entender
-            errado; médio = custa tempo e releitura; baixo = polimento.
+            Impact scale: high = the future reader will get lost or misread
+            the code; medium = costs time and rereading; low = polish.
             Do not nitpick style the formatter already owns (indentation,
             quotes, import order). Do not suggest speculative abstractions —
             simpler and flatter beats "more elegant".
 
-            If the code reads well, after the veredito add a short section
-            **O que está bom** with 2 a 4 bullets (padrões que ajudam a
-            leitura) — and nothing else.
+            If the code reads well, after the verdict add a short section
+            **What reads well** with 2–4 bullets (patterns that help
+            readability) — and nothing else.
 
             When you are done, use the Write tool to save the report to
             `${{ github.workspace }}/readability-report.md`. A later workflow
@@ -143,14 +143,14 @@ jobs:
               echo "$marker"
               echo
               cat "$REPORT_FILE"
-              printf '\n\n---\n<sub>🤖 Readability Analysis · `%.7s` · [ver execução](%s)</sub>\n' \
+              printf '\n\n---\n<sub>🤖 Readability Analysis · `%.7s` · [view run](%s)</sub>\n' \
                 "$HEAD_SHA" "$RUN_URL"
             } > "$body_file"
           else
             {
               printf '%s\n\n' "$marker"
-              printf ':warning: A análise de legibilidade **não foi concluída** para `%.7s` (outcome: `%s`%s). Veja a [execução do workflow](%s).\n' \
-                "$HEAD_SHA" "$ANALYSIS_OUTCOME" "${missing_report:+, arquivo de relatório ausente}" "$RUN_URL"
+              printf ':warning: Readability analysis **did not complete** for `%.7s` (outcome: `%s`%s). See the [workflow run](%s).\n' \
+                "$HEAD_SHA" "$ANALYSIS_OUTCOME" "${missing_report:+, report file missing}" "$RUN_URL"
             } > "$body_file"
           fi
 

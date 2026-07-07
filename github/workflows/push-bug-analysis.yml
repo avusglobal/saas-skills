@@ -1,8 +1,8 @@
 name: Push Bug Analysis
 
 # Project-agnostic. Requirements: the CLAUDE_CODE_OAUTH_TOKEN repository
-# secret (generate with `claude setup-token`). The report language below is
-# Brazilian Portuguese — swap the prompt's language/structure freely.
+# secret (generate with `claude setup-token`). Reports are written in
+# English (kit-wide language policy) — swap the prompt's structure freely.
 #
 # Runs on every push to any branch and asks Claude to review the pushed
 # changes for likely bugs. Results are posted as a comment on the open
@@ -114,47 +114,47 @@ jobs:
             error handling, security issues (injection, XSS, auth bypass), and
             regressions relative to existing behavior.
 
-            Write the report in Brazilian Portuguese. Be direct: no filler,
+            Write the report in English. Be direct: no filler,
             no hedging, no restating instructions. Use exactly this structure
             (GitHub-flavored Markdown):
 
-            ## 🔎 Análise de bugs — `<base-curto>..<head-curto>`
+            ## 🔎 Bug analysis — `<short-base>..<short-head>`
 
-            **Veredito:** 🐛 <N> bug(s) encontrado(s) — or — ✅ Nenhum bug encontrado
+            **Verdict:** 🐛 <N> bug(s) found — or — ✅ No bugs found
 
             If there are bugs, add a summary table and then one section per
             bug, numbered to match the table:
 
-            | # | Severidade | Arquivo | Problema |
-            |---|------------|---------|----------|
-            | 1 | alta | `src/exemplo.ts:42` | resumo em uma frase |
+            | # | Severity | File | Problem |
+            |---|----------|------|---------|
+            | 1 | high | `src/example.ts:42` | one-sentence summary |
 
-            ### 1. <título direto> — `arquivo:linha`
+            ### 1. <direct title> — `file:line`
 
-            <1 a 3 frases: o que está errado e por quê.>
+            <1–3 sentences: what is wrong and why.>
 
-            **Código atual:**
+            **Current code:**
             ```ts
-            // somente as linhas relevantes, como estão no diff
+            // only the relevant lines, as they appear in the diff
             ```
 
-            **Correção sugerida:**
+            **Suggested fix:**
             ```ts
-            // as mesmas linhas, corrigidas
+            // the same lines, fixed
             ```
 
-            **Como verificar:** <teste a adicionar, caso de reprodução ou log a observar.>
+            **How to verify:** <test to add, reproduction case, or log to watch.>
 
-            Severity scale: alta = quebra funcionalidade ou segurança; média =
-            comportamento errado em casos plausíveis; baixa = edge case /
-            robustez. When a short flow genuinely clarifies how a bug
-            manifests (ex.: requisição → handler → estado inválido), add a
+            Severity scale: high = breaks functionality or security; medium =
+            wrong behavior in plausible cases; low = edge case / robustness.
+            When a short flow genuinely clarifies how a bug
+            manifests (e.g. request → handler → invalid state), add a
             small `mermaid` `flowchart TD` code block inside that bug's
             section — only when it adds real clarity.
 
-            If there are no bugs, after the veredito add a short section
-            **O que foi verificado** with 3 a 6 bullets objetivos (arquivos e
-            riscos checados) — and nothing else.
+            If there are no bugs, after the verdict add a short section
+            **What was checked** with 3–6 objective bullets (files and
+            risks examined) — and nothing else.
 
             When you are done, use the Write tool to save the report to
             `${{ github.workspace }}/pr-bug-report.md`. A later workflow step
@@ -202,15 +202,15 @@ jobs:
               echo
               cat "$REPORT_FILE"
               # %.7s prints the short form of the two commit SHAs.
-              printf '\n\n---\n<sub>🤖 Push Bug Analysis · diff `%.7s..%.7s` · [ver execução](%s)</sub>\n' \
+              printf '\n\n---\n<sub>🤖 Push Bug Analysis · diff `%.7s..%.7s` · [view run](%s)</sub>\n' \
                 "$DIFF_BASE" "$HEAD_SHA" "$RUN_URL"
             } > "$body_file"
           else
             {
               printf '%s\n\n' "$marker"
-              printf ':warning: A análise automática de bugs **não foi concluída** para `%.7s` (outcome do passo de análise: `%s`%s).\n\n' \
-                "$HEAD_SHA" "$ANALYSIS_OUTCOME" "${missing_report:+, arquivo de relatório ausente}"
-              printf 'Isto **não** significa "nenhum bug encontrado" — veja a [execução do workflow](%s) para detalhes.\n' "$RUN_URL"
+              printf ':warning: Automated bug analysis **did not complete** for `%.7s` (analysis step outcome: `%s`%s).\n\n' \
+                "$HEAD_SHA" "$ANALYSIS_OUTCOME" "${missing_report:+, report file missing}"
+              printf 'This does **not** mean "no bugs were found" — see the [workflow run](%s) for details.\n' "$RUN_URL"
             } > "$body_file"
           fi
 
