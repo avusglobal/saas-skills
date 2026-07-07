@@ -62,11 +62,18 @@ Do **not** invent alternate list-action or delete UX on new pages — the first 
 
 Check every UI change per route in **light and dark**: tokens resolve (no undefined CSS vars), dark mode flips, focus rings/hover/active, `Dialog` focus-trap + `Esc`, `Dropdown`/`Popover` keyboard + outside-click, form validation timing, and toasts fire.
 
-## Deliverables after UI changes (mandatory)
+## Deliverables for UI changes (mandatory — before AND after)
 
-When you change any UI, deliver visual proof **before** marking the work done:
+Every UI modification ships with **before/after** visual proof. No UI work
+is reported as done without it:
 
-1. **Screenshot** of each affected route in light and dark mode (when theming applies).
-2. **Screen recording** — short walkthrough of the changed behavior.
+1. **Before** — capture FIRST, before touching any code: a screenshot of
+   each affected route/state and a short recording of the current behavior.
+   Skip only when no "before" exists (a brand-new screen or flow). If you
+   forgot to capture it, recreate it from the base branch — don't skip it.
+2. **After** — a screenshot of each affected route in light and dark mode
+   (when theming applies) **and** a screen recording walking through the
+   changed behavior.
 
-Attach artifacts to the PR or session summary.
+Attach the artifacts to the PR (or session summary) as labeled
+before/after pairs per route.

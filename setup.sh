@@ -38,8 +38,11 @@ fi
 echo "Kit installed into $TARGET"
 cat <<'EOF'
 
-Next steps — do them by hand, or open Claude Code in the target repo and ask
-it to walk the list (each file marks its own TODOs):
+Next step — open Claude Code in the target repo and run /onboard: it
+interviews you about what the project is, writes the domain glossary
+(docs/CONTEXT.md), fills AGENTS.md, and walks this whole list with you,
+then hands off to /architecture. Or do the items by hand (each file marks
+its own TODOs):
 
  1. AGENTS.md               — fill the <placeholders> (project name, stack, commands).
  2. .github/workflows/      — ci.yml + format.yml: pick the toolchain block and wire

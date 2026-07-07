@@ -7,12 +7,21 @@ the first thing every agent reads — keep it short and inviolable. -->
 
 ## Rule #0 — context this project lives in
 
-**One developer, many projects.** Everything here is optimized for a solo
-developer who juggles multiple projects and will come back to this code after
-weeks away. Every decision — architecture, tooling, planning, code style —
-must favor **simple to develop, simple to re-understand**. When two options
-tie, pick the one with less to remember. Two months from now, the code must
-explain itself (see the `simplicity` skill).
+**One developer, many projects.** This codebase is maintained by a single
+person who works on other projects during the day. Everything here is
+optimized for that reality: work happens in short, efficient sessions, and
+the code will be revisited after weeks away. Every decision — architecture,
+tooling, planning, code style — must favor **simple to develop, simple to
+re-understand**. When two options tie, pick the one with less to remember.
+Two months from now, the code must explain itself (see the `simplicity`
+skill).
+
+**Stack bias (applies to every technology decision — reuse it in all
+planning and ADRs):** prefer pieces that are easy to use, need **no
+maintenance**, are **easy to configure**, and preferably **scale on their
+own** — managed/serverless services over anything that must be provisioned,
+patched, monitored, or resized by hand. There is no ops team; a dependency
+that needs babysitting is a cost this project cannot pay.
 
 ## Language
 
@@ -44,7 +53,8 @@ Commands (also wired as package scripts and used verbatim by CI):
 2. **Every issue becomes exactly one branch** (use Linear's suggested branch
    name so the PR auto-links), worked on in an **isolated workspace** (git
    worktree or a fresh clone/session) — never directly on the default
-   branch, never two issues on one branch.
+   branch, never two issues on one branch. The `implement` skill
+   (`/implement <issue-id>`) runs steps 2–4 end to end for one issue.
 3. **Every branch is linked to exactly one pull request.** The PR merging is
    what ships that functionality (and closes the Linear issue) — nothing
    lands on the default branch except through its PR.
@@ -69,8 +79,14 @@ TSK-2 ------------------------ TSK-5
 
 ## Code rules
 
-- **TDD** — the failing test comes first (`guard` hook reminds; CI enforces).
+- **TDD** — the failing test comes first (`guard` hook reminds; CI
+  enforces); the `tdd` skill is the methodology — seams, the loop, and the
+  test anti-patterns to avoid.
 - **Simplicity** — the `simplicity` skill is the default bias for all code.
+- **Libraries over hand-rolled complexity** — complex logic a
+  well-maintained library already solves is delegated to that library
+  (decision order + adoption bar in the `simplicity` skill); we don't grow
+  bespoke logic in-repo.
 - **Self-documenting** — descriptive names over comments; comment only a
   non-obvious *why*.
 - **Module layout** — <describe your layout, e.g. one folder per module with
@@ -83,6 +99,9 @@ TSK-2 ------------------------ TSK-5
 See the `design` skill. Non-negotiables: **Kumo UI** for all interface work;
 list-item actions via `DropdownMenu` (icon + item title, delete last in red
 after a separator); deletions confirmed with Kumo's `DeleteResource` block.
+Every UI change ships with **before** (when a before exists) **and after**
+screenshots + screen recording, attached to the PR (see the `design` skill's
+deliverables section).
 
 ## Docs
 

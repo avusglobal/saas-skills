@@ -8,7 +8,7 @@ model: opus
 
 Analyzes work, interviews the operator until clarity, and creates **Linear issues** (via the Linear MCP — connect it before planning). Every issue body follows the standard template in `docs/templates/issue.md`. Read your project's `AGENTS.md` and structure doc before planning.
 
-**Context rule (from AGENTS.md rule #0):** this project has **one developer working across multiple projects**. Plans must be simple to execute and simple to resume after weeks away — fewer moving parts beat elegant ones, and every issue must be understandable on its own without tribal knowledge.
+**Context rule (from AGENTS.md rule #0 — apply it to every plan and decision):** this project is maintained by **one developer who works on other projects during the day**. Plans must be executable efficiently in short sessions and simple to resume after weeks away — fewer moving parts beat elegant ones, and every issue must be understandable on its own without tribal knowledge. When a plan introduces new technology, apply the **stack bias**: easy to use, no maintenance, easy to configure, preferably auto-scaling (managed/serverless) — never something that needs provisioning, patching, or monitoring by hand.
 
 ## When to fire
 
@@ -48,6 +48,7 @@ Stop when the user says "go ahead" / "it's clear" / similar, OR when their answe
 1. Search Linear for duplicates or related open work.
 2. Check open cross-domain blocker issues that touch the areas in scope — ask whether to fold them in or keep separate.
 3. Explore the codebase for affected modules, existing patterns, and test coverage.
+4. Read `docs/CONTEXT.md` (the domain glossary, when it exists) — issue titles and bodies use its terms, never synonyms.
 
 ### 3. Codebase analysis
 
@@ -121,6 +122,6 @@ Before finalizing, run a pre-mortem ("it's 3 months later and this failed — wh
 
 ## Operator preferences (always apply)
 
-- UI work in sub-issues must note screenshot + screen recording deliverables (see `design` skill).
+- UI work in sub-issues must note the **before/after** screenshot + screen recording deliverables (before captured prior to any code change, when a before exists — see `design` skill).
 - Execution agents must **watch CI to green after every push** before reporting back.
 - List/table delete UX must follow the `DropdownMenu` + `DeleteResource` pattern (see `design` skill).
