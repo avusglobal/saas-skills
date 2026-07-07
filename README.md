@@ -16,7 +16,7 @@ Variants: `... | bash -s -- /path/to/project` installs into another directory; `
 ./setup.sh /path/to/your-project
 ```
 
-Either way, `setup.sh` copies everything to its real location (`.github/workflows/`, `.claude/`, `docs/`, `AGENTS.md`), makes the hooks executable, records the kit commit in `.kit-version`, and prints the fill-in checklist. Then open Claude Code in the target repo and ask it to walk the checklist.
+Either way, `setup.sh` copies everything to its real location (`.github/workflows/`, `.claude/`, `docs/`, `AGENTS.md`), makes the hooks executable, records the kit commit in `.kit-version`, and prints the fill-in checklist. Then open Claude Code in the target repo and run **`/onboard`** — it interviews you about what the project is, writes the domain glossary, fills `AGENTS.md`, and walks the checklist, handing off to **`/architecture`** for the technical docs.
 
 | Here | Installed at | What it is |
 |---|---|---|
@@ -64,6 +64,7 @@ Both analysis workflows need the `CLAUDE_CODE_OAUTH_TOKEN` secret (`claude setup
 | `plan` | generalized | Interview-driven planning into Linear: phases = issues, tasks = sub-issues (bodies follow `docs/templates/issue.md`), issue→branch→PR delivery, and every plan ends with the execution-lanes parallelism diagram. |
 | `implement` | generalized | `/implement <issue-id>` — executes one Linear issue end to end: fetch via the Linear MCP, refuse blocked work, branch in an isolated workspace, TDD loop (per the `tdd` skill), PR, watch CI to green. |
 | `architecture` | generalized | `/architecture` — deep stack/architecture analysis: explores the codebase, reuses a PRD/ADRs, interviews the user to common ground, then writes `docs/ARCHITECTURE.md` + `docs/STRUCTURE.md` (where-to-change guide + file templates) and wires AGENTS.md and the guard knobs. |
+| `onboard` | generalized | `/onboard` — one-time, right after install: common ground on WHAT the project is (reuses a PRD/README, interviews the rest), fills `AGENTS.md`, writes the `docs/CONTEXT.md` domain glossary, walks the setup checklist, hands off to `/architecture`. |
 | `tdd` | generalized | The test methodology behind the kit's TDD mandate: seams (where to test), the red-green loop, and named test anti-patterns with their tells. |
 | `design` | generalized | UI standard: **Kumo UI** (<https://kumo-ui.com/>) as-is, `data-mode` theming, and the mandatory list pattern — `DropdownMenu` row actions (icon + title, delete last in red after a separator) + [`DeleteResource`](https://kumo-ui.com/blocks/delete-resource/) confirmation. |
 | `guard` | generalized | Spec for the guard hook's 4 rules; pairs with `hooks/guard.sh`. |
@@ -87,7 +88,7 @@ Conventions (English-only, INDEX-as-projection, surprise-only learnings, ADR imm
 
 ## Adoption order (suggested)
 
-1. `./setup.sh` + fill `AGENTS.md`.
+1. Install (`curl … | bash` or `./setup.sh`), then run `/onboard` — it establishes what the project is, writes `docs/CONTEXT.md`, fills `AGENTS.md`, and walks the checklist below with you.
 2. `/architecture` — analyze the stack, confirm it with you, and write `docs/ARCHITECTURE.md` + `docs/STRUCTURE.md` (file templates included); wires the AGENTS.md stack table and the guard knobs.
 3. `ci.yml` + `format.yml` — wire the package scripts.
 4. Docs system + `sync` skill (already active via hooks).

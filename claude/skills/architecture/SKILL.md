@@ -17,11 +17,12 @@ without asking anyone.
 
 ### 1. Explore first — facts come from the code, not the user
 
-Read before asking anything: `AGENTS.md`, package manifests + lockfile,
-config files (tsconfig, bundler, framework, CI workflows), entry points,
-the `src/` module tree, the `tests/` layout, `.claude/` knobs (guard
-patterns, module basenames), and all existing docs — `ARCHITECTURE.md`,
-`STRUCTURE.md`, ADRs, learnings. Build the inventory: runtime(s),
+Read before asking anything: `AGENTS.md`, `docs/CONTEXT.md` (the domain
+glossary — use its terms in everything you write), package manifests +
+lockfile, config files (tsconfig, bundler, framework, CI workflows), entry
+points, the `src/` module tree, the `tests/` layout, `.claude/` knobs
+(guard patterns, module basenames), and all existing docs —
+`ARCHITECTURE.md`, `STRUCTURE.md`, ADRs, learnings. Build the inventory: runtime(s),
 framework, database, UI kit, test runner, deploy target, module layout,
 layer conventions, naming patterns, and every place where **two competing
 patterns** coexist (those become questions).

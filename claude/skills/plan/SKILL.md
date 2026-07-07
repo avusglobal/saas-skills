@@ -48,6 +48,7 @@ Stop when the user says "go ahead" / "it's clear" / similar, OR when their answe
 1. Search Linear for duplicates or related open work.
 2. Check open cross-domain blocker issues that touch the areas in scope — ask whether to fold them in or keep separate.
 3. Explore the codebase for affected modules, existing patterns, and test coverage.
+4. Read `docs/CONTEXT.md` (the domain glossary, when it exists) — issue titles and bodies use its terms, never synonyms.
 
 ### 3. Codebase analysis
 
