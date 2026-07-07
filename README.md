@@ -4,11 +4,19 @@ Project-agnostic assets extracted from `messager.dev`, ready to become a standal
 
 ## Install into a project
 
+One-liner, from inside the target repo (no sudo — only project files are written):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/gruporezult/code-toolkit/main/install.sh | bash
+```
+
+Variants: `... | bash -s -- /path/to/project` installs into another directory; `KIT_REF=<branch-or-tag>` pins a kit version. Or, from a local clone of this repo:
+
 ```bash
 ./setup.sh /path/to/your-project
 ```
 
-`setup.sh` copies everything to its real location (`.github/workflows/`, `.claude/`, `docs/`, `AGENTS.md`), makes the hooks executable, and prints the fill-in checklist. Then open Claude Code in the target repo and ask it to walk the checklist.
+Either way, `setup.sh` copies everything to its real location (`.github/workflows/`, `.claude/`, `docs/`, `AGENTS.md`), makes the hooks executable, records the kit commit in `.kit-version`, and prints the fill-in checklist. Then open Claude Code in the target repo and ask it to walk the checklist.
 
 | Here | Installed at | What it is |
 |---|---|---|
