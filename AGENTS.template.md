@@ -74,6 +74,10 @@ TSK-2 ------------------------ TSK-5
   enforces); the `tdd` skill is the methodology — seams, the loop, and the
   test anti-patterns to avoid.
 - **Simplicity** — the `simplicity` skill is the default bias for all code.
+- **Libraries over hand-rolled complexity** — complex logic a
+  well-maintained library already solves is delegated to that library
+  (decision order + adoption bar in the `simplicity` skill); we don't grow
+  bespoke logic in-repo.
 - **Self-documenting** — descriptive names over comments; comment only a
   non-obvious *why*.
 - **Module layout** — <describe your layout, e.g. one folder per module with
