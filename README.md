@@ -66,7 +66,7 @@ The three evlog skills are stack-conditional (they assume evlog) but project-agn
 
 ### Docs system (`docs/`)
 
-Conventions (English-only, INDEX-as-projection, surprise-only learnings, ADR immutability, executable runbooks, and **no plans or dependencies in docs — Linear owns all task state**) in `docs/README.md`, plus fill-in templates for ADRs, learnings, runbooks, INDEX files, and the mandatory Linear issue body (`templates/issue.md`).
+Conventions (English-only, INDEX-as-projection, surprise-only learnings, ADR immutability, executable runbooks, and **Linear as the standard for all task state — task files never live in docs**) in `docs/README.md`, plus fill-in templates for ADRs, learnings, runbooks, INDEX files, and the mandatory Linear issue body (`templates/issue.md`).
 
 ## What was left behind (and why)
 

@@ -88,5 +88,5 @@ after a separator); deletions confirmed with Kumo's `DeleteResource` block.
 
 `docs/README.md` describes the system: ADRs for decisions, learnings for
 surprises, runbooks for operations, INDEX.md files kept by the `sync` skill.
-Record a learning whenever something genuinely surprised you. **No plans or
-task lists in docs/** — all task state lives in Linear.
+Record a learning whenever something genuinely surprised you. **Linear is the
+standard for all task state** — plans and task lists never live in docs/.

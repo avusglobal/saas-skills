@@ -111,7 +111,7 @@ Before finalizing, run a pre-mortem ("it's 3 months later and this failed — wh
 - **Every plan ends with the execution-lanes diagram** (step 6). No plan is delivered without it.
 - **English only** in issue titles and bodies.
 - **TDD mandatory**: every sub-issue lists `tests:` scenarios — red first.
-- **Linear only** for planning and task state — never in-repo planning trees (docs/ has no `plans/` or `dependencies/`).
+- **Linear is the standard tracker** for all planning and task state — never in-repo planning trees or task files.
 - **Solo-dev bias**: if a breakdown needs a diagram to explain the diagram, it's too complex — simplify.
 
 ## When NOT to create a plan

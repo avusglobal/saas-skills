@@ -23,7 +23,7 @@ docs/
 ## Rules that make it work
 
 1. **One language for everything: English.** Enforce it in every doc, commit, issue, and CI report. Mixed-language docs rot fast and split search.
-2. **No plans, no dependencies — Linear owns all task state.** There is deliberately no `docs/plans/` or `docs/dependencies/`: every plan, phase, task, and cross-domain blocker is a **Linear issue** (mandatory body format in [templates/issue.md](./templates/issue.md)). docs/ records only decisions (ADRs), surprises (learnings), and procedures (runbooks). The moment a file starts tracking work state, it belongs in Linear, not here.
+2. **Linear is the standard for all task state.** Every plan, phase, task, and cross-domain blocker is a **Linear issue** (mandatory body format in [templates/issue.md](./templates/issue.md)) — never a file in docs/. docs/ records only decisions (ADRs), surprises (learnings), and procedures (runbooks). The moment a file starts tracking work state, it belongs in Linear, not here.
 3. **INDEX.md files are projections, never sources.** Every folder has an `INDEX.md` listing its children with status. They are regenerated from the files' frontmatter (the `sync` skill + PostToolUse hook automate this) — never hand-edit an INDEX to say something the source files don't.
 4. **ADRs record decisions, not designs.** Nygard format: Status / Context / Decision / Consequences. Number them (`0001-...`), never delete — supersede (link both ways) or amend (dated note under Status).
 5. **Learnings are surprise-only.** If it's in official docs or inferable from the code, it doesn't belong. Only what genuinely surprised you (a library quirk, a platform behavior, a dead end). Date-prefixed filename, frontmatter with `slug`, `date`, `relates_to`.
