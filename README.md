@@ -4,19 +4,36 @@ Project-agnostic assets extracted from `messager.dev`, ready to become a standal
 
 ## Install into a project
 
-One-liner, from inside the target repo (no sudo — only project files are written):
+There's no install script — an AI assistant does the install itself, so it can
+merge sensibly with whatever already exists in the target repo instead of
+blindly overwriting it. Open Claude Code (or another coding AI) inside the
+target repo and paste this prompt:
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/gruporezult/code-toolkit/main/install.sh | bash
 ```
+Install the code-toolkit kit (https://github.com/gruporezult/code-toolkit) into this repository:
 
-Variants: `... | bash -s -- /path/to/project` installs into another directory; `KIT_REF=<branch-or-tag>` pins a kit version. Or, from a local clone of this repo:
-
-```bash
-./setup.sh /path/to/your-project
+1. Clone the kit repo (branch `main`, unless I pin another ref) into a temp directory.
+2. Copy from the kit into this repo:
+   - `github/workflows/` -> `.github/workflows/`
+   - `claude/` -> `.claude/` (make sure `.claude/hooks/*.sh` stay executable)
+   - `docs/` -> `docs/`
+   - `AGENTS.template.md` -> `AGENTS.md`, only if this repo has no `AGENTS.md` yet;
+     if one already exists, leave it untouched and copy the template to
+     `docs/AGENTS.template.md` instead, for reference.
+   If any of these paths already exist here with real content, merge instead of
+   overwriting blindly — preserve whatever is already customized.
+3. Record the cloned kit's commit SHA in `.kit-version` at this repo's root
+   (the `kit-sync` skill uses it later to apply kit updates).
+4. Read the kit's own README (in the clone) for what each installed piece is
+   for, then walk me through the fill-in checklist it describes (AGENTS.md
+   placeholders, CI toolchain wiring, the CLAUDE_CODE_OAUTH_TOKEN secret,
+   guard.sh knobs, session-start.sh commands, the simplicity skill's stack
+   table, the plan skill's Linear team/project).
+5. Once installed, offer to run the `/onboard` skill — it interviews me about
+   what the project is, writes the domain glossary, fills `AGENTS.md`, and
+   walks the rest of the checklist, handing off to `/architecture` for the
+   technical docs.
 ```
-
-Either way, `setup.sh` copies everything to its real location (`.github/workflows/`, `.claude/`, `docs/`, `AGENTS.md`), makes the hooks executable, records the kit commit in `.kit-version`, and prints the fill-in checklist. Then open Claude Code in the target repo and run **`/onboard`** — it interviews you about what the project is, writes the domain glossary, fills `AGENTS.md`, and walks the checklist, handing off to **`/architecture`** for the technical docs.
 
 | Here | Installed at | What it is |
 |---|---|---|
@@ -29,7 +46,7 @@ Either way, `setup.sh` copies everything to its real location (`.github/workflow
 
 ## Updating adopted repos
 
-`setup.sh` records the installed kit commit in the target's `.kit-version`. When this kit gains new commits, open Claude Code in the adopted repo and run the **`kit-sync`** skill: it diffs the kit from `.kit-version` to the latest `main`, re-applies each change while preserving the repo's local adaptations (filled knobs, stack tables, commands), skips anything listed in that repo's `docs/KIT-DEVIATIONS.md`, bumps `.kit-version`, and delivers the result as a branch + PR (CI watched to green). Repos with specific needs record their intentional divergences in `docs/KIT-DEVIATIONS.md` — syncs never clobber them.
+The install prompt above records the installed kit commit in the target's `.kit-version`. When this kit gains new commits, open Claude Code in the adopted repo and run the **`kit-sync`** skill: it diffs the kit from `.kit-version` to the latest `main`, re-applies each change while preserving the repo's local adaptations (filled knobs, stack tables, commands), skips anything listed in that repo's `docs/KIT-DEVIATIONS.md`, bumps `.kit-version`, and delivers the result as a branch + PR (CI watched to green). Repos with specific needs record their intentional divergences in `docs/KIT-DEVIATIONS.md` — syncs never clobber them.
 
 ## Operating model (what the kit assumes)
 
@@ -88,7 +105,7 @@ Conventions (English-only, INDEX-as-projection, surprise-only learnings, ADR imm
 
 ## Adoption order (suggested)
 
-1. Install (`curl … | bash` or `./setup.sh`), then run `/onboard` — it establishes what the project is, writes `docs/CONTEXT.md`, fills `AGENTS.md`, and walks the checklist below with you.
+1. Install (paste the prompt from [Install into a project](#install-into-a-project)), then run `/onboard` — it establishes what the project is, writes `docs/CONTEXT.md`, fills `AGENTS.md`, and walks the checklist below with you.
 2. `/architecture` — analyze the stack, confirm it with you, and write `docs/ARCHITECTURE.md` + `docs/STRUCTURE.md` (file templates included); wires the AGENTS.md stack table and the guard knobs.
 3. `ci.yml` + `format.yml` — wire the package scripts.
 4. Docs system + `sync` skill (already active via hooks).

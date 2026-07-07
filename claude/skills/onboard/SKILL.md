@@ -1,13 +1,14 @@
 ---
 name: onboard
-description: One-time project onboarding after installing the kit. Use when the user invokes /onboard, asks to "onboard this project", "configure the kit", "walk the setup checklist", or right after install.sh/setup.sh has run. Reaches common ground on WHAT the project is (product, users, problem, domain vocabulary) by reusing a PRD/README first and interviewing only for what stays open, then fills AGENTS.md, writes the docs/CONTEXT.md domain glossary, walks the rest of the setup checklist, and hands off to /architecture for the technical half.
+description: One-time project onboarding after installing the kit. Use when the user invokes /onboard, asks to "onboard this project", "configure the kit", "walk the setup checklist", or right after the install prompt (see README.md) has run. Reaches common ground on WHAT the project is (product, users, problem, domain vocabulary) by reusing a PRD/README first and interviewing only for what stays open, then fills AGENTS.md, writes the docs/CONTEXT.md domain glossary, walks the rest of the setup checklist, and hands off to /architecture for the technical half.
 disable-model-invocation: true
 ---
 
 # Skill: `onboard`
 
-Run **once, right after the kit is installed** (`install.sh` / `setup.sh`).
-Its job is the common ground about **what the project is** — product, users,
+Run **once, right after the kit is installed** (via the install prompt in
+this kit's README.md). Its job is the common ground about **what the project
+is** — product, users,
 problem, domain language — written down where every future agent session
 will find it. The technical half (stack, where to modify, file templates)
 belongs to `/architecture`, which this skill hands off to at the end.
@@ -65,8 +66,8 @@ worse than none.
 
 ### 5. Walk the rest of the setup checklist
 
-Go through the remaining items `setup.sh` printed, one at a time, asking
-only what you can't derive:
+Go through the remaining items from the kit's install prompt, one at a time,
+asking only what you can't derive:
 
 - `.github/workflows/ci.yml` + `format.yml` — toolchain block and package
   scripts wired.
