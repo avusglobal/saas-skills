@@ -1,4 +1,4 @@
-# Extracted reusable kit — CI, Docs, Skills, Agents
+# Extracted reusable kit — CI, Docs, Skills
 
 Project-agnostic assets extracted from `messager.dev`, ready to become a standalone versioned repository and be dropped into any other project (any stack). Everything stack-specific was either generalized into a configurable knob or deliberately left out (see [What was left behind](#what-was-left-behind-and-why)).
 
@@ -16,7 +16,6 @@ Project-agnostic assets extracted from `messager.dev`, ready to become a standal
 | `claude/settings.json` | `.claude/settings.json` | Hook wiring (SessionStart, PreToolUse guard, PostToolUse sync) |
 | `claude/hooks/` | `.claude/hooks/` | The three hook scripts |
 | `claude/skills/` | `.claude/skills/` | Skills (see inventory) |
-| `claude/agents/` | `.claude/agents/` | Subagents used by the `dispatch` skill |
 | `docs/` | `docs/` | Documentation system: conventions + templates (ADR, learning, runbook, INDEX) |
 | `AGENTS.template.md` | `AGENTS.md` | Root agent doc template: solo-dev rule #0, delivery workflow, code/UI rules |
 
@@ -54,17 +53,11 @@ Both analysis workflows need the `CLAUDE_CODE_OAUTH_TOKEN` secret (`claude setup
 | `design` | generalized | UI standard: **Kumo UI** (<https://kumo-ui.com/>) as-is, `data-mode` theming, and the mandatory list pattern — `DropdownMenu` row actions (icon + title, delete last in red after a separator) + [`DeleteResource`](https://kumo-ui.com/blocks/delete-resource/) confirmation. |
 | `guard` | generalized | Spec for the guard hook's 4 rules; pairs with `hooks/guard.sh`. |
 | `sync` | generalized | Keeps `docs/**/INDEX.md` as projections of files on disk. |
-| `dispatch` | generalized | Multi-agent change executor (worktree per change, cmux panes per track, adversarial review, merge gate). `dispatch.ts` copied near-verbatim — see its SKILL.md "Adopting in another project" for the knobs (test command, task-tree paths; requires `bun`, `claude`, `cmux`). |
 | `analyze-logs` | verbatim | evlog NDJSON log analysis. Applies to any TS project using [evlog](https://github.com/evlog). |
 | `build-audit-logs` | verbatim | Audit-trail building with evlog; framework-agnostic. |
 | `review-logging-patterns` | verbatim | Logging-pattern review + evlog adoption across ~15 frameworks. |
 
 The three evlog skills are stack-conditional (they assume evlog) but project-agnostic — drop them if you don't use evlog. The `design` skill assumes Kumo UI by choice (the kit's UI standard).
-
-### Agents (`claude/agents/`)
-
-- **`code-reviewer.md`** — adversarial, read-only, decisive (never punts to a human); severity-ranked findings, sentinel verdict the orchestrator parses. Add your project's inviolable rules at the marked spot.
-- **`task-integrator.md`** — merges a change branch into base, resolving additive conflicts at your registration spines (name yours at the marked spot); sentinel verdicts.
 
 ### Docs system (`docs/`)
 
@@ -83,4 +76,4 @@ Conventions (English-only, INDEX-as-projection, surprise-only learnings, ADR imm
 3. Docs system + `sync` skill (already active via hooks).
 4. `simplicity` (fill the stack table) + `guard` (configure the two knobs).
 5. `push-bug-analysis.yml` + `readability-analysis.yml` (create the OAuth token secret).
-6. `plan` + `design` skills, then `dispatch` + the two agents when you're ready for multi-agent execution.
+6. `plan` + `design` skills.
