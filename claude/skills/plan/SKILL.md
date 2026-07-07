@@ -121,6 +121,6 @@ Before finalizing, run a pre-mortem ("it's 3 months later and this failed — wh
 
 ## Operator preferences (always apply)
 
-- UI work in sub-issues must note screenshot + screen recording deliverables (see `design` skill).
+- UI work in sub-issues must note the **before/after** screenshot + screen recording deliverables (before captured prior to any code change, when a before exists — see `design` skill).
 - Execution agents must **watch CI to green after every push** before reporting back.
 - List/table delete UX must follow the `DropdownMenu` + `DeleteResource` pattern (see `design` skill).

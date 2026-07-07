@@ -58,7 +58,9 @@ Run the red-green loop per the **`tdd` skill** against the issue's `tests:`
 list: one failing test → minimal green → next scenario. If the issue is its
 phase's **tracer bullet**, build the thin end-to-end path first — do not
 fan out into layers. `scope: frontend` work follows the `design` skill,
-including its screenshot + recording deliverables.
+including its **before/after** screenshot + recording deliverables —
+capture the "before" of every affected screen now, before the first code
+change (skip only if the screen doesn't exist yet).
 
 ### 6. Open the PR
 

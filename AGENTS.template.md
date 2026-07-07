@@ -90,6 +90,9 @@ TSK-2 ------------------------ TSK-5
 See the `design` skill. Non-negotiables: **Kumo UI** for all interface work;
 list-item actions via `DropdownMenu` (icon + item title, delete last in red
 after a separator); deletions confirmed with Kumo's `DeleteResource` block.
+Every UI change ships with **before** (when a before exists) **and after**
+screenshots + screen recording, attached to the PR (see the `design` skill's
+deliverables section).
 
 ## Docs
 
