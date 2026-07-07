@@ -54,6 +54,8 @@ Both analysis workflows need the `CLAUDE_CODE_OAUTH_TOKEN` secret (`claude setup
 |---|---|---|
 | `simplicity` | generalized | The anti-over-engineering bias. Fill the stack table with *your* libraries when adopting. |
 | `plan` | generalized | Interview-driven planning into Linear: phases = issues, tasks = sub-issues (bodies follow `docs/templates/issue.md`), issue→branch→PR delivery, and every plan ends with the execution-lanes parallelism diagram. |
+| `implement` | generalized | `/implement <issue-id>` — executes one Linear issue end to end: fetch via the Linear MCP, refuse blocked work, branch in an isolated workspace, TDD loop (per the `tdd` skill), PR, watch CI to green. |
+| `tdd` | generalized | The test methodology behind the kit's TDD mandate: seams (where to test), the red-green loop, and named test anti-patterns with their tells. |
 | `design` | generalized | UI standard: **Kumo UI** (<https://kumo-ui.com/>) as-is, `data-mode` theming, and the mandatory list pattern — `DropdownMenu` row actions (icon + title, delete last in red after a separator) + [`DeleteResource`](https://kumo-ui.com/blocks/delete-resource/) confirmation. |
 | `guard` | generalized | Spec for the guard hook's 4 rules; pairs with `hooks/guard.sh`. |
 | `sync` | generalized | Keeps `docs/**/INDEX.md` as projections of files on disk. |
@@ -81,5 +83,5 @@ Conventions (English-only, INDEX-as-projection, surprise-only learnings, ADR imm
 3. Docs system + `sync` skill (already active via hooks).
 4. `simplicity` (fill the stack table) + `guard` (configure the two knobs).
 5. `push-bug-analysis.yml` + `readability-analysis.yml` (create the OAuth token secret).
-6. `plan` + `design` skills.
+6. `plan` + `implement` + `tdd` + `design` skills.
 7. From then on, updates flow via the `kit-sync` skill (see [Updating adopted repos](#updating-adopted-repos)).

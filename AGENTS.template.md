@@ -44,7 +44,8 @@ Commands (also wired as package scripts and used verbatim by CI):
 2. **Every issue becomes exactly one branch** (use Linear's suggested branch
    name so the PR auto-links), worked on in an **isolated workspace** (git
    worktree or a fresh clone/session) — never directly on the default
-   branch, never two issues on one branch.
+   branch, never two issues on one branch. The `implement` skill
+   (`/implement <issue-id>`) runs steps 2–4 end to end for one issue.
 3. **Every branch is linked to exactly one pull request.** The PR merging is
    what ships that functionality (and closes the Linear issue) — nothing
    lands on the default branch except through its PR.
@@ -69,7 +70,9 @@ TSK-2 ------------------------ TSK-5
 
 ## Code rules
 
-- **TDD** — the failing test comes first (`guard` hook reminds; CI enforces).
+- **TDD** — the failing test comes first (`guard` hook reminds; CI
+  enforces); the `tdd` skill is the methodology — seams, the loop, and the
+  test anti-patterns to avoid.
 - **Simplicity** — the `simplicity` skill is the default bias for all code.
 - **Self-documenting** — descriptive names over comments; comment only a
   non-obvious *why*.
