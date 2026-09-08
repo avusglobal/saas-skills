@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/gruporezult/saas-skills/main/plugins/saas-skills/schemas/saas-skills.schema.json",
+  "title": "saas-skills project configuration",
+  "description": "Per-project knobs for the saas-skills plugin hooks. Lives at .claude/saas-skills.json in the project that installed the plugin; every section is optional and an absent section leaves its hook inert.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "toolkitVersion": {
+      "type": "string",
+      "description": "Version of the saas-skills plugin that last scaffolded this project's files. Read by /saas-skills:upgrade to know which template changes still have to be applied.",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "guard": {
+      "type": "object",
+      "description": "Deterministic rules enforced by the PreToolUse hook on Write|Edit.",
+      "additionalProperties": false,
+      "properties": {
+        "pathScope": {
+          "type": "string",
+          "description": "Only files whose path contains this substring are checked.",
+          "default": "/src/"
+        },
+        "testFilePatterns": {
+          "type": "array",
+          "description": "Globs marking a file as a test. Test files are exempt from every deterministic rule.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "forbiddenPatterns": {
+          "type": "array",
+          "description": "Runtime APIs that must never reach shipped code. A match blocks the write.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "pattern"
+            ],
+            "properties": {
+              "pattern": {
+                "type": "string",
+                "description": "POSIX extended regular expression matched against the file content."
+              },
+              "message": {
+                "type": "string",
+                "description": "Why it is blocked and what to do instead. Shown to the agent."
+              }
+            }
+          }
+        },
+        "moduleLayout": {
+          "type": "object",
+          "description": "Enforced one-file-per-layer layout inside module folders. Omit basenames to disable the rule.",
+          "additionalProperties": false,
+          "properties": {
+            "pathPattern": {
+              "type": "string",
+              "description": "Path fragment identifying module folders.",
+              "default": "/src/modules/"
+            },
+            "fileExtensions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Extensions the rule applies to, without the dot."
+            },
+            "basenames": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "The only file names allowed, without the extension."
+            }
+          }
+        },
+        "advisoryContext": {
+          "type": "string",
+          "description": "Text injected into the agent's context on every allowed write. Use it for the judgment rules that must never hard-block, such as the TDD reminder and domain boundaries."
+        }
+      }
+    },
+    "docsSync": {
+      "type": "object",
+      "description": "PostToolUse reminder keeping docs/**/INDEX.md a projection of the files on disk.",
+      "additionalProperties": false,
+      "properties": {
+        "watchPaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Path fragments that trigger the reminder."
+        },
+        "reminder": {
+          "type": "string",
+          "description": "Overrides the default reminder text."
+        }
+      }
+    },
+    "sessionStart": {
+      "type": "object",
+      "description": "Environment bootstrap run at the start of a session.",
+      "additionalProperties": false,
+      "properties": {
+        "remoteOnly": {
+          "type": "boolean",
+          "default": true,
+          "description": "When true, only runs on Claude Code web sessions and leaves local machines untouched."
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Shell commands run in order from the project root."
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "description": "Read by /saas-skills:plan, /saas-skills:implement and the review agents. Absent when the project does not use them; every key below is optional and an absent key means the behavior it drives does not run.",
+      "additionalProperties": false,
+      "properties": {
+        "linear": {
+          "type": "object",
+          "description": "Where planning lives. The delivery commands refuse to create issues without a team.",
+          "additionalProperties": false,
+          "properties": {
+            "teamKey": {
+              "type": "string",
+              "description": "The team's slug in Linear \u2014 the prefix its issues carry, e.g. ENG, LOVI, ACME. Asked during /saas-skills:setup, never guessed from the repository name."
+            },
+            "projectId": {
+              "type": "string",
+              "description": "Optional Linear project the work belongs to."
+            }
+          },
+          "required": [
+            "teamKey"
+          ]
+        },
+        "riskLabels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Issue labels that make an epic require the operator's own approval on top of the approver agent, e.g. risk:payments. An empty list means the approver is the only gate.",
+          "default": []
+        },
+        "riskDomains": {
+          "type": "array",
+          "description": "Areas the reviewers weigh extra. This is what makes bug-reviewer and spec-verifier sharp for this product instead of generic.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "The area, e.g. payments, uploads, tenancy."
+              },
+              "whatBreaks": {
+                "type": "string",
+                "description": "What tends to go wrong there, in one sentence the reviewer can check against a diff."
+              }
+            },
+            "required": [
+              "name",
+              "whatBreaks"
+            ]
+          },
+          "default": []
+        },
+        "commands": {
+          "type": "object",
+          "description": "The project's own commands, exactly as CI runs them. Agents never invent one; a missing key means that step is skipped and reported.",
+          "additionalProperties": false,
+          "properties": {
+            "install": {
+              "type": "string"
+            },
+            "lint": {
+              "type": "string"
+            },
+            "typecheck": {
+              "type": "string"
+            },
+            "test": {
+              "type": "string"
+            }
+          }
+        },
+        "deploy": {
+          "type": "object",
+          "description": "Deploy verification for the ship agent. OMIT THIS BLOCK ENTIRELY when there is no deploy check \u2014 ship then finishes at 'merged, issue closed' instead of claiming a deployment it never observed.",
+          "additionalProperties": false,
+          "properties": {
+            "healthUrl": {
+              "type": "string",
+              "description": "Polled after a merge into the default branch."
+            },
+            "statusCommand": {
+              "type": "string",
+              "description": "Shell command reporting the deployment state; must exit non-zero while it is not healthy."
+            },
+            "requiredEnvVars": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Variable NAMES checked as present in the target environment. Values are never read or printed."
+            },
+            "timeoutSeconds": {
+              "type": "integer",
+              "default": 600,
+              "description": "How long to wait for the deployment before reporting a failure."
+            }
+          }
+        }
+      }
+    }
+  }
+}

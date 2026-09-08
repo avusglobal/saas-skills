@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "saas-skills",
+  "description": "Opinionated delivery toolkit for solo maintainers, as one installable Claude Code plugin: the code standard, TDD, how the agent talks to you, a deterministic write guard, Linear-driven planning and implementation, and the review agents that approve and ship a PR.",
+  "owner": {
+    "name": "gruporezult",
+    "url": "https://github.com/gruporezult"
+  },
+  "plugins": [
+    {
+      "name": "saas-skills",
+      "source": "./plugins/saas-skills",
+      "category": "workflow"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "saas-skills",
+  "version": "0.3.0",
+  "description": "The saas-skills kit in one plugin: the code-standard, tdd and communication skills, the deterministic write guard and docs hooks, /saas-skills:setup and :upgrade to install and update the project-local half, and Linear-driven delivery \u2014 /saas-skills:plan and :implement plus the six agents that review, approve and ship a pull request.",
+  "author": {
+    "name": "gruporezult",
+    "url": "https://github.com/gruporezult"
+  },
+  "homepage": "https://github.com/gruporezult/saas-skills",
+  "repository": "https://github.com/gruporezult/saas-skills",
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "tdd",
+    "code-review",
+    "agents",
+    "linear",
+    "delivery",
+    "guard",
+    "hooks",
+    "scaffolding",
+    "docs"
+  ]
+}

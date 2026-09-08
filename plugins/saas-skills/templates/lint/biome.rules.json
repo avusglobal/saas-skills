@@ -1,0 +1,50 @@
+{
+  "$comment": [
+    "Drop this $comment key when merging \u2014 it is documentation, not config.",
+    "The code-standard rules Biome can decide on its own. Merge into the",
+    "project's biome.json \u2014 this is a fragment, not a config.",
+    "noFloatingPromises is type-aware and needs Biome 2 or newer.",
+    "Verify every rule against the installed version before writing this in;",
+    "drop what Biome rejects and report it as uncovered.",
+    "Biome has no equivalent for max-depth, max-params, no-await-in-loop,",
+    "no-null, commented-out code, the TODO format or restricted disables \u2014",
+    "those stay review-only on a Biome project."
+  ],
+  "linter": {
+    "rules": {
+      "complexity": {
+        "noExcessiveCognitiveComplexity": {
+          "level": "warn",
+          "options": {
+            "maxAllowedComplexity": 15
+          }
+        },
+        "noUselessCatch": "error"
+      },
+      "style": {
+        "noNonNullAssertion": "error",
+        "noParameterAssign": "error",
+        "noNestedTernary": "error",
+        "useNamingConvention": {
+          "level": "warn",
+          "options": {
+            "conventions": [
+              {
+                "selector": {
+                  "kind": "interface"
+                },
+                "match": "(?!I[A-Z]).*"
+              }
+            ]
+          }
+        }
+      },
+      "suspicious": {
+        "noExplicitAny": "error",
+        "noEmptyBlockStatements": "error",
+        "useAwait": "error",
+        "noFloatingPromises": "error"
+      }
+    }
+  }
+}

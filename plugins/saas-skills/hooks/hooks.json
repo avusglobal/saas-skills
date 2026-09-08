@@ -1,0 +1,40 @@
+{
+  "description": "saas-skills hooks: environment bootstrap on session start, the deterministic write guard before Write|Edit, and the docs INDEX reminder after. All three stay inert until the project has a .claude/saas-skills.json (run /saas-skills:setup).",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh\"",
+            "timeout": 300
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/guard.sh\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/sync.sh\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$comment": [
+    "Drop this $comment key when merging \u2014 it is documentation, not config.",
+    "Compiler flags that back code-standard rules the linter cannot reach.",
+    "Merge into the project's tsconfig.json.",
+    "useUnknownInCatchVariables is what makes 'narrow a caught unknown' real.",
+    "exactOptionalPropertyTypes is the one to drop first on an existing",
+    "codebase \u2014 it is the strictest and the noisiest to adopt late."
+  ],
+  "compilerOptions": {
+    "strict": true,
+    "useUnknownInCatchVariables": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true
+  }
+}

@@ -1,0 +1,67 @@
+# Validates the marketplace and every plugin on each push, so a broken manifest
+# is caught here instead of in the projects that install from this repository.
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Validate the marketplace
+        run: claude plugin validate .
+
+      - name: Validate every plugin
+        run: |
+          status=0
+          for manifest in plugins/*/.claude-plugin/plugin.json; do
+            plugin="$(dirname "$(dirname "$manifest")")"
+            echo "::group::$plugin"
+            claude plugin validate "$plugin" || status=1
+            echo "::endgroup::"
+          done
+          exit $status
+
+      - name: Check the hook scripts
+        run: |
+          status=0
+          for script in plugins/*/hooks/*.sh; do
+            [ -e "$script" ] || continue
+            bash -n "$script" || status=1
+            [ -x "$script" ] || { echo "$script is not executable"; status=1; }
+          done
+          exit $status
+
+      - name: Check that every plugin version matches its tag-ready state
+        run: |
+          status=0
+          for manifest in plugins/*/.claude-plugin/plugin.json; do
+            name=$(jq -r '.name' "$manifest")
+            version=$(jq -r '.version // empty' "$manifest")
+            if [ -z "$version" ]; then
+              echo "$name has no version — adopters cannot tell releases apart"
+              status=1
+            fi
+            if ! jq -e --arg n "$name" '.plugins[] | select(.name == $n)' \
+                 .claude-plugin/marketplace.json > /dev/null; then
+              echo "$name is not listed in the marketplace"
+              status=1
+            fi
+          done
+          exit $status
