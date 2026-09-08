@@ -6,7 +6,7 @@ that must live inside your repository, and the Linear-driven delivery pipeline
 — planning, implementation and the agents that review, approve and ship.
 
 ```
-/plugin marketplace add gruporezult/code-toolkit
+/plugin marketplace add gruporezult/saas-skills
 /plugin install saas-skills@saas-skills
 /saas-skills:setup
 ```

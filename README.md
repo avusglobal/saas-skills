@@ -21,7 +21,7 @@ Set this repository up with the saas-skills plugin. Do it in this order and stop
 
 1. If this directory is not a git repository yet, run `git init -b main`.
 2. Register the marketplace and install the plugin:
-   claude plugin marketplace add gruporezult/code-toolkit
+   claude plugin marketplace add gruporezult/saas-skills
    claude plugin install saas-skills@saas-skills
    If the marketplace is already registered, run `claude plugin marketplace update saas-skills` instead of adding it again.
 3. Confirm with `claude plugin list` that saas-skills is installed and enabled. If it is not, show me the error and stop.
@@ -45,7 +45,7 @@ finishes, so the hooks pick up the configuration it wrote.
 The same thing as slash commands, for an existing project or a second machine:
 
 ```
-/plugin marketplace add gruporezult/code-toolkit
+/plugin marketplace add gruporezult/saas-skills
 /plugin install saas-skills@saas-skills
 /saas-skills:setup
 ```
