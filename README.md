@@ -10,17 +10,48 @@ from now*: fewer moving parts over elegant ones, managed and serverless over
 anything that must be provisioned or patched by hand, and every unit of work
 understandable on its own without tribal knowledge.
 
-## Install
+## Start a new project
+
+Create the repository, open Claude Code inside it, and paste this prompt as
+your first message. It installs the plugin and stops; the plugin's own setup
+command does the rest after a restart.
 
 ```
-/plugin marketplace add gruporezult/saas-skills
+Set this repository up with the saas-skills plugin. Do it in this order and stop when told to.
+
+1. If this directory is not a git repository yet, run `git init -b main`.
+2. Register the marketplace and install the plugin:
+   claude plugin marketplace add gruporezult/code-toolkit
+   claude plugin install saas-skills@saas-skills
+   If the marketplace is already registered, run `claude plugin marketplace update saas-skills` instead of adding it again.
+3. Confirm with `claude plugin list` that saas-skills is installed and enabled. If it is not, show me the error and stop.
+4. Do not scaffold anything yourself — no workflows, docs, AGENTS.md or configuration. The plugin's setup command does that after a restart.
+5. Finish by telling me, in one line each: what you ran, and that I must restart Claude Code and run /saas-skills:setup.
+```
+
+Then restart Claude Code and run:
+
+```
+/saas-skills:setup
+```
+
+It installs the half a plugin cannot deliver — the CI workflows, the
+documentation system, `AGENTS.md`, and the configuration the hooks read —
+merging with whatever the repository already has. Restart once more when it
+finishes, so the hooks pick up the configuration it wrote.
+
+## Install by hand
+
+The same thing as slash commands, for an existing project or a second machine:
+
+```
+/plugin marketplace add gruporezult/code-toolkit
 /plugin install saas-skills@saas-skills
 /saas-skills:setup
 ```
 
-`/saas-skills:setup` installs the half a plugin cannot deliver — the CI
-workflows, the documentation system, `AGENTS.md`, and the configuration the
-hooks read — merging with whatever the repository already has.
+The plugin is installed for your user, so a second project on the same
+machine only needs the last command.
 
 ## What is in it
 
