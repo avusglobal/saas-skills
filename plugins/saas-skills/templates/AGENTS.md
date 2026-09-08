@@ -101,13 +101,13 @@ Commands (also wired as package scripts and used verbatim by CI):
 
 1. **Every unit of work is a Linear issue**, body following
    `docs/templates/epic.md` (parent) or `docs/templates/issue.md` (task).
-   `/saas-skills:plan` creates them: the spec and the plan live in
+   `/spec` creates them: the spec and the plan live in
    the parent's body, the tasks become sub-issues.
 2. **Every issue becomes exactly one branch** (use Linear's suggested branch
    name so the PR auto-links), worked on in an **isolated workspace** (git
    worktree or a fresh clone/session) — never directly on the default
    branch, never two issues on one branch.
-   `/saas-skills:implement <issue-id>` runs steps 2–4 end to end for
+   `/implement <issue-id>` runs steps 2–4 end to end for
    the whole issue tree.
 3. **Every branch is linked to exactly one pull request.** The PR merging is
    what ships that functionality (and closes the Linear issue) — nothing
@@ -119,7 +119,7 @@ Commands (also wired as package scripts and used verbatim by CI):
 
 ## Planning
 
-Use `/saas-skills:plan`. Its contract: the spec is closed before the
+Use `/spec`. Its contract: the spec is closed before the
 plan, an independent agent argues the counterpoint, the operator approves part
 by part, all planning lives in Linear (never in repository files), and every
 plan ends with the execution order showing what runs in parallel:

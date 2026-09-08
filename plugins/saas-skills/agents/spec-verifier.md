@@ -6,7 +6,7 @@ description: >-
   touches application source, injects up to two behavior faults in a
   disposable copy to confirm the tests actually discriminate. Use after every
   complete implementation change — for example when a child
-  `/saas-skills:implement` workspace announces PR_READY. The prompt must give
+  `/implement` workspace announces PR_READY. The prompt must give
   the absolute path of the worktree, the base branch, the issue text with its
   numbered criteria, and, if available, the PR URL. Returns a structured
   report whose last line is `RESULT: APPROVED` or `RESULT: REJECTED <n>`.

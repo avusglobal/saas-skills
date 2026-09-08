@@ -2,11 +2,12 @@
 description: >-
   Set up this repository to work with the saas-skills. One pass: surveys the
   project, fills the capability table with libraries that clear the adoption
-  bar, proposes the MCP servers the stack deserves, scaffolds the CI
-  workflows, the docs system and AGENTS.md, wires the code standard into the
-  linter and tsconfig, writes every knob the plugins read, and says which
-  saas-skills plugins this project should install. Run it once, after
-  installing the plugin; use /saas-skills:upgrade afterwards.
+  bar, adopts the skills those libraries already publish, proposes the MCP
+  servers the stack deserves, scaffolds the CI workflows, the docs system and
+  AGENTS.md, wires the code standard into the linter and tsconfig, writes every
+  knob the plugins read, and says which saas-skills plugins this project should
+  install. Run it once, after installing the plugin; use /saas-skills:upgrade
+  afterwards.
 argument-hint: (no arguments)
 ---
 
@@ -86,13 +87,52 @@ per question.
 
 ---
 
-## 3. Propose the MCP servers the stack deserves
+## 3. Adopt the skills this project's libraries already publish
+
+A skill teaches the agent one library the way its maintainers use it, so it
+stops writing that library from memory. Many of the libraries you just wrote
+into the capability table publish one, shipped inside a plugin.
+
+1. `claude plugin marketplace list` — the marketplaces already configured.
+   Claude Code ships with `claude-plugins-official`. Add another only when the
+   operator names one: `claude plugin marketplace add <owner/repo>`.
+2. `claude plugin list --available --json` — every plugin those marketplaces
+   offer, each with its own description, next to what is already installed.
+   **That listing is the only source: a plugin exists only if it appears
+   there.** Never propose one from memory, and never invent a plugin name.
+3. Match it against the survey and the capability table — the framework, the
+   database client, the payment provider, the test runner, the deploy target,
+   the error tracker. Match on what the plugin says it covers, not on a name
+   that merely looks alike.
+4. Hold every candidate to a bar, because an installed skill costs context in
+   **every** session, whether it fires or not:
+   - it covers something the project uses today, not something it might;
+   - it comes from the library's own maintainers, or its description names the
+     version this project runs;
+   - it earns that cost. `claude plugin details <name>` prints the always-on
+     tokens and the per-skill cost, but only for an installed plugin — so
+     install, measure, report the number, and
+     `claude plugin uninstall <name>` whatever did not earn it.
+5. Ask one plugin per question, with the exact command:
+   `claude plugin install <name>@<marketplace>`. Installing asks the operator
+   to trust the marketplace and needs a restart to take effect — say both.
+6. A plugin is the operator's own state, not the repository's: whoever clones
+   this repository next does not get it. List the adopted ones in the final
+   report, with their install commands, so the set can be reproduced.
+
+A vendor's plugin often bundles that vendor's MCP server too. When it does,
+adopting it here settles the next step for that service.
+
+---
+
+## 4. Propose the MCP servers the stack deserves
 
 An MCP server lets the agent read the real state of a service instead of
 guessing at it — the issue tracker, the database, the payment provider, the
 error tracker.
 
-1. `claude mcp list` — what is already connected.
+1. `claude mcp list` — what is already connected. Skip any server a
+   plugin adopted in step 3 already brings.
 2. For each service in the survey and in the capability table, check whether
    its vendor publishes an MCP server. Verify it exists before naming it;
    never invent a server or a URL.
@@ -103,13 +143,13 @@ error tracker.
 4. **You cannot finish these for the operator** when they need a login — say
    which need `claude mcp login <name>` afterwards.
 
-`/saas-skills:plan` and `/saas-skills:implement` need the **Linear** MCP. When
+`/spec` and `/implement` need the **Linear** MCP. When
 the operator plans in Linear and it is not connected, this is the first server
 you propose.
 
 ---
 
-## 4. Copy the templates, merging with what is there
+## 5. Copy the templates, merging with what is there
 
 | Template | Installs at | On conflict |
 |---|---|---|
@@ -127,7 +167,7 @@ never invented.
 
 ---
 
-## 5. Make the code standard enforceable
+## 6. Make the code standard enforceable
 
 The `code-standard` skill states about sixty rules; sixteen a linter can decide
 on its own. Those belong in the build, not in a review comment.
@@ -159,7 +199,7 @@ seven of the sixteen have no equivalent and remain review-only.
 
 ---
 
-## 6. Write the knobs
+## 7. Write the knobs
 
 `.claude/saas-skills.json` is what makes the hooks and the delivery agents do
 anything at all — until it exists they are inert by design. The schema is at
@@ -207,7 +247,7 @@ Set `toolkitVersion` to the `version` in
 
 ---
 
-## 7. Say which parts of the kit this project can use
+## 8. Say which parts of the kit this project can use
 
 From the survey, name what applies and what does not, so nothing sits unused
 without the operator knowing why:
@@ -215,21 +255,22 @@ without the operator knowing why:
 | Part | Usable when |
 |---|---|
 | The skills, the hooks, `upgrade` | Always. |
-| `/saas-skills:plan` and `/saas-skills:implement` | Work is planned in Linear, Orca manages the worktrees, and `gh` is authenticated. Name whichever of the three is missing. |
+| `/spec` and `/implement` | Work is planned in Linear, Orca manages the worktrees, and `gh` is authenticated. Name whichever of the three is missing. |
 | The `delivery` agents | Same requirements — they run inside `implement`. |
 
 ---
 
-## 8. Report what only the operator can do
+## 9. Report what only the operator can do
 
 - Create the `CLAUDE_CODE_OAUTH_TOKEN` repository secret, needed by the two AI
   analysis workflows: `claude setup-token`.
-- Authenticate any MCP server proposed in step 3: `claude mcp login <name>`.
+- Authenticate any MCP server proposed in step 4: `claude mcp login <name>`.
 - Restart the session so the newly written hook configuration is picked up.
 
 Then the summary: what was written, what was filled in the capability table and
-from where, which rules are now enforced by the build, which stayed
-review-only, and every decision you made on their behalf.
+from where, which library plugins were adopted and their install commands,
+which rules are now enforced by the build, which stayed review-only, and every
+decision you made on their behalf.
 
 ---
 
@@ -243,7 +284,8 @@ initial commit on the default branch is fine, and you say so explicitly.
 
 - **Read before writing.** Every file you merge into, you read first.
 - **Never overwrite hand-written content** without showing the diff and asking.
-- **No invented commands, libraries, MCP servers or config keys.** Anything you
-  could not verify gets reported as unverified, never written as fact.
+- **No invented commands, libraries, plugins, MCP servers or config keys.**
+  Anything you could not verify gets reported as unverified, never written as
+  fact.
 - One question per turn, with the comparison and the recommendation separated.
 - Everything written is in English, whatever language the conversation uses.

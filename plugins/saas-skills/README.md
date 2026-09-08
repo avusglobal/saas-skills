@@ -17,8 +17,8 @@ that must live inside your repository, and the Linear-driven delivery pipeline
 |---|---|
 | `commands/setup.md` | `/saas-skills:setup` — surveys the project, fills the capability table with libraries that clear the adoption bar, proposes the MCP servers the stack deserves, scaffolds CI, docs and `AGENTS.md`, wires the code standard into the linter, and writes every knob the plugin reads. |
 | `commands/upgrade.md` | `/saas-skills:upgrade` — re-applies template changes without clobbering local adaptations. |
-| `commands/plan.md` | `/saas-skills:plan` — closes a spec, runs the counterpoint agent, approves it part by part, creates the Linear issue tree. |
-| `commands/implement.md` | `/saas-skills:implement` — orchestrates the tree in Orca child workspaces through review, simplify, the merge gate and ship. |
+| `commands/plan.md` | `/spec` (or `/saas-skills:plan`) — closes a spec, runs the counterpoint agent, approves it part by part, creates the Linear issue tree. |
+| `commands/implement.md` | `/implement` (or `/saas-skills:implement`) — orchestrates the tree in Orca child workspaces through review, simplify, the merge gate and ship. |
 | `skills/code-standard/` | The whole code standard, routing by condition to the design step, the dependency bar, and the frontend and backend deltas. |
 | `skills/tdd/` | The failing test first, traced to what the task asked for, and the mutation pass that proves the tests are real. |
 | `skills/communication/` | How the agent talks to you: your language, plain words, one question per turn with a full comparison. |
@@ -52,7 +52,7 @@ in — a session restart is needed after the file is first written.
 
 ## Delivery requirements
 
-`/saas-skills:plan` and `/saas-skills:implement` need more than the plugin:
+`/spec` and `/implement` need more than the plugin:
 **Linear** (the MCP, `orca linear`, or `LINEAR_API_KEY`), **Orca**-managed
 worktrees, and an authenticated **`gh`**. The rest of the kit works without
 any of them.

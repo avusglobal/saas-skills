@@ -1,14 +1,16 @@
 ---
 description: >-
   Analyze, spec and plan work, then create the issue tree in Linear.
-  Triggers on /saas-skills:plan or when the operator asks to plan a feature.
+  Triggers on /spec (or /saas-skills:plan) or when the operator asks to plan
+  a feature.
   Closes a spec (scope, assumptions, EARS criteria) before planning, runs the
   spec-critic agent as an independent counterpoint, approves it in parts with
   the operator, and creates the issues — always ending with the
   execution-order diagram showing what runs in parallel. Linear is the single
   source of truth for task state; the resulting epic is the input to
-  /saas-skills:implement.
+  /implement.
 argument-hint: <what to plan, or the path to a spec file>
+name: spec
 model: claude-fable-5-1
 effort: high
 ---
@@ -202,7 +204,7 @@ TSK-12 ------------------------ TSK-15
 ```
 
 3. One line per lane naming the dependency that shaped it.
-4. The line ready for the next step: `/saas-skills:implement <parent-id>`.
+4. The line ready for the next step: `/implement <parent-id>`.
 
 ---
 

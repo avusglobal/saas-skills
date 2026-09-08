@@ -1,6 +1,17 @@
 ---
 name: code-standard
-description: Apply before writing, refactoring or reviewing any application code — before the first line and again before committing. This project's complete code standard, covering the numeric thresholds, naming, comments, and the settled tie-breakers for absent values, expected failures, types and async. Routes to the design step when the change spans more than one function, to the dependency bar before any package or non-domain logic is written, and to the frontend and backend deltas.
+description: >-
+  Apply before writing, refactoring or reviewing any application code — before
+  the first line and again before committing. This project's complete code
+  standard, covering the numeric thresholds, naming, comments, and the settled
+  tie-breakers for absent values, expected failures, types and async. Routes to
+  the design step when the change spans more than one function, to the
+  dependency bar before any package or non-domain logic is written, and to the
+  frontend and backend deltas. Load it when creating or editing a source file,
+  reviewing a diff, naming a thing, splitting or growing a function, writing a
+  comment, deciding how a failure travels, reaching for a package, or answering
+  "is this too complex", "where should this live", "should we build it
+  ourselves".
 ---
 
 # Skill: `code-standard`

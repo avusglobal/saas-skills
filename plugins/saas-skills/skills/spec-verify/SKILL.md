@@ -4,7 +4,9 @@ description: >-
   The procedure the `spec-verifier` agent follows — checking that every
   acceptance criterion has real test evidence and, when the diff touches
   application source, injecting behavior faults to confirm the tests actually
-  discriminate. Load when acting as the `spec-verifier` agent.
+  discriminate. Load when acting as the `spec-verifier` agent, and only then —
+  outside that agent the same question belongs to the `tdd` skill's mutation
+  pass.
 ---
 
 # Skill: `spec-verify`

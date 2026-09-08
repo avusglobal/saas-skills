@@ -1,6 +1,17 @@
 ---
 name: communication
-description: Apply to every message written to the operator — answering, reporting finished work, asking something, explaining a decision, or refusing one. Sets the language rule (their language in the conversation, English in everything that lands in the repository), the plain-words bar and how an unavoidable technical term is introduced, the one-question-per-turn protocol — context, a full comparison with advantages and disadvantages and nothing assumed, then the recommendation stated separately — and what a report of finished work has to separate.
+description: >-
+  Apply before sending any message to the operator — answering them, asking
+  them something, offering options, explaining or defending a decision,
+  refusing one, saying work is done, saying it failed, saying it is blocked, or
+  opening a session. Sets the language rule (their language in the
+  conversation, English in everything that lands in the repository), the
+  plain-words bar and how an unavoidable technical term is introduced, the
+  one-question-per-turn protocol — context, a full comparison with advantages
+  and disadvantages and nothing assumed, then the recommendation stated
+  separately — and what a report of finished work has to keep apart. Load it
+  whenever a reply runs longer than one line, or carries a question, a
+  trade-off, a recommendation, a status, or bad news.
 ---
 
 # Skill: `communication`

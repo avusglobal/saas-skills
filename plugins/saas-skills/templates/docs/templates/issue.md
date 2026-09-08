@@ -1,7 +1,7 @@
 <!--
 Body of a task issue: one task = one workspace = one branch = one PR.
 Exported verbatim to the child workspace, which has no tracker access — so it
-must be self-sufficient. Created by /saas-skills:plan or by hand.
+must be self-sufficient. Created by /spec or by hand.
 
 Conventions:
 - English only — title, body, comments.

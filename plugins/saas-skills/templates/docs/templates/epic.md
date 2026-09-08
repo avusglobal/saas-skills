@@ -1,6 +1,6 @@
 <!--
 Body of a parent (epic) issue. It is the spec AND the plan — one document.
-Created by /saas-skills:plan, read verbatim by the implement
+Created by /spec, read verbatim by the implement
 command, the approver and every reviewer, so it must be self-sufficient.
 Delete this comment block before filling it in.
 -->
