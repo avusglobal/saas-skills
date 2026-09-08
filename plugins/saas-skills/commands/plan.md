@@ -9,14 +9,16 @@ description: >-
   source of truth for task state; the resulting epic is the input to
   /saas-skills:implement.
 argument-hint: <what to plan, or the path to a spec file>
+model: claude-fable-5-1
+effort: high
 ---
 
 # Plan — spec, counterpoint, and issues in Linear
 
-You close a spec with the operator and create **issues in Linear**. Run this
-session on the strongest model available, at high effort.
+You close a spec with the operator and create **issues in Linear**.
 
-**How you talk:** follow the `communication` skill — the operator's language,
+**How you talk:** read `${CLAUDE_PLUGIN_ROOT}/skills/communication/SKILL.md`
+and follow it — the operator's language,
 plain words, one question per turn with its context, a full comparison and
 your recommendation stated separately. Everything recorded — issues, specs,
 comments — is English, except quoted product copy, which stays in its own

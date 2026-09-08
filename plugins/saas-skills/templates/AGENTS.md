@@ -56,7 +56,7 @@ Core — fill these when the project starts:
 | Validating and typing input | <...> |
 | Auth, sessions, password hashing | <...> |
 | Logging and structured events | <...> |
-| UI, forms, state | Kumo UI (<https://kumo-ui.com/>) — see the `design` skill |
+| UI, forms, state | <...> |
 | Tests | <...> |
 | HTTP, crypto, encoding, timers | Web standard APIs — `fetch`, `crypto.subtle`, `URL`, `TextEncoder` |
 
@@ -92,10 +92,10 @@ request that adopts it.
 
 Commands (also wired as package scripts and used verbatim by CI):
 
-- Install: `<bun install --frozen-lockfile>`
-- Typecheck: `<bun run typecheck>`
-- Lint/format: `<bun run lint>` / `<bun run format>`
-- Test: `<bun run test>`
+- Install: `<install command, with a frozen lockfile>`
+- Typecheck: `<typecheck command>`
+- Lint/format: `<lint command>` / `<format command>`
+- Test: `<test command>`
 
 ## Delivery workflow (inviolable)
 
@@ -145,23 +145,22 @@ TSK-2 ------------------------ TSK-5
 - **Self-documenting** — descriptive names over comments; comment only a
   non-obvious *why*.
 - **Module layout** — <describe your layout, e.g. one folder per module with
-  fixed per-layer filenames>; the `guard` hook blocks violations.
-- **Forbidden APIs** — <e.g. no `bun:*`/`Bun.*` in `src/` if production runs
-  elsewhere>; configured in `.claude/saas-skills.json`.
+  fixed per-layer filenames>; the guard hook repeats it as context on every
+  write.
+- **Forbidden APIs** — <e.g. no server-runtime built-ins in `src/` if
+  production runs on the edge>; configured in `.claude/saas-skills.json`.
 
 ## UI rules
 
-See the `design` skill. Non-negotiables: **Kumo UI** for all interface work;
-list-item actions via `DropdownMenu` (icon + item title, delete last in red
-after a separator); deletions confirmed with Kumo's `DeleteResource` block.
-Every UI change ships with **before** (when a before exists) **and after**
-screenshots + screen recording, attached to the PR (see the `design` skill's
-deliverables section).
+<The component library and the non-negotiables for interface work, if the
+project has a UI. Delete this section otherwise.> Every UI change ships with
+**before** (when a before exists) **and after** screenshots attached to the
+PR.
 
 ## Docs
 
 `docs/README.md` describes the system: ADRs for decisions, learnings for
-surprises, runbooks for operations, INDEX.md files kept in sync by the docs
-hook.
+surprises, runbooks for operations, INDEX.md files regenerated after every
+docs change (the docs hook reminds).
 Record a learning whenever something genuinely surprised you. **Linear is the
 standard for all task state** — plans and task lists never live in docs/.

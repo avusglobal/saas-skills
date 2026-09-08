@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# PostToolUse hook on Write|Edit — reminds the agent to re-run the `sync` skill
-# after a documentation file changes, so every docs/**/INDEX.md stays a faithful
-# projection of the files on disk.
+# PostToolUse hook on Write|Edit — reminds the agent to regenerate the INDEX.md
+# files after a documentation file changes, so every docs/**/INDEX.md stays a
+# faithful projection of the files on disk.
 #
 # Configured in the consumer repository at .claude/saas-skills.json, under
 # "docsSync":
@@ -26,7 +26,7 @@ input=$(cat)
 file_path=$(jq -r '.tool_input.file_path // empty' <<<"$input" 2>/dev/null) || pass
 [ -n "$file_path" ] || pass
 
-# An INDEX.md is the sync skill's own output — reacting to it would loop.
+# An INDEX.md is the output of that regeneration — reacting to it would loop.
 [[ "$file_path" == *"/INDEX.md" ]] && pass
 
 watched=false
@@ -37,7 +37,7 @@ done < <(jq -r '.watchPaths[]? // empty' <<<"$sync")
 [ "$watched" = true ] || pass
 
 reminder=$(jq -r '.reminder // empty' <<<"$sync")
-[ -n "$reminder" ] || reminder="Invoke the \`sync\` skill to regenerate the ancestor INDEX.md files and report inconsistencies (orphan files, entries pointing at files that no longer exist)."
+[ -n "$reminder" ] || reminder="Regenerate the ancestor INDEX.md files from the files on disk (one row per file, from its frontmatter or title) and report inconsistencies: orphan files, entries pointing at files that no longer exist."
 
 jq -cn --arg context "Documentation changed: ${file_path}. ${reminder}" \
   '{hookSpecificOutput:{hookEventName:"PostToolUse",additionalContext:$context}}'

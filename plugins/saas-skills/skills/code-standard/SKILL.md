@@ -37,7 +37,7 @@ speculative interface or a wrapper for one call site does not survive contact
 with this page.
 
 **Scope:** how code is written. Where it physically lives — folders, modules,
-layers — is in `docs/ARCHITECTURE.md` and `docs/STRUCTURE.md`.
+layers — is the module layout section of `AGENTS.md`.
 
 ---
 

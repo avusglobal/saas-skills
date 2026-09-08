@@ -41,7 +41,6 @@ in — a session restart is needed after the file is first written.
 | Section | Drives |
 |---|---|
 | `guard.forbiddenPatterns` | Runtime APIs that must never reach shipped code. A match blocks the write. |
-| `guard.moduleLayout` | The enforced one-file-per-layer naming inside module folders. |
 | `guard.advisoryContext` | Judgment rules injected as context on every allowed write — never a hard block. |
 | `docsSync.watchPaths` | Which documentation paths trigger the INDEX regeneration reminder. |
 | `sessionStart.commands` | Install and local-stack commands, on web sessions only by default. |
@@ -80,5 +79,7 @@ the sixteen have no equivalent and stay review-only.
 
 ## The guard's design
 
-Only what a script can decide with certainty blocks a write. Everything
-needing judgment is injected as context, with CI as the real backstop.
+Only what a script can decide with certainty blocks a write, and that is one
+rule: a forbidden runtime API in shipped code. Everything else — layout,
+naming, boundaries — is judgment, injected as context, with CI and the
+reviewers as the real backstop.

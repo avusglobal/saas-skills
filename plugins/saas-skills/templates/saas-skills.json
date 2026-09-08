@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/gruporezult/saas-skills/main/plugins/saas-skills/schemas/saas-skills.schema.json",
-  "toolkitVersion": "0.2.0",
+  "toolkitVersion": "0.4.0",
   "guard": {
     "pathScope": "/src/",
     "testFilePatterns": [
@@ -8,15 +8,7 @@
       "*.test.tsx"
     ],
     "forbiddenPatterns": [],
-    "moduleLayout": {
-      "pathPattern": "/src/modules/",
-      "fileExtensions": [
-        "ts",
-        "tsx"
-      ],
-      "basenames": []
-    },
-    "advisoryContext": "Before finishing this write, check two things by hand. (a) TDD \u2014 if this file carries behavior, the matching test under tests/ mirroring src/ must already exist and be failing; CI's test suite is the backstop. (b) Domain boundary \u2014 if the active task belongs to a different domain than the module you are editing, record a cross-domain blocker instead of editing outside the domain."
+    "advisoryContext": "Before finishing this write, check two things by hand. (a) TDD — if this file carries behavior, the matching test under tests/ mirroring src/ must already exist and be failing; CI's test suite is the backstop. (b) Domain boundary — if the active task belongs to a different domain than the module you are editing, record a cross-domain blocker instead of editing outside the domain."
   },
   "docsSync": {
     "watchPaths": [

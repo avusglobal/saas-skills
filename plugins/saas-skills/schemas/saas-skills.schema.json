@@ -16,7 +16,7 @@
     },
     "guard": {
       "type": "object",
-      "description": "Deterministic rules enforced by the PreToolUse hook on Write|Edit.",
+      "description": "Deterministic rule enforced by the PreToolUse hook on Write|Edit, plus the advisory context it injects.",
       "additionalProperties": false,
       "properties": {
         "pathScope": {
@@ -49,32 +49,6 @@
                 "type": "string",
                 "description": "Why it is blocked and what to do instead. Shown to the agent."
               }
-            }
-          }
-        },
-        "moduleLayout": {
-          "type": "object",
-          "description": "Enforced one-file-per-layer layout inside module folders. Omit basenames to disable the rule.",
-          "additionalProperties": false,
-          "properties": {
-            "pathPattern": {
-              "type": "string",
-              "description": "Path fragment identifying module folders.",
-              "default": "/src/modules/"
-            },
-            "fileExtensions": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Extensions the rule applies to, without the dot."
-            },
-            "basenames": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "The only file names allowed, without the extension."
             }
           }
         },
@@ -133,7 +107,7 @@
           "properties": {
             "teamKey": {
               "type": "string",
-              "description": "The team's slug in Linear \u2014 the prefix its issues carry, e.g. ENG, LOVI, ACME. Asked during /saas-skills:setup, never guessed from the repository name."
+              "description": "The team's slug in Linear — the prefix its issues carry, e.g. ENG, LOVI, ACME. Asked during /saas-skills:setup, never guessed from the repository name."
             },
             "projectId": {
               "type": "string",
@@ -196,7 +170,7 @@
         },
         "deploy": {
           "type": "object",
-          "description": "Deploy verification for the ship agent. OMIT THIS BLOCK ENTIRELY when there is no deploy check \u2014 ship then finishes at 'merged, issue closed' instead of claiming a deployment it never observed.",
+          "description": "Deploy verification for the ship agent. OMIT THIS BLOCK ENTIRELY when there is no deploy check — ship then finishes at 'merged, issue closed' instead of claiming a deployment it never observed.",
           "additionalProperties": false,
           "properties": {
             "healthUrl": {
