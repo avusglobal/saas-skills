@@ -18,6 +18,9 @@ the skill was loaded — read it when a message is more than one line:
   options — advantages, disadvantages, and nothing assumed. Say which you
   recommend, as a separate line I can reject.
 - **State plainly what is done, what failed, and what is waiting on me.**
+- **Write so compaction keeps it.** Constraints as orders on their own line,
+  identifiers spelled out instead of "the one we picked", and anything that
+  has to outlive the session written into the repository, not only told to me.
 
 ## Working here
 

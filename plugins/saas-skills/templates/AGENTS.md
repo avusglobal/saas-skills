@@ -38,6 +38,10 @@ is the full standard; the part that applies to every message:
   — advantages, disadvantages, nothing assumed — then the recommendation,
   stated separately.
 - Done, failed and waiting-on-you are stated plainly and kept apart.
+- A long session gets compacted, and a summarizer keeps a rule only when it
+  reads as one. Write every constraint as an order on its own line, restate
+  facts instead of pointing back at an earlier turn, and put anything that
+  must outlive the session into this repository, not only into a message.
 
 ## Stack
 
