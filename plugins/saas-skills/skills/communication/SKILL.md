@@ -11,7 +11,9 @@ description: >-
   and disadvantages and nothing assumed, then the recommendation stated
   separately — and what a report of finished work has to keep apart. Load it
   whenever a reply runs longer than one line, or carries a question, a
-  trade-off, a recommendation, a status, or bad news.
+  trade-off, a recommendation, a status, or bad news — and in a long session,
+  where it also sets how to write so that compaction keeps the constraints and
+  the decisions.
 ---
 
 # Skill: `communication`
@@ -116,6 +118,40 @@ it is still cheap.
 
 ---
 
+## Writing so a compacted conversation keeps it
+
+A long session gets summarized, and the summarizer weighs every sentence the
+same way. Anything phrased as a story about what you did is dropped first;
+a rule is kept — but only when it *reads* as a rule. Measured on Claude's own
+compaction prompt, 53% of the constraints in a context survive one round and
+10% survive five, because a constraint written as a plain statement of fact
+is indistinguishable from background (Zerhoudi et al., *The Compaction Cliff
+in Long-Running AI Agent Memory*, arXiv:2608.22752).
+
+**A constraint is written as an order, never as an observation.** "Never
+force-push to `main`" survives a summary; "force-pushing to `main` is risky"
+does not. The same goes for anything the operator tells you: echo it back once,
+in imperative form, in the turn you received it.
+
+**Constraints and decisions get their own lines** — never a clause inside a
+paragraph about the work. A rule buried in narrative is compacted with the
+narrative.
+
+**Never point back at an earlier turn.** "As I said above", "the option we
+picked", "the plan from before" all break the moment that turn is gone.
+Restate the fact itself, however repetitive it feels.
+
+**Write the identifier, not the reference to it.** The version number, the
+branch name, the issue key, the file path, the exact command — not "the version
+we chose", not "that file".
+
+**Anything that must outlive the session goes into the repository**, not only
+into a message. A decision that exists only in the conversation is episodic: it
+is the first thing dropped. Put it in the code, in `AGENTS.md`, in an ADR or in
+the issue — then say in the message where you put it.
+
+---
+
 ## Before sending
 
 - Would someone outside this project understand every word?
@@ -125,4 +161,8 @@ it is still cheap.
 - Is every claim in the comparison something I checked, not something I
   assumed?
 - Is my recommendation separate from the facts, so it can be rejected?
+- Would every constraint here still read as a constraint after a summarizer
+  rewrote the message?
+- Does anything that must outlive this session exist somewhere other than this
+  message?
 - Conversation in their language, everything repo-bound in English?
