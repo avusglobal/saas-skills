@@ -134,6 +134,22 @@ boundary is in the wrong place — that is the finding, not the workaround.
 **Data flows down, events flow up.** A lower layer that reaches back up into
 its caller is the same mistake with a different shape.
 
+**The default layout is package by feature** — one directory per subdomain,
+its entity, service, repository and controller together. Layers as top-level
+directories — `controllers/`, `services/`, `repositories/` — are not used here.
+
+**A `features/` directory exists only next to a `domain/`** that holds the one
+definition of the entity. A use-case directory carrying its own copy of an
+entity is the finding.
+
+**Modules talk through a public entry point or an event**, never through each
+other's internals and never by sharing an entity.
+
+**`shared/` holds technical capability and no business rule.** A rule two
+domains both need means the boundary is drawn in the wrong place.
+
+When to leave the default is measured in `/spec`, not argued while writing.
+
 ---
 
 ## Writing the decision down

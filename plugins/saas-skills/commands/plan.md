@@ -78,6 +78,18 @@ step, because those run on somebody else's calendar.
 
 **Explore the code instead of asking whenever the answer is discoverable.**
 
+**Answer it yourself before asking.** A question is only for what the operator
+alone holds: product intent, a preference, a constraint that lives outside the
+repository. How a thing is normally built, what a provider supports, what an
+approach costs, and what usually fails in work of this shape are yours to find
+— code, `docs/`, the vendor's documentation, then the web — and to bring back
+as a finding, with its source named.
+
+**Never hand an unknown back as a question.** Someone asking for a feature is
+not required to know how it is built, which decisions it hides, or where it
+usually breaks. Research those, decide what the evidence supports, and record
+the call as an assumption when it could not be verified.
+
 ---
 
 ## 3. Before writing the spec
@@ -143,15 +155,50 @@ the last part is explicitly approved.
 
 ## 7. The plan (Medium and above)
 
-Fill `## Plan` in the parent body: `Architecture` in prose, `Reuse` as a
-table, `Risks` as `file:line` → impact → mitigation, `Decisions` — one that is
+Fill `## Plan` in the parent body: `Architecture` in prose, `Structure` per
+the rules below, `Reuse` as a table, `Risks` as `file:line` → impact → mitigation, `Decisions` — one that is
 hard to reverse, surprising and the product of a real trade-off becomes an
 **ADR** (`docs/templates/adr.md`) pointing back to this issue — and `Phases`
 as waves of at most two parallel tasks, only in different areas.
 
+### Structure
+
+Where the code lands is **decided here, never asked.** Read the affected
+directories, measure, decide, and tell the operator the decision together with
+the number that produced it.
+
+**Default: package by feature** — one directory per subdomain, holding its
+entity, service, repository and controller together. This kit sends auth,
+email, search, queues, payments and flags to managed services, so the domain
+left in the repository is mostly orchestration, which is what package by
+feature is for. Keep it unless a signal below is measured.
+
+**Measure first and record the numbers in `Structure`:** lines and public
+methods of the largest service in the area being changed, feature directories
+already there, bounded contexts sharing that directory, and whether the entity
+this work touches is already defined somewhere else.
+
+| Measured signal | The only structure it justifies |
+|---|---|
+| A service over 1000 lines, or over 20 public methods | Vertical Slice Architecture inside that module: one directory per use case under `features/`, over a `domain/` that owns the entity |
+| The same entity defined twice, or a feature importing another feature's internals | A `domain/` in that module holding the single definition, called by every feature |
+| Over 50 feature directories spanning different bounded contexts | Modules by bounded context, each module choosing its own internal layout |
+
+A rich domain that is expected rather than measured stays package by feature.
+Nothing else justifies leaving the default, and any structure other than the
+default is an **ADR**.
+
+**Never create `features/` without a `domain/` in the same module.**
+
+**A module never imports another module's internals** — public entry point or
+event only.
+
+**An entity is never shared across modules** — replicate the few fields needed,
+or read them through the other module's public API.
+
 Breakdown: Medium ⇒ parent plus tasks as sub-issues. Large and Complex with
 natural stages ⇒ each phase is its own sub-issue with its tasks. Every task is
-a **vertical slice** ending in testable behavior; the first is the tracer
+an **end-to-end slice** ending in testable behavior; the first is the tracer
 bullet.
 
 **Pre-mortem:** "three months from now this plan failed — why?". List the

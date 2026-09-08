@@ -1,7 +1,7 @@
 ---
 description: >-
   Execute a Linear issue and its whole sub-issue tree in Orca child
-  workspaces, breaking each task into vertical slices with criterion-derived
+  workspaces, breaking each task into end-to-end slices with criterion-derived
   tests, running bug-reviewer and spec-verifier in parallel after each PR,
   then simplify, then the approver agent as the merge gate — it reads the
   commits and the whole code against the issue, the epic and the docs, and
@@ -60,7 +60,7 @@ All of it from `.claude/saas-skills.json`. Missing file or missing
   skipped, and no PR merges without its recorded approval.
 - **Never write the issue's code yourself.** A child that fails repeatedly is
   recreated (at most twice) or escalated.
-- **Vertical slices.** Each slice cuts through every layer it needs and ends
+- **End-to-end slices.** Each slice cuts through every layer it needs and ends
   in observable behavior. Tests come from the acceptance criteria and are
   written before the slice's code, per the tdd skill. You slice; the child
   executes slice by slice.
@@ -106,7 +106,7 @@ All of it from `.claude/saas-skills.json`. Missing file or missing
    orca worktree create --name "impl-<ID>" --linear-issue "<ID>" \
      --parent-worktree active --base-branch "<BASE>" --json
    ```
-3. Break the task into **one to five vertical slices**, ordered, each ending
+3. Break the task into **one to five end-to-end slices**, ordered, each ending
    in behavior a test can observe. The first is the tracer bullet. A small
    task is one slice — no ceremony. **Never slice by layer.**
 4. Write the briefing into `<child_path>/.orca-task.md`. **The child has no
