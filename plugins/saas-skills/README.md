@@ -15,7 +15,7 @@ that must live inside your repository, and the Linear-driven delivery pipeline
 
 | Component | What it does |
 |---|---|
-| `commands/setup.md` | `/saas-skills:setup` — surveys the project, fills the capability table with libraries that clear the adoption bar, proposes the MCP servers the stack deserves, scaffolds CI, docs and `AGENTS.md`, wires the code standard into the linter, and writes every knob the plugin reads. |
+| `commands/setup.md` | `/saas-skills:setup` — surveys the project, fills the capability table with libraries that clear the adoption bar, adopts the skills those libraries publish, proposes the MCP servers the stack deserves, then shows the whole plan and waits for approval before scaffolding CI, docs and `AGENTS.md`, wiring the code standard into the linter, and writing every knob the plugin reads. |
 | `commands/upgrade.md` | `/saas-skills:upgrade` — re-applies template changes without clobbering local adaptations. |
 | `commands/plan.md` | `/spec` (or `/saas-skills:plan`) — closes a spec, runs the counterpoint agent, approves it part by part, creates the Linear issue tree. |
 | `commands/implement.md` | `/implement` (or `/saas-skills:implement`) — orchestrates the tree in Orca child workspaces through review, simplify, the merge gate and ship. |

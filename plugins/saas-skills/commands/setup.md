@@ -1,12 +1,12 @@
 ---
 description: >-
-  Set up this repository to work with the saas-skills. One pass: surveys the
-  project, fills the capability table with libraries that clear the adoption
-  bar, adopts the skills those libraries already publish, proposes the MCP
-  servers the stack deserves, scaffolds the CI workflows, the docs system and
-  AGENTS.md, wires the code standard into the linter and tsconfig, writes every
-  knob the plugins read, and says which saas-skills plugins this project should
-  install. Run it once, after installing the plugin; use /saas-skills:upgrade
+  Set up this repository to work with saas-skills. Surveys the project,
+  fills the capability table with libraries that clear the adoption bar,
+  adopts the skills those libraries already publish, proposes the MCP
+  servers the stack deserves, then shows the whole plan and waits for
+  approval before writing anything: the CI workflows, the docs system,
+  AGENTS.md, the lint and tsconfig rules, and every knob the plugin reads.
+  Run it once, after installing the plugin; use /saas-skills:upgrade
   afterwards.
 argument-hint: (no arguments)
 ---
@@ -30,6 +30,13 @@ decides.
 
 **Stop condition:** `.claude/saas-skills.json` already exists ⇒ this project is
 already set up. Say so and run `/saas-skills:upgrade` instead.
+
+**Plan first, write second.** Steps 1 to 4 only read and decide; step 5 lays
+the whole plan in front of the operator and waits for one approval. Nothing
+in the repository changes before that approval — not a file, not a config
+key, not a lint rule. Steps 6 to 8 execute the approved plan and nothing
+else; anything the execution reveals that the plan did not cover goes back to
+the operator as a question, never as a silent addition.
 
 ---
 
@@ -149,7 +156,39 @@ you propose.
 
 ---
 
-## 5. Copy the templates, merging with what is there
+## 5. Write the plan and get it approved
+
+Everything decided so far becomes one plan, shown in one message, in the
+operator's language. It is the contract for the rest of the command: what
+steps 6 to 8 will do, file by file, and nothing more.
+
+- **Files** — one line per path: `create` from which template, or `merge`
+  into an existing file with which sections ported and which kept. The
+  toolchain block and every `<... command>` placeholder with the value they
+  get.
+- **Capability table** — every row that will be written and where its value
+  came from (already in use, or proposed in step 2 and approved).
+- **Library plugins** — the ones adopted in step 3, with their install
+  commands.
+- **MCP servers** — the ones to add, with the exact command, and which need a
+  login afterwards.
+- **Lint and tsconfig** — the rules to be added, the ones the project already
+  sets differently and will be kept, and the ones that will stay review-only
+  on this stack, with the reason.
+- **Knobs** — every key of `.claude/saas-skills.json` with its value, and
+  which values were inferred rather than read.
+- **Delivery** — branch and pull request, or the initial commit for a
+  repository with no history.
+- **For the operator afterwards** — secrets, logins, the restart.
+
+Then one `AskUserQuestion`: approve as is, or change something. A change
+edits the plan and asks again; the plan is written only when it is approved
+whole. The final report in step 10 is checked against this plan, line by
+line — a deviation is reported, never hidden.
+
+---
+
+## 6. Copy the templates, merging with what is there
 
 | Template | Installs at | On conflict |
 |---|---|---|
@@ -167,7 +206,7 @@ never invented.
 
 ---
 
-## 6. Make the code standard enforceable
+## 7. Make the code standard enforceable
 
 The `code-standard` skill states about sixty rules; sixteen a linter can decide
 on its own. Those belong in the build, not in a review comment.
@@ -199,7 +238,7 @@ seven of the sixteen have no equivalent and remain review-only.
 
 ---
 
-## 7. Write the knobs
+## 8. Write the knobs
 
 `.claude/saas-skills.json` is what makes the hooks and the delivery agents do
 anything at all — until it exists they are inert by design. The schema is at
@@ -247,7 +286,7 @@ Set `toolkitVersion` to the `version` in
 
 ---
 
-## 8. Say which parts of the kit this project can use
+## 9. Say which parts of the kit this project can use
 
 From the survey, name what applies and what does not, so nothing sits unused
 without the operator knowing why:
@@ -260,17 +299,18 @@ without the operator knowing why:
 
 ---
 
-## 9. Report what only the operator can do
+## 10. Report what only the operator can do
 
 - Create the `CLAUDE_CODE_OAUTH_TOKEN` repository secret, needed by the two AI
   analysis workflows: `claude setup-token`.
 - Authenticate any MCP server proposed in step 4: `claude mcp login <name>`.
 - Restart the session so the newly written hook configuration is picked up.
 
-Then the summary: what was written, what was filled in the capability table and
-from where, which library plugins were adopted and their install commands,
-which rules are now enforced by the build, which stayed review-only, and every
-decision you made on their behalf.
+Then the summary, checked against the plan approved in step 5: what was
+written, what was filled in the capability table and from where, which
+library plugins were adopted and their install commands, which rules are now
+enforced by the build, which stayed review-only, every decision you made on
+their behalf, and anything that ended up different from the plan and why.
 
 ---
 
@@ -282,6 +322,8 @@ initial commit on the default branch is fine, and you say so explicitly.
 
 ## Inviolable rules
 
+- **Plan before writing.** Nothing changes in the repository before the plan
+  in step 5 is approved, and nothing outside that plan changes after.
 - **Read before writing.** Every file you merge into, you read first.
 - **Never overwrite hand-written content** without showing the diff and asking.
 - **No invented commands, libraries, plugins, MCP servers or config keys.**
