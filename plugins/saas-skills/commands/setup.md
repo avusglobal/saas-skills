@@ -20,7 +20,8 @@ plugins need to know about it.
 Templates live at `${CLAUDE_PLUGIN_ROOT}/templates/`. Read them before copying —
 never write a file you have not read.
 
-**How you talk during this command:** follow the `communication` skill. One
+**How you talk during this command:** read
+`${CLAUDE_PLUGIN_ROOT}/skills/communication/SKILL.md` and follow it. One
 question per turn via `AskUserQuestion`, each with its context, a full
 comparison of the options — advantages, disadvantages, nothing assumed — and
 your recommendation stated separately, marked `(Recommended)`. The operator
@@ -117,10 +118,12 @@ you propose.
 | `templates/AGENTS.md` | `AGENTS.md` | If one exists, merge the sections it lacks — never overwrite written content. Keep the capability table filled in step 2. |
 | `templates/saas-skills.json` | `.claude/saas-skills.json` | Never overwrite — that path is the stop condition above. |
 
-The workflows carry a toolchain block and three commands (`typecheck`, `lint`,
-`test`) that must exist as scripts in the package manifest, so CI and the
-laptop never diverge. Wire them to the real commands from step 1; a missing
-script gets reported, never invented.
+The workflows carry a commented toolchain block (Node or Bun — uncomment the
+one the lockfile says, pin its version) and `<... command>` placeholders for
+install, typecheck, lint, test and format. Fill every placeholder with the
+real command from step 1; the commands must exist as scripts in the package
+manifest, so CI and the laptop never diverge. A missing script gets reported,
+never invented.
 
 ---
 
@@ -169,11 +172,11 @@ writing, and never write a key it does not define.
   Derive candidates from the deploy target: an edge runtime forbids Node and
   Bun built-ins; shared code forbids server-only APIs. An empty list is a
   valid answer.
-- `guard.moduleLayout.basenames` — the enforced layer file names, read off the
-  existing `src/` tree. Empty when there is no module layout yet.
 - `guard.pathScope`, `guard.testFilePatterns` — the real source and test
   layout, not the defaults.
-- `guard.advisoryContext` — the judgment rules injected on every allowed write.
+- `guard.advisoryContext` — the judgment rules injected on every allowed write:
+  the TDD reminder, the module layout and file naming read off the existing
+  `src/` tree, domain boundaries. Nothing here blocks; it is context.
 - `docsSync.watchPaths` — which documentation paths trigger the INDEX
   regeneration reminder.
 - `sessionStart.commands` — the install and local-stack commands that make

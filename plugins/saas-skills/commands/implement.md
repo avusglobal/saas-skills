@@ -10,6 +10,8 @@ description: >-
   configured risk label; when the root issue closes, opens and merges the
   working branch into the default branch the same way.
 argument-hint: <issue identifier (e.g. TSK-12) or Linear URL>
+model: claude-opus-5
+effort: high
 ---
 
 # Implement — epic orchestrator
@@ -22,7 +24,8 @@ Root issue: `$ARGUMENTS`.
 **Requirements.** Orca-managed worktrees (`orca worktree`, `orca terminal`),
 `gh`, and Linear access. Missing any of them ⇒ stop and say which.
 
-**How you talk:** the `communication` skill. Status to the operator is one or
+**How you talk:** read `${CLAUDE_PLUGIN_ROOT}/skills/communication/SKILL.md`
+and follow it. Status to the operator is one or
 two lines per event — child launched, PR opened, review verdict, simplify
 result, ship result, blockers, and the decisions you took. No long reports
 until the final one. Everything recorded — issues, comments, PR titles and
@@ -44,6 +47,12 @@ All of it from `.claude/saas-skills.json`. Missing file or missing
 
 - Every `orca` and `gh` call uses `--json` when available. Decide from the
   JSON, never from the text.
+- Agents and skills from this plugin carry the `saas-skills:` prefix on the
+  command line (`--agent saas-skills:bug-reviewer`). Child and reviewer
+  sessions run `claude -p` and cannot load a skill by name: give them the
+  file path instead. The skill files are at
+  `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md`; paste that absolute path
+  into every briefing.
 - **Never merge outside Phase 5**, and never skip Phase 4. Every PR goes
   through bug-reviewer and spec-verifier, then simplify, then the `approver`
   gate, then ship. The approver replaces the human approve: it is never
@@ -52,7 +61,7 @@ All of it from `.claude/saas-skills.json`. Missing file or missing
   recreated (at most twice) or escalated.
 - **Vertical slices.** Each slice cuts through every layer it needs and ends
   in observable behavior. Tests come from the acceptance criteria and are
-  written before the slice's code, per the `tdd` skill. You slice; the child
+  written before the slice's code, per the tdd skill. You slice; the child
   executes slice by slice.
 - **Supervision cadence in seconds.** While there are active children,
   pending reviews or pending CI, never use long sleeps or serial waits: the
@@ -108,7 +117,8 @@ All of it from `.claude/saas-skills.json`. Missing file or missing
      Steps, Acceptance;
    - the slice plan from step 3, one slice at a time, committing at the end of
      each;
-   - **the test rules**: load the `tdd` skill and follow it. Every test traces
+   - **the test rules**: read `${CLAUDE_PLUGIN_ROOT}/skills/tdd/SKILL.md`
+     and follow it. Every test traces
      to a criterion or to an edge case the issue names; the test for the next
      slice is written before its code and must fail for the right reason;
      assert on returned state and persisted values, never only that a function
@@ -116,10 +126,12 @@ All of it from `.claude/saas-skills.json`. Missing file or missing
      — fix the code. One run per slice, touched files only, with
      `delivery.commands.test`. Config, schema and docs-only slices pass with
      lint and typecheck alone;
-   - **the code rules**: load the `code-standard` skill and follow its router
-     — the design reference before anything spanning more than one function,
-     the dependency reference before adding a package. Apply it to the files
-     touched before every commit;
+   - **the code rules**: read
+     `${CLAUDE_PLUGIN_ROOT}/skills/code-standard/SKILL.md` and follow its
+     router — the design reference before anything spanning more than one
+     function, the dependency reference before adding a package, both under
+     the same `references/` folder. Apply it to the files touched before
+     every commit;
    - every entry of `delivery.riskDomains` the task touches, with what tends
      to break there;
    - **the knowledge chain**: codebase → repository docs → installed library
@@ -184,7 +196,7 @@ Launched **in parallel**, in fresh Orca terminals of the child worktree:
 
 ```bash
 orca terminal create --worktree name:impl-<ID> --title "REVIEW <name> <ID>" \
-  --command "claude -p --agent <name> --model claude-sonnet-5 --effort medium --dangerously-skip-permissions --output-format text 'Read .orca-review-<name>.md in this directory and do what it says' < /dev/null > .orca-review-<name>.report.md" \
+  --command "claude -p --agent saas-skills:<name> --model claude-sonnet-5 --effort medium --dangerously-skip-permissions --output-format text 'Read .orca-review-<name>.md in this directory and do what it says' < /dev/null > .orca-review-<name>.report.md" \
   --json
 ```
 

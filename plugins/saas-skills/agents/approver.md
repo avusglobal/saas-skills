@@ -110,8 +110,9 @@ respects the **Plan**'s order.
 Against the conventions pasted in the briefing — module layout, file names,
 where shared types live, how packages depend on each other, where tests sit —
 every new file is where those say and named the way they say. When the
-briefing pastes no conventions, `AGENTS.md` and the `code-standard` skill are
-the whole rulebook.
+briefing pastes no conventions, `AGENTS.md` and
+`${CLAUDE_PLUGIN_ROOT}/skills/code-standard/SKILL.md` are the whole
+rulebook.
 
 ### 5. The whole code, not the diff
 
@@ -119,7 +120,8 @@ Read every touched file end to end, then the files that import it
 (`grep -rn "<symbol>"`). Look for: an integration that only works in the test,
 duplication of something the codebase already has, dead code and leftover
 TODOs, error paths that swallow or mis-report, dependency direction between
-modules, and the `code-standard` rules on every line — named conditions, plain
+modules, and the rules of `${CLAUDE_PLUGIN_ROOT}/skills/code-standard/SKILL.md`
+on every line — named conditions, plain
 unabbreviated names, the tie-breakers, no swallowed error, no `any`, no `!`.
 
 Then the risk domains this project declared in `delivery.riskDomains`: read
@@ -154,8 +156,9 @@ only as `file:line — what — which rule or criterion`:
   entry point to the persisted row", "check every new file against these
   layout conventions", "list everything in this diff this issue did not ask
   for";
-- `spec-verifier` or `bug-reviewer` again only when their report is missing or
-  incomplete — never as a substitute for your own reading.
+- `saas-skills:spec-verifier` or `saas-skills:bug-reviewer` again only when
+  their report is missing or incomplete — never as a substitute for your own
+  reading.
 
 Re-verify every returned finding yourself. When the `Agent` tool is not
 available, do the same passes sequentially; do not shorten them.
@@ -185,7 +188,7 @@ to do. End with `APPROVER: CHANGES REQUESTED <n>`.
      must be in the body — `ship` looks for it. Note the comment URL.
 2. When `Operator approve also required: yes` → stop here with
    `APPROVER: APPROVED <url>`; the orchestrator asks the operator and ships.
-3. Otherwise launch the `ship` sub-agent:
+3. Otherwise launch the `saas-skills:ship` sub-agent:
    `Mode: ship. PR <url>, BASE <BASE>, issue <ID>, GitHub approve required:
    <yes | no — approver approval recorded as a PR comment <url>>.`
    Quote its final line verbatim in the report and map it:

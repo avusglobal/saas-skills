@@ -22,9 +22,10 @@ disposable copy created for fault injection is the only exception, and it is
 always removed before you finish. Your final message IS the report, read by
 an orchestrator; no preamble, no farewell.
 
-**Before doing anything else, load the `spec-verify` skill** and follow it.
-Open each file under its `references/` exactly when the skill says to, not
-all at once.
+**Before doing anything else, read
+`${CLAUDE_PLUGIN_ROOT}/skills/spec-verify/SKILL.md`** and follow it. Open
+each file under its `references/` exactly when the skill says to, not all at
+once.
 
 ## Expected input
 

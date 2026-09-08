@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# PreToolUse hook on Write|Edit — the deterministic half of the `guard` skill.
+# PreToolUse hook on Write|Edit — the deterministic write guard.
 #
 # This script ships inside the plugin and is READ-ONLY for the projects that
 # install it. Everything project-specific lives in the consumer repository at
@@ -9,8 +9,6 @@
 #   testFilePatterns  globs that mark a file as a test (exempt from the rules)
 #   forbiddenPatterns [{ pattern, message }] — extended regexes banned from
 #                     shipped code; a match blocks the write with `message`
-#   moduleLayout      { pathPattern, fileExtensions, basenames } — enforced file
-#                     layout inside a module folder; omit `basenames` to disable
 #   advisoryContext   free text injected on every allowed write (TDD reminders,
 #                     domain boundaries — judgment rules that must not hard-block)
 #
@@ -38,8 +36,8 @@ content=$(jq -r '.tool_input.content // .tool_input.new_string // empty' <<<"$in
 path_scope=$(jq -r '.pathScope // "/src/"' <<<"$guard")
 [[ "$file_path" == *"$path_scope"* ]] || pass
 
-# Test files run on the dev runtime and own their own naming — they are exempt
-# from both deterministic rules.
+# Test files run on the dev runtime — they are exempt from the forbidden
+# patterns.
 is_test=false
 while IFS= read -r pattern; do
   [ -n "$pattern" ] || continue
@@ -47,9 +45,16 @@ while IFS= read -r pattern; do
   case "$file_path" in $pattern) is_test=true; break ;; esac
 done < <(jq -r '.testFilePatterns[]? // empty' <<<"$guard")
 
-block() { jq -cn --arg reason "$1" '{decision:"block",reason:$reason}'; exit 0; }
+# The PreToolUse-specific output shape: `permissionDecision` is what the
+# harness documents today; the older top-level `decision: block` is no longer
+# in the docs and could stop being read without any error reaching us.
+block() {
+  jq -cn --arg reason "$1" \
+    '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"deny",permissionDecisionReason:$reason}}'
+  exit 0
+}
 
-# Rule 1 — runtime APIs that must never reach shipped code.
+# The one deterministic rule — runtime APIs that must never reach shipped code.
 if [ "$is_test" = false ] && [ -n "$content" ]; then
   while IFS= read -r entry; do
     [ -n "$entry" ] || continue
@@ -60,23 +65,6 @@ if [ "$is_test" = false ] && [ -n "$content" ]; then
       block "${message:-Blocked: this file matches a pattern forbidden in shipped code (guard.forbiddenPatterns in .claude/saas-skills.json).}"
     fi
   done < <(jq -c '.forbiddenPatterns[]? // empty' <<<"$guard")
-fi
-
-# Rule 2 — one file per layer inside a module folder.
-layout=$(jq -c '.moduleLayout // {}' <<<"$guard")
-basenames=$(jq -r '[.basenames[]?] | join("|")' <<<"$layout")
-if [ "$is_test" = false ] && [ -n "$basenames" ]; then
-  layout_path=$(jq -r '.pathPattern // "/src/modules/"' <<<"$layout")
-  extensions=$(jq -r '[.fileExtensions[]?] | join("|")' <<<"$layout")
-  [ -n "$extensions" ] || extensions="ts|tsx"
-  if [[ "$file_path" == *"$layout_path"* ]]; then
-    basename="${file_path##*/}"
-    extension="${basename##*.}"
-    stem="${basename%.*}"
-    if [[ "|$extensions|" == *"|$extension|"* && ! "$stem" =~ ^(${basenames})$ ]]; then
-      block "Blocked: files under ${layout_path} must be named one of {${basenames//|/, }}.${extension}, or be a test file. Got: ${basename}. Keep one file per layer — do not invent new layer names or anticipate subfolders."
-    fi
-  fi
 fi
 
 # Everything deterministic passed. Hand the judgment rules to the agent.
