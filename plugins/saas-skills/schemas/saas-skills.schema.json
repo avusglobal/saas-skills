@@ -97,7 +97,7 @@
     },
     "delivery": {
       "type": "object",
-      "description": "Read by /saas-skills:plan, /saas-skills:implement and the review agents. Absent when the project does not use them; every key below is optional and an absent key means the behavior it drives does not run.",
+      "description": "Read by /spec, /implement and the review agents. Absent when the project does not use them; every key below is optional and an absent key means the behavior it drives does not run.",
       "additionalProperties": false,
       "properties": {
         "linear": {

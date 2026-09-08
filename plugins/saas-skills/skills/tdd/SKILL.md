@@ -1,6 +1,15 @@
 ---
 name: tdd
-description: Apply whenever behavior-bearing code is written — implementing a task issue, building a feature, fixing a bug. The failing test comes first, and every test traces back to something the task asked for. Defines what a good test is, where the seam goes, the red-green-refactor loop, and the mutation pass that proves the tests are worth having before the pull request opens.
+description: >-
+  Apply whenever behavior-bearing code is written or changed — implementing a
+  task issue, building a feature, fixing a bug, changing what existing code
+  does. The failing test comes first, and every test traces back to something
+  the task asked for. Defines what a good test is, where the seam goes, the
+  red-green-refactor loop, and the mutation pass that proves the tests are
+  worth having before the pull request opens. Load it before writing or
+  changing a test, before the first line of a fix, when deciding what to mock
+  or stub, when a test passes on its very first run, and when judging whether
+  the coverage on a diff is real.
 ---
 
 # Skill: `tdd`

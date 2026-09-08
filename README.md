@@ -63,7 +63,7 @@ machine only needs the last command.
 | Hooks | The deterministic write guard, the docs INDEX reminder, the session bootstrap. |
 | Templates | CI workflows, the docs system, `AGENTS.md`, and the lint and TypeScript rules that make part of the standard a build failure. |
 
-`/saas-skills:plan` and `/saas-skills:implement` additionally need Linear, Orca
+`/spec` and `/implement` additionally need Linear, Orca
 and `gh`. Everything else works without them.
 
 ## Updating an adopted project

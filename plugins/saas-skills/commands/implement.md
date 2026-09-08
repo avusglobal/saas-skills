@@ -10,6 +10,7 @@ description: >-
   configured risk label; when the root issue closes, opens and merges the
   working branch into the default branch the same way.
 argument-hint: <issue identifier (e.g. TSK-12) or Linear URL>
+name: implement
 model: claude-opus-5
 effort: high
 ---

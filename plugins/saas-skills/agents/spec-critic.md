@@ -1,7 +1,7 @@
 ---
 name: spec-critic
 description: >-
-  Launched by `/saas-skills:plan` right after a spec is written into the
+  Launched by `/spec` right after a spec is written into the
   parent issue. Reads the spec and the code independently — never the
   author's reasoning — and returns, for each part of the spec (scope, out of
   scope, assumptions, each group of acceptance criteria, and the plan when

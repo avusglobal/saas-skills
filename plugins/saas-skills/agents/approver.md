@@ -1,7 +1,7 @@
 ---
 name: approver
 description: >-
-  The merge gate. Launched by `/saas-skills:implement` in the child worktree
+  The merge gate. Launched by `/implement` in the child worktree
   at the moment a PR would otherwise wait for a human approve, on the
   strongest model at high effort. Reads every commit and the whole code the
   PR touches — not only the diff — against the task issue, the parent epic
