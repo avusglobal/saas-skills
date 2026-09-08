@@ -69,6 +69,38 @@ size and the reason in `## Size`.
 
 ## 2. Discovery
 
+### Worth building — three answers before anything else
+
+For a **new capability**. A bug fix, a copy change, docs, infrastructure, or a
+change to something already shipped skips this.
+
+Bring your own answer to each one, then put it to the operator. **You name the
+cheaper alternative, with the actual tool** — a spreadsheet, a form, a
+scheduled export, an off-the-shelf product, a manual step done twice a week —
+instead of asking an open "why build this?".
+
+1. **Why is this software at all?** Name what a spreadsheet, a form or an
+   existing product would do instead, and what it fails at. "It would be
+   slower" is not a failure; a volume it cannot hold, a deadline it cannot
+   meet, or a rule it cannot enforce is.
+2. **Who is it for — this operator, or the market?** Something one person uses
+   is allowed to stay manual, ugly and hard-coded. Something sold has to
+   survive a stranger, and that changes the scope, the error handling and the
+   criteria before a single one is written.
+3. **What does it save, as a number?** Hours per week, money per month, or the
+   revenue it unlocks. An estimate the operator will stand behind counts;
+   "it improves the experience" does not.
+
+The three answers go in `## Worth building` in the epic. An answer the
+operator will not give becomes an assumption with `Confirmed? no`, and the
+epic names which of the three is missing.
+
+**A feature that loses to the spreadsheet is not planned.** Say it in one
+line, name the alternative, and create nothing. The operator overriding that
+is a decision: record it in `## Worth building` and carry on.
+
+### The rest
+
 `AskUserQuestion`, one question per turn, until there is no ambiguity left.
 Cover: the measurable goal, scope in and out, affected areas, contracts
 (routes, schemas, provider APIs), the critical error cases, success criteria,
