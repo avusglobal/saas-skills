@@ -148,9 +148,25 @@ TSK-2 ------------------------ TSK-5
   `dependencies` reference. We don't grow bespoke logic in-repo.
 - **Self-documenting** — descriptive names over comments; comment only a
   non-obvious *why*.
-- **Module layout** — <describe your layout, e.g. one folder per module with
-  fixed per-layer filenames>; the guard hook repeats it as context on every
-  write.
+- **Module layout** — package by feature: one directory per subdomain holding
+  its entity, service, repository and controller together. No top-level
+  `controllers/`, `services/` or `repositories/`.
+
+  ```
+  <src>/
+    books/     book.entity.<ext>  book.service.<ext>  book.repository.<ext>  book.controller.<ext>
+    users/     user.entity.<ext>  ...
+    rentals/   rental.entity.<ext>  ...
+    shared/    technical capability only — logging, config, database access; no business rule
+  ```
+
+  A directory per use case (`features/`) exists only next to a `domain/` that
+  holds the one definition of the entity, and only where `/spec` measured the
+  signal for it. Modules talk through a public entry point or an event, never
+  through each other's internals and never by sharing an entity.
+
+  <Replace the tree with this project's real paths and file naming. Keep the
+  rules above.> The guard hook repeats this section as context on every write.
 - **Forbidden APIs** — <e.g. no server-runtime built-ins in `src/` if
   production runs on the edge>; configured in `.claude/saas-skills.json`.
 

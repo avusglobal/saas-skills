@@ -188,6 +188,12 @@ A rich domain that is expected rather than measured stays package by feature.
 Nothing else justifies leaving the default, and any structure other than the
 default is an **ADR**.
 
+**A structure that leaves the default is written into the repository in the
+same epic:** the `Module layout` bullet of `AGENTS.md` and
+`guard.advisoryContext` in `.claude/saas-skills.json`. Until both say it, the
+guard hook keeps injecting the old layout on every write and the decision
+exists only in Linear.
+
 **Never create `features/` without a `domain/` in the same module.**
 
 **A module never imports another module's internals** — public entry point or

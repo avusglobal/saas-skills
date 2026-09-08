@@ -47,8 +47,11 @@ The rules in this file apply either way, and they win: a design that needs a
 speculative interface or a wrapper for one call site does not survive contact
 with this page.
 
-**Scope:** how code is written. Where it physically lives — folders, modules,
-layers — is the module layout section of `AGENTS.md`.
+**Scope:** how code is written, plus the rules a boundary has to hold — those
+are in [`references/design-and-patterns.md`](references/design-and-patterns.md).
+The concrete tree — this project's directory names, its file naming, its paths
+— is the module layout section of `AGENTS.md`, which the guard hook repeats on
+every write.
 
 ---
 
