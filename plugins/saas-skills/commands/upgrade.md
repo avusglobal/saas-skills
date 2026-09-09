@@ -41,12 +41,12 @@ Classify every difference before touching anything:
 
 - **Template gained something this repository lacks** → port it in.
 - **Local adaptation** (filled knobs, project names, real commands, stack
-  tables, written documentation) → keep the local value. When the template
-  changed the very lines this repository adapted, apply the template's new
-  *structure* and carry the repository's *values* into it.
-- **Listed in `docs/TOOLKIT-DEVIATIONS.md`** → skip entirely, and say so in
-  the report. That file is how a repository records intentional divergence;
-  an upgrade never overrules it.
+  tables, written documentation, a section deliberately removed) → keep the
+  local value. When the template changed the very lines this repository
+  adapted, apply the template's new *structure* and carry the repository's
+  *values* into it — and when the two cannot coexist, ask, showing the diff.
+  There is no separate list of intentional deviations: the repository's file
+  is the record, and the question is how an upgrade respects it.
 
 Rules the templates gained since this project was installed are the common
 case here: add them, run the linter once, and report the violation count per
@@ -72,13 +72,13 @@ lists, explicitly:
 
 - what was ported in,
 - what was adapted around a local customization (and how),
-- what was skipped as a recorded deviation,
+- what was kept as a local adaptation after asking,
 - anything left unresolved for the user to decide.
 
 ## Inviolable rules
 
-- **Never overwrite a local adaptation or a recorded deviation** without
-  asking first and showing the diff.
+- **Never overwrite a local adaptation** without asking first and showing
+  the diff.
 - **Read both sides before merging** — the template and the repository's file.
 - A knob whose correct value you cannot derive is a question for the user, not
   a guess.

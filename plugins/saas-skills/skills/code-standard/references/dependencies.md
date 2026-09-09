@@ -48,10 +48,7 @@ framework.
 **Record the chosen one as a row in `AGENTS.md`'s capability table,** so the
 next change reuses it instead of adding a competitor for the same job.
 
-**Infrastructure has its own bias:** provisioned over serverless while the
-project is small — an instance rented by the month costs less to keep running
-than per-request pricing, and its bill does not move with traffic. Whether a
-whole responsibility should leave the codebase for an external service is
-decided one step earlier, in `design-and-patterns.md`.
-
----
+**Infrastructure follows rule #0 of `AGENTS.md`** — provisioned over
+serverless while the project is small. Whether a whole responsibility should
+leave the codebase for an external service is decided one step earlier, in
+`design-and-patterns.md`.

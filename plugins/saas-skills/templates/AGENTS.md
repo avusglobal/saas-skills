@@ -108,26 +108,27 @@ Commands (also wired as package scripts and used verbatim by CI):
 
 1. **Every unit of work is a Linear issue**, body following
    `docs/templates/epic.md` (parent) or `docs/templates/issue.md` (task).
-   `/spec` creates them: the spec and the plan live in
-   the parent's body, the tasks become sub-issues.
+   `/saas-skills:spec` creates them: the spec and the plan live in the
+   parent's body, the tasks become sub-issues.
 2. **Every issue becomes exactly one branch** (use Linear's suggested branch
    name so the PR auto-links), worked on in an **isolated workspace** (git
    worktree or a fresh clone/session) — never directly on the default
    branch, never two issues on one branch.
-   `/implement <issue-id>` runs steps 2–4 end to end for
-   the whole issue tree.
+   `/saas-skills:implement <issue-id>` runs steps 2–4 end to end for the
+   whole issue tree.
 3. **Every branch is linked to exactly one pull request.** The PR merging is
    what ships that functionality (and closes the Linear issue) — nothing
    lands on the default branch except through its PR.
-4. **After every push, watch CI until it is green** (verify, format,
-   bug-analysis, readability). Do not report work as done, move to the next
-   task, or ask for review while CI is red or still running. If CI fails,
-   fix it and push again — the loop ends green.
+4. **After every push, watch CI until the `verify` job is green.** It is the
+   only blocking check. The `format` workflow may push a formatting commit,
+   and the two analysis workflows (`bug-analysis`, `readability`) only post
+   comments — read them, they never gate. Do not report work as done, move to
+   the next task, or ask for review while `verify` is red or still running.
+   If it fails, fix it and push again — the loop ends green.
 
 ## Planning
 
-Use `/spec`. Its contract: the spec is closed before the
-plan, an independent agent argues the counterpoint, the operator approves part
+Use `/saas-skills:spec`. Its contract: the spec is closed before the plan, an independent agent argues the counterpoint, the operator approves part
 by part, all planning lives in Linear (never in repository files), and every
 plan ends with the execution order showing what runs in parallel:
 
@@ -141,8 +142,8 @@ TSK-2 ------------------------ TSK-5
 ## Code rules
 
 - **TDD** — the failing test comes first, it traces to what the issue asked
-  for, and a review agent proves it by breaking the code (`guard` hook
-  reminds; CI enforces). The `tdd` skill is the methodology.
+  for, and the `spec-verifier` agent proves it by breaking the code. The
+  guard hook reminds on every write; the `tdd` skill is the methodology.
 - **Code standard** — the `code-standard` skill: the shape is decided first
   (its `design-and-patterns` reference), then written to the thresholds,
   naming and tie-breakers in the skill body.
@@ -164,12 +165,16 @@ TSK-2 ------------------------ TSK-5
   ```
 
   A directory per use case (`features/`) exists only next to a `domain/` that
-  holds the one definition of the entity, and only where `/spec` measured the
-  signal for it. Modules talk through a public entry point or an event, never
+  holds the one definition of the entity, and only where `/saas-skills:spec`
+  measured the signal for it. Modules talk through a public entry point or an event, never
   through each other's internals and never by sharing an entity.
 
-  <Replace the tree with this project's real paths and file naming. Keep the
-  rules above.> The guard hook repeats this section as context on every write.
+  Tests live in <`tests/`, mirroring `src/` — or co-located as
+  `*.test.<ext>` next to the module>.
+
+  <Replace the tree and the test location with this project's real paths and
+  file naming. Keep the rules above.> The guard hook repeats this section as
+  context on every write.
 - **Forbidden APIs** — <e.g. no server-runtime built-ins in `src/` if
   production runs on the edge>; configured in `.claude/saas-skills.json`.
 

@@ -107,7 +107,7 @@
           "properties": {
             "teamKey": {
               "type": "string",
-              "description": "The team's slug in Linear — the prefix its issues carry, e.g. ENG, LOVI, ACME. Asked during /saas-skills:setup, never guessed from the repository name."
+              "description": "The team's slug in Linear — the prefix its issues carry, e.g. ENG, LOVI, ACME. Asked during /saas-skills:setup, never guessed from the repository name and never left as a placeholder: the delivery commands treat a missing, empty or placeholder value as 'not set up'."
             },
             "projectId": {
               "type": "string",
@@ -151,7 +151,7 @@
         },
         "commands": {
           "type": "object",
-          "description": "The project's own commands, exactly as CI runs them. Agents never invent one; a missing key means that step is skipped and reported.",
+          "description": "The project's own commands, exactly as CI runs them. Agents never invent one; a key that is missing or an empty string means that step is skipped and reported.",
           "additionalProperties": false,
           "properties": {
             "install": {

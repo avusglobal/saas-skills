@@ -30,11 +30,9 @@ file conversion, PDF generation, image processing, analytics, error tracking,
 payments. Each of those is somebody's whole product; a hand-built version is a
 second product you maintain alone, forever, in the gaps between other projects.
 
-**Stack bias (AGENTS.md rule #0):** a provisioned instance over a serverless
-one while the project is small — it costs less to keep running, and the bill
-does not move with traffic. Serverless earns its place when the load is spiky
-enough that the instance sits idle most of the time, or when one instance stops
-being enough.
+**Stack bias:** rule #0 of `AGENTS.md` — provisioned over serverless while the
+project is small, and pieces that are easy to use, easy to configure and cheap
+to leave. It is stated there once; reuse it, do not restate it.
 
 **Take the external option when** it covers the responsibility whole, its
 failure mode is visible (a status page, an alert you receive), its pricing at
@@ -46,8 +44,8 @@ more than the feature, when the data cannot leave, or when every candidate
 needs you to run it.
 
 The same question one level down — a library instead of a module, rather than a
-service instead of a subsystem — belongs to the skill body, along with the
-bar a dependency has to clear.
+service instead of a subsystem — belongs to the skill body, and the bar a
+dependency has to clear is in `dependencies.md`.
 
 ---
 
@@ -149,7 +147,8 @@ other's internals and never by sharing an entity.
 **`shared/` holds technical capability and no business rule.** A rule two
 domains both need means the boundary is drawn in the wrong place.
 
-When to leave the default is measured in `/spec`, not argued while writing.
+When to leave the default is measured in `/saas-skills:spec`, not argued while
+writing.
 
 ---
 

@@ -5,8 +5,11 @@ name: Push Bug Analysis
 # English (kit-wide language policy) — swap the prompt's structure freely.
 #
 # Runs on every push to any branch and asks Claude to review the pushed
-# changes for likely bugs. Results are posted as a comment on the open
-# pull request for that branch (or, if none exists, as a commit comment).
+# changes for likely bugs. The criteria are NOT in this file: the job checks
+# out the kit and reads the `bug-reviewer` agent, so the bug review has one
+# source of truth whether it runs here or inside /saas-skills:implement.
+# Results are posted as a comment on the open pull request for that branch
+# (or, if none exists, as a commit comment).
 #
 # Uses claude-code-base-action (not claude-code-action) because the
 # higher-level action only supports a fixed set of GitHub event types
@@ -58,6 +61,14 @@ jobs:
           # deep-but-bounded fetch instead.
           fetch-depth: 0
 
+      - name: Check out the saas-skills standard
+        uses: actions/checkout@v4
+        with:
+          repository: gruporezult/saas-skills
+          path: .saas-skills-standard
+          # Deliberately tracks the kit's current agent, like
+          # readability-analysis.yml tracks the current code standard.
+
       - name: Resolve diff range
         id: range
         env:
@@ -103,58 +114,30 @@ jobs:
           # runs use ~15-25 turns); the cap only guards against runaways.
           max_turns: "50"
           prompt: |
-            Run `git diff ${{ steps.range.outputs.base }} ${{ github.sha }}`
+            The review criteria are not in this prompt. Read
+            `.saas-skills-standard/plugins/saas-skills/agents/bug-reviewer.md`
+            first, in full: its **What to review** and **Report format**
+            sections are the criteria and the structure of your report. Its
+            **Expected input** section and its `RESULT:` final line are for
+            the orchestrator that normally launches it — ignore both here.
+            Read this repository's `.claude/saas-skills.json` when it exists,
+            for the risk domains the agent file tells you to weigh, and
+            `AGENTS.md` for expected behavior.
+
+            Then run `git diff ${{ steps.range.outputs.base }} ${{ github.sha }}`
             in this repository to see the changes pushed to this branch
             (previous tip vs. new tip, or the merge-base with the default
-            branch on a first push).
+            branch on a first push), and review them exactly as that file
+            says.
 
-            Carefully review only the changed lines (plus enough surrounding
-            context to understand them) for likely bugs: logic errors, off-by-one
-            mistakes, incorrect null/undefined handling, race conditions, broken
-            error handling, security issues (injection, XSS, auth bypass), and
-            regressions relative to existing behavior.
-
-            Write the report in English. Be direct: no filler,
-            no hedging, no restating instructions. Use exactly this structure
-            (GitHub-flavored Markdown):
-
-            ## 🔎 Bug analysis — `<short-base>..<short-head>`
-
-            **Verdict:** 🐛 <N> bug(s) found — or — ✅ No bugs found
-
-            If there are bugs, add a summary table and then one section per
-            bug, numbered to match the table:
-
-            | # | Severity | File | Problem |
-            |---|----------|------|---------|
-            | 1 | high | `src/example.ts:42` | one-sentence summary |
-
-            ### 1. <direct title> — `file:line`
-
-            <1–3 sentences: what is wrong and why.>
-
-            **Current code:**
-            ```ts
-            // only the relevant lines, as they appear in the diff
-            ```
-
-            **Suggested fix:**
-            ```ts
-            // the same lines, fixed
-            ```
-
-            **How to verify:** <test to add, reproduction case, or log to watch.>
-
-            Severity scale: high = breaks functionality or security; medium =
-            wrong behavior in plausible cases; low = edge case / robustness.
-            When a short flow genuinely clarifies how a bug
-            manifests (e.g. request → handler → invalid state), add a
-            small `mermaid` `flowchart TD` code block inside that bug's
-            section — only when it adds real clarity.
-
-            If there are no bugs, after the verdict add a short section
-            **What was checked** with 3–6 objective bullets (files and
-            risks examined) — and nothing else.
+            Write the report in English, in the agent file's format, titled
+            `## 🔎 Bug analysis — <short-base>..<short-head>`. Be direct: no
+            filler, no hedging, no restating instructions. Each bug section
+            carries the current code, the suggested fix and how to verify
+            it. When a short flow genuinely clarifies how a bug manifests
+            (e.g. request → handler → invalid state), add a small `mermaid`
+            `flowchart TD` code block inside that bug's section — only when
+            it adds real clarity.
 
             When you are done, use the Write tool to save the report to
             `${{ github.workspace }}/pr-bug-report.md`. A later workflow step

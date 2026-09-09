@@ -4,7 +4,7 @@ description: >-
   Reviews the diff of a completed implementation looking for probable BUGS
   (logic, null/undefined, race conditions, error handling, security,
   regressions). Use after every complete implementation change — for example
-  when a child `/implement` workspace announces PR_READY. The
+  when a child `/implement` workspace announces ORCA_PR_READY. The
   prompt must give the absolute path of the worktree with the code, the base
   branch, and, if available, the PR URL and an issue summary. Returns a
   structured report whose last line is `RESULT: APPROVED` or `RESULT:

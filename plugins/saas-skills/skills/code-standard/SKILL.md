@@ -50,8 +50,8 @@ with this page.
 **Scope:** how code is written, plus the rules a boundary has to hold — those
 are in [`references/design-and-patterns.md`](references/design-and-patterns.md).
 The concrete tree — this project's directory names, its file naming, its paths
-— is the module layout section of `AGENTS.md`, which the guard hook repeats on
-every write.
+— is the module layout section of `AGENTS.md`, which `/saas-skills:setup`
+copies into the guard hook's advisory context so it is repeated on every write.
 
 ---
 
@@ -89,8 +89,6 @@ package — is in [`references/dependencies.md`](references/dependencies.md).**
 
 ---
 
----
-
 ## Don't build for a future that hasn't arrived
 
 **No speculative abstraction, interface, generic or config option** for a case
@@ -115,8 +113,6 @@ const user = await prisma.user.findUnique({ where: { id } })
 
 **Match the surrounding idiom and altitude** — no new pattern for one call
 site, and no helper pitched a level below everything around it.
-
----
 
 ---
 
@@ -166,8 +162,6 @@ crosses the network, `buildInvoice` has no side effects.
 
 ---
 
----
-
 ## Name your conditions
 
 **Two or more clauses gets a name.** This is the first move whenever you feel
@@ -190,8 +184,6 @@ if (canExport) { ... }
 
 ---
 
----
-
 ## Function shape and control flow
 
 **One job per function;** if describing it needs an "and", it is two.
@@ -207,8 +199,6 @@ shorten its parent adds a jump and explains nothing.
 
 **If the linter's complexity rule fires, split and rename** — never annotate
 your way past it. ⚙
-
----
 
 ---
 
@@ -241,8 +231,6 @@ a block restating each parameter name.
 
 ---
 
----
-
 ## Errors, types and async
 
 **Never swallow:** no empty `catch`, no `catch { return null }`. ⚙
@@ -262,8 +250,6 @@ it.
 
 **No `async` without an `await` inside,** and never `.then()` chains mixed
 with `await` in one function. ⚙
-
----
 
 ---
 
@@ -320,16 +306,12 @@ reason goes; otherwise `Promise.all`.
 
 ---
 
----
-
 ## When complexity is justified
 
 Simplicity is the default, not a dogma. When a real, present requirement needs
 complexity, make it obvious: a descriptive name, one comment explaining the
 why, and a test pinning the behavior. **A correct solution that is slightly
 longer beats a clever one that is hard to read.**
-
----
 
 ---
 

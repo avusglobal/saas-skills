@@ -7,8 +7,8 @@
     "Verify every rule against the installed version before writing this in;",
     "drop what Biome rejects and report it as uncovered.",
     "Biome has no equivalent for max-depth, max-params, no-await-in-loop,",
-    "no-null, commented-out code, the TODO format or restricted disables \u2014",
-    "those stay review-only on a Biome project."
+    "no-null, prefer-await-to-then, commented-out code, the TODO format or",
+    "restricted disables \u2014 those eight stay review-only on a Biome project."
   ],
   "linter": {
     "rules": {

@@ -18,14 +18,17 @@ The failing test comes first, everywhere. This skill is what that test looks
 like, where the seam goes, and how the tests are **proven** to be worth having
 before the work is called done.
 
-Tests live in `tests/`, mirroring `src/` — not co-located.
+Tests live where the **Module layout** section of `AGENTS.md` says —
+`/saas-skills:setup` copies that section into the guard hook's advisory
+context, so it is repeated on every write. The kit's default is `tests/`
+mirroring `src/`; a project that co-locates its tests says so there.
 
 ---
 
 ## The test comes from the task, not from the code
 
-**Every test traces to something the task asked for.** The issue's `tests:`
-scenarios are the list; each one becomes a test. A test you cannot trace back
+**Every test traces to something the task asked for.** The scenarios under
+the issue's `## Tests` section are the list; each one becomes a test. A test you cannot trace back
 to a line of the issue is either a missing acceptance criterion — add it to the
 issue — or scope you invented.
 
@@ -90,12 +93,15 @@ end, when they are most expensive.
 Green is not evidence. A test that passes whether or not the code works is
 worse than no test — it buys confidence and blocks nothing.
 
-**When the loop is green, a review agent verifies the tests by breaking the
-code.** The implementation agent runs it as a separate pass, so the assertions
-are checked by someone other than their author. It is not optional and the
-author does not self-certify it.
+**When the loop is green, the tests are proven by breaking the code.** Inside
+`/saas-skills:implement` that is the `spec-verifier` agent's job: a separate
+process, in a disposable copy, at most two faults on the riskiest lines, so the
+assertions are checked by someone other than their author. Outside that
+command there is no reviewer, so run the same pass yourself before opening the
+pull request, on the tests covering the riskiest lines of the change — and the
+pull request says which tests were mutated and what happened.
 
-For each test:
+For each test you prove:
 
 1. Change the implementation so the behavior that test claims to pin is
    actually wrong — flip a comparison, drop a branch, return a constant.
@@ -110,8 +116,6 @@ Read the result:
 | The test stayed green | The test is invalid — it does not observe the behavior it claims. Fix the test, never the mutation. |
 | Half the suite went red from one mutation | The tests are coupled to the implementation, or the seam is too low. |
 | Nothing to mutate — the code has no branch the test cares about | The test is asserting a constant. Re-derive it from the issue. |
-
-The pull request reports which tests were mutated and what happened.
 
 ---
 
