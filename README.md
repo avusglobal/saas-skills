@@ -25,11 +25,11 @@ Set this repository up with the saas-skills plugin. Do it in this order and stop
    claude plugin install saas-skills@saas-skills
    If the marketplace is already registered, run `claude plugin marketplace update saas-skills` instead of adding it again.
 3. Confirm with `claude plugin list` that saas-skills is installed and enabled. If it is not, show me the error and stop.
-4. Do not scaffold anything yourself — no workflows, docs, AGENTS.md or configuration. The plugin's setup command does that after a restart.
-5. Finish by telling me, in one line each: what you ran, and that I must restart Claude Code and run /saas-skills:setup.
+4. Do not scaffold anything yourself — no workflows, docs, AGENTS.md or configuration, and do not ask me to choose a stack. The plugin's own commands do that after a restart.
+5. Finish by telling me, in one line each: what you ran; that I must restart Claude Code; and which command comes next — /saas-skills:spec if this repository has no code yet, /saas-skills:setup if it already does.
 ```
 
-Then restart Claude Code and run:
+Then restart Claude Code. On a repository that **already has code**, run:
 
 ```
 /saas-skills:setup
@@ -39,6 +39,33 @@ It installs the half a plugin cannot deliver — the CI workflows, the
 documentation system, `AGENTS.md`, and the configuration the hooks read —
 merging with whatever the repository already has. Restart once more when it
 finishes, so the hooks pick up the configuration it wrote.
+
+### On a repository with no code yet
+
+**Run `/saas-skills:spec` first — not setup.** There is nothing to survey, and
+picking a stack before knowing what the product does is a guess. `/spec` is
+the entry point for a new project and it calls setup itself:
+
+1. **`/saas-skills:spec <what you are building>`** — discovery, the spec, then
+   the plan. The stack is decided here, next to what the product has to do:
+   held to the dependency bar, argued with you one capability at a time, and
+   recorded as an ADR.
+2. Once you approve the plan, **`/spec` runs `/saas-skills:setup` for you**,
+   handing it every answer — the libraries, the commands, the module layout,
+   the Linear team. Setup asks you nothing you already decided; it writes the
+   docs system, `AGENTS.md`, the CI workflows and `.claude/saas-skills.json`
+   as the initial commit.
+3. `/spec` then creates the Linear issues and ends with the execution order,
+   as always. Restart Claude Code so the hooks read the new configuration.
+4. **`/saas-skills:implement <epic-id>`** — the first task is the runnable
+   skeleton, which is what turns CI green; a second task wires the lint and
+   tsconfig rules, which need a linter that exists only once the skeleton
+   installed it.
+
+Setup never asks you to name a stack to get unblocked, and there is no second
+setup run to remember.
+
+Only an **existing** project starts at `/saas-skills:setup`.
 
 ## Install by hand
 

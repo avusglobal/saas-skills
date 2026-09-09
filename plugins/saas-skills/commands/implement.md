@@ -38,6 +38,14 @@ All of it from `.claude/saas-skills.json`. Missing file, or
 `delivery.commands` that is missing or an empty string is a step that is
 skipped and reported, never run.
 
+**A configuration carrying `setup.deferred`** is a greenfield epic: the
+commands and the workflows are already written, but the scripts they name do
+not exist until the tracer bullet merges. So the first task's briefing states
+that its lint and typecheck scripts are the ones it is creating, and CI is
+expected red until it lands. The epic's toolchain task is the only one allowed
+to edit `.claude/saas-skills.json`; it removes `setup.deferred` when it
+merges.
+
 | Key | Drives |
 |---|---|
 | `delivery.riskLabels` | Which issues need the operator's approval on top of the approver |

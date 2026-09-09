@@ -1,6 +1,6 @@
 {
   "name": "saas-skills",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "The saas-skills kit in one plugin: the code-standard, tdd and communication skills, the deterministic write guard and docs hooks, /saas-skills:setup and :upgrade to install and update the project-local half, and Linear-driven delivery — /spec and /implement plus the six agents that review, approve and ship a pull request.",
   "author": {
     "name": "gruporezult",
