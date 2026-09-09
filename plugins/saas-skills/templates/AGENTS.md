@@ -17,11 +17,14 @@ Two months from now, the code must explain itself (see the `code-standard`
 skill).
 
 **Stack bias (applies to every technology decision — reuse it in all
-planning and ADRs):** prefer pieces that are easy to use, need **no
-maintenance**, are **easy to configure**, and preferably **scale on their
-own** — managed/serverless services over anything that must be provisioned,
-patched, monitored, or resized by hand. There is no ops team; a dependency
-that needs babysitting is a cost this project cannot pay.
+planning and ADRs):** prefer pieces that are **easy to use**, **easy to
+configure**, and cheap to leave. On infrastructure, **provisioned over
+serverless while the project is small** — an instance rented by the month
+costs less to keep running than per-request pricing, and its bill does not
+move with traffic. Serverless earns its place when the load is spiky enough
+that the instance sits idle most of the time, or when one instance stops being
+enough. There is no ops team either way, so anything that needs constant
+babysitting is still a cost this project cannot pay.
 
 ## Language and communication
 
