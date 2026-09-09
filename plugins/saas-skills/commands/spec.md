@@ -1,8 +1,8 @@
 ---
 description: >-
   Analyze, spec and plan work, then create the issue tree in Linear.
-  Triggers on /spec (or /saas-skills:plan) or when the operator asks to plan
-  a feature.
+  Triggers on /saas-skills:spec (also /spec) or when the operator asks to
+  plan a feature.
   Closes a spec (scope, assumptions, EARS criteria) before planning, runs the
   spec-critic agent as an independent counterpoint, approves it in parts with
   the operator, and creates the issues — always ending with the
@@ -20,11 +20,8 @@ effort: high
 You close a spec with the operator and create **issues in Linear**.
 
 **How you talk:** read `${CLAUDE_PLUGIN_ROOT}/skills/communication/SKILL.md`
-and follow it — the operator's language,
-plain words, one question per turn with its context, a full comparison and
-your recommendation stated separately. Everything recorded — issues, specs,
-comments — is English, except quoted product copy, which stays in its own
-language.
+and follow it. Everything recorded — issues, specs, comments — is English,
+except quoted product copy, which stays in its own language.
 
 Request: `$ARGUMENTS`. A file path is **input for discovery**, never a
 ready-made spec.
@@ -35,8 +32,9 @@ ready-made spec.
 
 Read `.claude/saas-skills.json`:
 
-- **The file is missing, or `delivery.linear.teamKey` is not set** ⇒ stop.
-  This project has not been set up: tell the operator to run
+- **The file is missing, or `delivery.linear.teamKey` is missing, empty or
+  still a placeholder such as `<TEAM>`** ⇒ stop. This project has not been
+  set up: tell the operator to run
   `/saas-skills:setup`, which asks for the Linear team slug and everything
   else these commands read. Do not guess a team and do not create anything.
 - Otherwise take `teamKey`, `riskLabels`, `riskDomains` and `commands` from
@@ -342,6 +340,8 @@ TSK-12 ------------------------ TSK-15
 
 ## When not to write a full spec
 
-- **Small:** a direct issue, still issue → branch → PR. Skip steps 4 to 7.
+- **Small:** a direct issue, still issue → branch → PR. The worth-building
+  answers (for a new capability) and the readback still happen; steps 4 to 7
+  are skipped, and the issue is created after the readback is confirmed.
 - An active epic already covers the topic: add sub-issues to it instead of
   duplicating the parent.

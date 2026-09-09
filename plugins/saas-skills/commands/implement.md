@@ -26,16 +26,17 @@ Root issue: `$ARGUMENTS`.
 `gh`, and Linear access. Missing any of them ⇒ stop and say which.
 
 **How you talk:** read `${CLAUDE_PLUGIN_ROOT}/skills/communication/SKILL.md`
-and follow it. Status to the operator is one or
-two lines per event — child launched, PR opened, review verdict, simplify
-result, ship result, blockers, and the decisions you took. No long reports
-until the final one. Everything recorded — issues, comments, PR titles and
-bodies, code, briefings — is English.
+and follow it. Status to the operator is one or two lines per event; no long
+reports until the final one. Everything recorded — issues, comments, PR titles
+and bodies, code, briefings — is English.
 
 ## Configuration
 
-All of it from `.claude/saas-skills.json`. Missing file or missing
-`delivery.linear.teamKey` ⇒ stop and point at `/saas-skills:setup`.
+All of it from `.claude/saas-skills.json`. Missing file, or
+`delivery.linear.teamKey` missing, empty or still a placeholder such as
+`<TEAM>` ⇒ stop and point at `/saas-skills:setup`. A command under
+`delivery.commands` that is missing or an empty string is a step that is
+skipped and reported, never run.
 
 | Key | Drives |
 |---|---|
@@ -48,12 +49,16 @@ All of it from `.claude/saas-skills.json`. Missing file or missing
 
 - Every `orca` and `gh` call uses `--json` when available. Decide from the
   JSON, never from the text.
-- Agents and skills from this plugin carry the `saas-skills:` prefix on the
-  command line (`--agent saas-skills:bug-reviewer`). Child and reviewer
-  sessions run `claude -p` and cannot load a skill by name: give them the
-  file path instead. The skill files are at
+- Agents from this plugin carry the `saas-skills:` prefix on the command line
+  (`--agent saas-skills:bug-reviewer`). The child (an interactive `claude`)
+  and the agents (`claude -p --agent`) are separate processes: never tell them
+  to load a skill by name, give them the file path. The skill files are at
   `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md`; paste that absolute path
   into every briefing.
+- **One model, one effort, everywhere.** Every process this command launches
+  — the child and every agent — runs `claude` with
+  `--model claude-sonnet-5 --effort high`. The `--model` flag overrides the
+  `model:` in an agent's frontmatter, so this is the setting that counts.
 - **Never merge outside Phase 5**, and never skip Phase 4. Every PR goes
   through bug-reviewer and spec-verifier, then simplify, then the `approver`
   gate, then ship. The approver replaces the human approve: it is never
@@ -197,9 +202,13 @@ Launched **in parallel**, in fresh Orca terminals of the child worktree:
 
 ```bash
 orca terminal create --worktree name:impl-<ID> --title "REVIEW <name> <ID>" \
-  --command "claude -p --agent saas-skills:<name> --model claude-sonnet-5 --effort medium --dangerously-skip-permissions --output-format text 'Read .orca-review-<name>.md in this directory and do what it says' < /dev/null > .orca-review-<name>.report.md" \
+  --command "claude -p --agent saas-skills:<name> --model claude-sonnet-5 --effort high --dangerously-skip-permissions --output-format text 'Read .orca-review-<name>.md in this directory and do what it says' < /dev/null > .orca-review-<name>.report.md" \
   --json
 ```
+
+Every agent below is launched with this same shape — a briefing file in the
+worktree, `--agent saas-skills:<name>`, `--model claude-sonnet-5 --effort
+high`, and the report redirected to a `.report.md` next to the briefing.
 
 Wait with `orca terminal wait --for exit` (parallel, 30-second polling), read
 each report and decide from its last `RESULT:` line. Reviewers are read-only
@@ -216,10 +225,11 @@ and run alongside CI — keep Phase 3 going for other children meanwhile.
 
 ## Phase 4b — Simplify
 
-After every reviewer approves, launch `simplify` the same way at high effort —
-it writes code. It touches only non-test files already in the PR diff, runs
-the covering tests, and commits `refactor(scope): …` or reports
-`RESULT: NO CHANGE`.
+After every reviewer approves, write `<child_path>/.orca-simplify.md` (the
+worktree path, `BASE`, the PR URL, the issue summary) and launch `simplify`
+the same way — it writes code. It touches only non-test files already
+in the PR diff, runs the covering tests, and commits `refactor(scope): …` or
+reports `RESULT: NO CHANGE`.
 
 If it committed: wait for CI, then run `bug-reviewer` again briefed as a
 **recheck** of only that commit's lines. If CI or the recheck fails,
@@ -228,16 +238,17 @@ simplification.
 
 ## Phase 5 — Approve and ship
 
-The merge gate is the **`approver` agent**, on the strongest model at high
-effort, launched in the child worktree at the moment this phase would
-otherwise wait for a human approve.
+The merge gate is the **`approver` agent**, launched the same way in the
+child worktree at the moment this phase would otherwise wait for a human
+approve.
 
 Discover the default branch once (`gh repo view --json defaultBranchRef`).
 When a PR's `BASE` **is** the default branch and `delivery.deploy` is
-configured, run `ship` in **preflight** mode first; `PREFLIGHT BLOCKED
-<reason>` stops the phase until the named cause is fixed — it is an operator
-or infrastructure action, never something you retry blindly. A PR into an epic
-branch skips straight to the approver.
+configured, run `ship` in **preflight** mode first. Its briefing is
+`<child_path>/.orca-ship.md`, first line `Mode: preflight`, then the PR URL
+and `BASE`. `PREFLIGHT BLOCKED <reason>` stops the phase until the named cause
+is fixed — it is an operator or infrastructure action, never something you
+retry blindly. A PR into an epic branch skips straight to the approver.
 
 Write `<child_path>/.orca-approve.md` — the approver has no Linear access, so
 paste, never link: the worktree path, `BASE`, the PR URL, the issue id,
@@ -256,7 +267,11 @@ Launch it, wait with `orca terminal wait --for exit` (in parallel with Phase 3
   instead. On the next `ORCA_PR_READY`, go back to **Phase 4 in full**. Counts
   toward the three-cycle limit.
 - `APPROVER: APPROVED <url>` → the approval is recorded, the merge was not
-  attempted. Run the operator approve step when required, then launch `ship`.
+  attempted. Run the operator approve step when required, then launch `ship`
+  yourself: rewrite `.orca-ship.md` with `Mode: ship`, the PR URL, `BASE`, the
+  issue id, and `GitHub approve required: <yes | no — approval recorded as a
+  PR comment <url>>`, and map its last line exactly as the approver would
+  (`SHIP OK` → merged, `SHIP BLOCKED`, `SHIP DEPLOY FAILED`).
 - `APPROVER: SHIP BLOCKED <reason>` → the approval stands; fix the cause
   (rebase for a conflict, push for CI) and relaunch **`ship` alone**, up to
   three times. Never the approver again — its review does not change when CI

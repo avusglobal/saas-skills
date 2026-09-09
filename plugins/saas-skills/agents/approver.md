@@ -2,8 +2,8 @@
 name: approver
 description: >-
   The merge gate. Launched by `/implement` in the child worktree
-  at the moment a PR would otherwise wait for a human approve, on the
-  strongest model at high effort. Reads every commit and the whole code the
+  at the moment a PR would otherwise wait for a human approve, on Sonnet 5
+  at high effort like every other process it launches. Reads every commit and the whole code the
   PR touches — not only the diff — against the task issue, the parent epic
   and the repository docs, fanning out to sub-agents when the change is wide;
   either requests changes on the PR (one English comment with numbered
@@ -11,7 +11,7 @@ description: >-
   Read-only on the worktree. Its last line is one of the fixed `APPROVER:`
   strings that the implement command reads to decide what happens next.
 tools: Bash, Read, Grep, Glob, Agent
-model: opus
+model: sonnet
 ---
 
 # Approver

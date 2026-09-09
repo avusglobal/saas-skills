@@ -57,14 +57,14 @@ machine only needs the last command.
 
 | Piece | What it gives you |
 |---|---|
-| Skills | `code-standard` (with the design, dependency and frontend/backend references), `tdd`, `communication`, `spec-verify`. |
-| Commands | `/saas-skills:setup`, `:upgrade`, `:plan`, `:implement`. |
+| Skills | `code-standard` (with the design, dependency and frontend/backend references), `tdd`, `communication`. |
+| Commands | `/saas-skills:setup`, `:upgrade`, `:spec` (also `/spec`), `:implement` (also `/implement`). |
 | Agents | `spec-critic`, `bug-reviewer`, `spec-verifier`, `simplify`, `approver`, `ship`. |
 | Hooks | The deterministic write guard, the docs INDEX reminder, the session bootstrap. |
 | Templates | CI workflows, the docs system, `AGENTS.md`, and the lint and TypeScript rules that make part of the standard a build failure. |
 
-`/spec` and `/implement` additionally need Linear, Orca
-and `gh`. Everything else works without them.
+`/saas-skills:spec` and `/saas-skills:implement` additionally need Linear,
+Orca and `gh`. Everything else works without them.
 
 ## Updating an adopted project
 
@@ -90,19 +90,15 @@ a plugin update, run:
 ```
 
 It is a three-way merge: template changes are ported in, local adaptations are
-preserved, and anything the repository recorded in `docs/TOOLKIT-DEVIATIONS.md`
-is skipped. It delivers a branch and a pull request, never a silent rewrite.
+preserved, and a conflict between the two is a question with the diff, never a
+silent rewrite. It delivers a branch and a pull request.
 
 ## Configuration lives in the project
 
-A plugin's files are read-only for the projects that install it, so the guard
-hook's knobs cannot live in the script the way they would in a copied kit.
-They live in the consuming repository at **`.claude/saas-skills.json`**,
-described by
-[`plugins/saas-skills/schemas/saas-skills.schema.json`](plugins/saas-skills/schemas/saas-skills.schema.json).
-
-Without that file every hook is inert — installing a plugin never changes
-behavior in a project that has not opted in.
+Every project-specific knob lives in the consuming repository at
+**`.claude/saas-skills.json`**; without that file every hook is inert. The
+key-by-key description is in the
+[plugin README](plugins/saas-skills/README.md#configuration).
 
 ## Repository layout
 

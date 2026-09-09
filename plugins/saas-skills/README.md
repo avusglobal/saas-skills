@@ -17,12 +17,11 @@ that must live inside your repository, and the Linear-driven delivery pipeline
 |---|---|
 | `commands/setup.md` | `/saas-skills:setup` — surveys the project, fills the capability table with libraries that clear the adoption bar, adopts the skills those libraries publish, proposes the MCP servers the stack deserves, then shows the whole plan and waits for approval before scaffolding CI, docs and `AGENTS.md`, wiring the code standard into the linter, and writing every knob the plugin reads. |
 | `commands/upgrade.md` | `/saas-skills:upgrade` — re-applies template changes without clobbering local adaptations. |
-| `commands/plan.md` | `/spec` (or `/saas-skills:plan`) — closes a spec, runs the counterpoint agent, approves it part by part, creates the Linear issue tree. |
-| `commands/implement.md` | `/implement` (or `/saas-skills:implement`) — orchestrates the tree in Orca child workspaces through review, simplify, the merge gate and ship. |
+| `commands/spec.md` | `/saas-skills:spec` (also `/spec`) — closes a spec, runs the counterpoint agent, approves it part by part, creates the Linear issue tree. |
+| `commands/implement.md` | `/saas-skills:implement` (also `/implement`) — orchestrates the tree in Orca child workspaces through review, simplify, the merge gate and ship. |
 | `skills/code-standard/` | The whole code standard, routing by condition to the design step, the dependency bar, and the frontend and backend deltas. |
 | `skills/tdd/` | The failing test first, traced to what the task asked for, and the mutation pass that proves the tests are real. |
 | `skills/communication/` | How the agent talks to you: your language, plain words, one question per turn with a full comparison. |
-| `skills/spec-verify/` | The procedure the `spec-verifier` agent follows. |
 | `agents/` | `spec-critic`, `bug-reviewer`, `spec-verifier`, `simplify`, `approver`, `ship`. |
 | `hooks/` | The write guard (PreToolUse), the docs INDEX reminder (PostToolUse), the environment bootstrap (SessionStart). |
 | `templates/` | What `/saas-skills:setup` copies in — CI workflows, the docs system, `AGENTS.md`, and the lint and TypeScript rules that turn part of the code standard into a build failure. |
@@ -52,7 +51,7 @@ in — a session restart is needed after the file is first written.
 
 ## Delivery requirements
 
-`/spec` and `/implement` need more than the plugin:
+`/saas-skills:spec` and `/saas-skills:implement` need more than the plugin:
 **Linear** (the MCP, `orca linear`, or `LINEAR_API_KEY`), **Orca**-managed
 worktrees, and an authenticated **`gh`**. The rest of the kit works without
 any of them.
@@ -74,7 +73,7 @@ guarantee:
 | `readability-analysis.yml` reviewing the diff | Independent second opinion, not deterministic |
 
 [`templates/lint/README.md`](templates/lint/README.md) is the rule-by-rule
-mapping, including what each linter cannot cover — on a Biome project seven of
+mapping, including what each linter cannot cover — on a Biome project eight of
 the sixteen have no equivalent and stay review-only.
 
 ## The guard's design

@@ -47,10 +47,10 @@ decides those, and pretending otherwise is how a rule set gets ignored.
 ## On a Biome project
 
 Biome covers eight of the sixteen. `max-depth`, `max-params`,
-`no-await-in-loop`, `unicorn/no-null`, commented-out code, the `TODO` format
-and restricted disables have no equivalent. Say so in the install report — the
-adopter needs to know those seven stayed review-only, not that they are
-covered.
+`no-await-in-loop`, `unicorn/no-null`, `promise/prefer-await-to-then`,
+commented-out code, the `TODO` format and restricted disables have no
+equivalent. Say so in the install report — the adopter needs to know those
+eight stayed review-only, not that they are covered.
 
 ## Files
 

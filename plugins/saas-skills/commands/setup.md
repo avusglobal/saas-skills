@@ -22,11 +22,8 @@ Templates live at `${CLAUDE_PLUGIN_ROOT}/templates/`. Read them before copying �
 never write a file you have not read.
 
 **How you talk during this command:** read
-`${CLAUDE_PLUGIN_ROOT}/skills/communication/SKILL.md` and follow it. One
-question per turn via `AskUserQuestion`, each with its context, a full
-comparison of the options — advantages, disadvantages, nothing assumed — and
-your recommendation stated separately, marked `(Recommended)`. The operator
-decides.
+`${CLAUDE_PLUGIN_ROOT}/skills/communication/SKILL.md` and follow it. Questions
+go through `AskUserQuestion`, the recommended option marked `(Recommended)`.
 
 **Stop condition:** `.claude/saas-skills.json` already exists ⇒ this project is
 already set up. Say so and run `/saas-skills:upgrade` instead.
@@ -150,7 +147,7 @@ error tracker.
 4. **You cannot finish these for the operator** when they need a login — say
    which need `claude mcp login <name>` afterwards.
 
-`/spec` and `/implement` need the **Linear** MCP. When
+`/saas-skills:spec` and `/saas-skills:implement` need the **Linear** MCP. When
 the operator plans in Linear and it is not connected, this is the first server
 you propose.
 
@@ -193,7 +190,7 @@ line — a deviation is reported, never hidden.
 | Template | Installs at | On conflict |
 |---|---|---|
 | `templates/github/workflows/*.yml` | `.github/workflows/` | Keep the existing file; show the diff and ask which parts to port. |
-| `templates/docs/` | `docs/` | Merge — never drop existing documents; the template's conventions win only where the repository has none. |
+| `templates/docs/` | `docs/` | Merge — never drop existing documents; the template's conventions win only where the repository has none. The tree ships complete: `README.md`, `INDEX.md`, one `INDEX.md` per folder (`adrs/`, `learnings/`, `runbooks/`) and `templates/`. |
 | `templates/AGENTS.md` | `AGENTS.md` | If one exists, merge the sections it lacks — never overwrite written content. Keep the capability table filled in step 2. |
 | `templates/saas-skills.json` | `.claude/saas-skills.json` | Never overwrite — that path is the stop condition above. |
 
@@ -234,7 +231,7 @@ first, it also says what each tool cannot cover.
 - `exactOptionalPropertyTypes` is the first flag to drop when adopting late.
 
 End the step naming what stayed uncovered on this stack. On a Biome project
-seven of the sixteen have no equivalent and remain review-only.
+eight of the sixteen have no equivalent and remain review-only.
 
 ---
 
@@ -254,10 +251,10 @@ writing, and never write a key it does not define.
 - `guard.pathScope`, `guard.testFilePatterns` — the real source and test
   layout, not the defaults.
 - `guard.advisoryContext` — the judgment rules injected on every allowed write:
-  the TDD reminder, the module layout and file naming read off the existing
-  `src/` tree, domain boundaries. Nothing here blocks; it is context.
+  the TDD reminder, the module layout, file naming and test location read off
+  the existing tree, domain boundaries. Nothing here blocks; it is context.
   **Copy the `Module layout` bullet of `AGENTS.md` into it, in the project's
-  own paths and file naming.** A repository with no layout of its own gets the
+  own paths, file naming and test location.** A repository with no layout of its own gets the
   template's default — package by feature, one directory per subdomain.
 - `docsSync.watchPaths` — which documentation paths trigger the INDEX
   regeneration reminder.
@@ -265,7 +262,9 @@ writing, and never write a key it does not define.
   tests runnable from the first message of a web session. Run each one before
   writing it.
 
-**When the operator plans and tracks work in Linear** (ask, one question):
+**When the operator plans and tracks work in Linear** (ask, one question) —
+the template ships without a `delivery` block; write it only on a yes, and
+never with a placeholder value:
 
 - `delivery.linear.teamKey` — **the team's slug in Linear**, the prefix its
   issues carry (`ENG`, `LOVI`, `ACME`). Ask for it; never guess it from the
@@ -285,7 +284,8 @@ writing, and never write a key it does not define.
   deployment it never saw.
 
 Set `toolkitVersion` to the `version` in
-`${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`.
+`${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json` — the template's `0.0.0`
+is a placeholder, never a value to keep.
 
 ---
 
@@ -297,7 +297,7 @@ without the operator knowing why:
 | Part | Usable when |
 |---|---|
 | The skills, the hooks, `upgrade` | Always. |
-| `/spec` and `/implement` | Work is planned in Linear, Orca manages the worktrees, and `gh` is authenticated. Name whichever of the three is missing. |
+| `/saas-skills:spec` and `/saas-skills:implement` | Work is planned in Linear, Orca manages the worktrees, and `gh` is authenticated. Name whichever of the three is missing. |
 | The `delivery` agents | Same requirements — they run inside `implement`. |
 
 ---

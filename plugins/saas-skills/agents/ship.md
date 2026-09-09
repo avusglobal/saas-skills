@@ -39,8 +39,8 @@ Everything environment-specific comes from `.claude/saas-skills.json`, under
 
 **When `delivery.deploy` is missing, there is no deploy step.** Preflight
 answers `PREFLIGHT OK` after checking migrations and required variables it can
-see, and ship finishes at "merged, issue closed" with `no-release` and no
-health claim. Never invent a deploy mechanism, and never claim a deploy you
+see, and ship finishes at "merged, issue closed" with `deploy=not-configured`
+and no health claim. Never invent a deploy mechanism, and never claim a deploy you
 did not observe.
 
 ## Expected input
@@ -95,6 +95,6 @@ deploy is not, and name the rollback path.
 
 ## Final line (mandatory, exact)
 
-- `SHIP OK <sha> <tag|no-release> <deploy=ok health=<code>|deploy=not-configured>`
+- `SHIP OK <sha> <deploy=ok health=<code>|deploy=not-configured>`
 - `SHIP BLOCKED <reason>` — nothing was merged.
 - `SHIP DEPLOY FAILED <reason>` — merged, deploy not verified healthy.

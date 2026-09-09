@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/gruporezult/saas-skills/main/plugins/saas-skills/schemas/saas-skills.schema.json",
-  "toolkitVersion": "0.4.0",
+  "toolkitVersion": "0.0.0",
   "guard": {
     "pathScope": "/src/",
     "testFilePatterns": [
@@ -8,29 +8,17 @@
       "*.test.tsx"
     ],
     "forbiddenPatterns": [],
-    "advisoryContext": "Before finishing this write, check two things by hand. (a) TDD — if this file carries behavior, the matching test under tests/ mirroring src/ must already exist and be failing; CI's test suite is the backstop. (b) Domain boundary — if the active task belongs to a different domain than the module you are editing, record a cross-domain blocker instead of editing outside the domain."
+    "advisoryContext": "Before finishing this write, check two things by hand. (a) TDD — if this file carries behavior, its test (in the location the Module layout section of AGENTS.md names) must already exist and be failing; CI's test suite is the backstop. (b) Domain boundary — if the active task belongs to a different domain than the module you are editing, record a cross-domain blocker instead of editing outside the domain."
   },
   "docsSync": {
     "watchPaths": [
       "docs/adrs/",
-      "docs/learnings/"
+      "docs/learnings/",
+      "docs/runbooks/"
     ]
   },
   "sessionStart": {
     "remoteOnly": true,
     "commands": []
-  },
-  "delivery": {
-    "linear": {
-      "teamKey": "<TEAM>"
-    },
-    "riskLabels": [],
-    "riskDomains": [],
-    "commands": {
-      "install": "",
-      "lint": "",
-      "typecheck": "",
-      "test": ""
-    }
   }
 }

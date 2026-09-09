@@ -48,6 +48,24 @@ jobs:
           done
           exit $status
 
+      - name: Check that every path the markdown cites exists
+        # Commands, agents and skills point at files by path — a plugin file
+        # via ${CLAUDE_PLUGIN_ROOT}/..., or a template via templates/... —
+        # and a path that no longer exists fails silently at run time.
+        run: |
+          status=0
+          for plugin in plugins/*/; do
+            plugin="${plugin%/}"
+            refs=$(grep -rhoE '(\$\{CLAUDE_PLUGIN_ROOT\}|`templates)/[A-Za-z0-9_./-]+' \
+              "$plugin/commands" "$plugin/agents" "$plugin/skills" "$plugin/README.md" 2>/dev/null \
+              | sed -E 's#^\$\{CLAUDE_PLUGIN_ROOT\}/##; s#^`##; s#[.,;:]+$##' | sort -u)
+            for ref in $refs; do
+              case "$ref" in */\*|*\**) continue ;; esac
+              [ -e "$plugin/$ref" ] || { echo "$plugin cites $ref, which does not exist"; status=1; }
+            done
+          done
+          exit $status
+
       - name: Check that every plugin version matches its tag-ready state
         run: |
           status=0
