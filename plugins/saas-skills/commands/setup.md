@@ -256,6 +256,9 @@ writing, and never write a key it does not define.
 - `guard.advisoryContext` — the judgment rules injected on every allowed write:
   the TDD reminder, the module layout and file naming read off the existing
   `src/` tree, domain boundaries. Nothing here blocks; it is context.
+  **Copy the `Module layout` bullet of `AGENTS.md` into it, in the project's
+  own paths and file naming.** A repository with no layout of its own gets the
+  template's default — package by feature, one directory per subdomain.
 - `docsSync.watchPaths` — which documentation paths trigger the INDEX
   regeneration reminder.
 - `sessionStart.commands` — the install and local-stack commands that make

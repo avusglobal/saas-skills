@@ -7,6 +7,18 @@ Delete this comment block before filling it in.
 
 # <Epic title>
 
+## Worth building
+
+*New capability only — delete this section for a bug fix, docs or
+infrastructure. An answer nobody would stand behind belongs in `## Assumptions`
+with `Confirmed? no`, named here as missing.*
+
+| Question | Answer |
+| --- | --- |
+| Why software, rather than a spreadsheet, a form or an existing product | *the alternative, and what it fails at* |
+| Who it is for — this operator, or the market | ... |
+| What it saves — hours per week, money per month, or revenue unlocked | ... |
+
 ## Problem
 
 *What is wrong or missing today, and for whom. No solution here.*

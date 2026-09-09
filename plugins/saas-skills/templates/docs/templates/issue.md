@@ -33,7 +33,7 @@ skill. Config, schema and docs-only slices pass the build gate only
 
 ## Steps
 
-*Vertical slices, in order. The first is the tracer bullet.*
+*End-to-end slices, in order. The first is the tracer bullet.*
 
 1. ...
 
