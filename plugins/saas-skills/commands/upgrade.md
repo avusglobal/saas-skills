@@ -18,6 +18,12 @@ repository customized. Local adaptations always survive.
 - `PROJECT` — read `toolkitVersion` from `.claude/saas-skills.json`. If the
   file is missing, this project was never installed: stop and point at
   `/saas-skills:setup`.
+- If that file carries `setup.deferred`, a greenfield project's first epic
+  has not finished: the lint and tsconfig rules were left to its toolchain
+  task, which needs a linter that only exists after the skeleton merges. Their
+  absence is not drift — do not port them in and do not treat them as a
+  conflict. Say so in one line, name the task that owns them, and merge
+  everything else normally.
 - `PLUGIN` — read `version` from
   `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`.
 

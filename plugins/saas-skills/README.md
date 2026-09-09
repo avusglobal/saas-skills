@@ -15,9 +15,9 @@ that must live inside your repository, and the Linear-driven delivery pipeline
 
 | Component | What it does |
 |---|---|
-| `commands/setup.md` | `/saas-skills:setup` — surveys the project, fills the capability table with libraries that clear the adoption bar, adopts the skills those libraries publish, proposes the MCP servers the stack deserves, then shows the whole plan and waits for approval before scaffolding CI, docs and `AGENTS.md`, wiring the code standard into the linter, and writing every knob the plugin reads. |
+| `commands/setup.md` | `/saas-skills:setup` — on an empty repository it does not run on its own: `/spec` decides the stack and calls it back with the answers, and it then writes everything without asking twice. On a project that has code, it surveys it, fills the capability table with libraries that clear the adoption bar, adopts the skills those libraries publish, proposes the MCP servers the stack deserves, then shows the whole plan and waits for approval before scaffolding CI, docs and `AGENTS.md`, wiring the code standard into the linter, and writing every knob the plugin reads. |
 | `commands/upgrade.md` | `/saas-skills:upgrade` — re-applies template changes without clobbering local adaptations. |
-| `commands/spec.md` | `/saas-skills:spec` (also `/spec`) — closes a spec, runs the counterpoint agent, approves it part by part, creates the Linear issue tree. |
+| `commands/spec.md` | `/saas-skills:spec` (also `/spec`) — closes a spec, runs the counterpoint agent, approves it part by part, creates the Linear issue tree. On an empty repository it is also the entry point: it decides the stack and then runs `setup` with those decisions. |
 | `commands/implement.md` | `/saas-skills:implement` (also `/implement`) — orchestrates the tree in Orca child workspaces through review, simplify, the merge gate and ship. |
 | `skills/code-standard/` | The whole code standard, routing by condition to the design step, the dependency bar, and the frontend and backend deltas. |
 | `skills/tdd/` | The failing test first, traced to what the task asked for, and the mutation pass that proves the tests are real. |
@@ -43,6 +43,7 @@ in — a session restart is needed after the file is first written.
 | `guard.advisoryContext` | Judgment rules injected as context on every allowed write — never a hard block. |
 | `docsSync.watchPaths` | Which documentation paths trigger the INDEX regeneration reminder. |
 | `sessionStart.commands` | Install and local-stack commands, on web sessions only by default. |
+| `setup.deferred` | Present only on a greenfield project whose first epic is unfinished: what needed an installed toolchain, in practice the lint rules. The epic's toolchain task writes them and removes the key. |
 | `delivery.linear.teamKey` | The team slug in Linear. Asked during setup; without it `plan` and `implement` refuse to run. |
 | `delivery.riskLabels` | Labels that make an epic need your own approval on top of the `approver` agent. |
 | `delivery.riskDomains` | The areas the reviewers weigh extra — what makes them sharp instead of generic. |

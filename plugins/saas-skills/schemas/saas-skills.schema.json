@@ -14,6 +14,26 @@
       "description": "Version of the saas-skills plugin that last scaffolded this project's files. Read by /saas-skills:upgrade to know which template changes still have to be applied.",
       "pattern": "^\\d+\\.\\d+\\.\\d+$"
     },
+    "setup": {
+      "type": "object",
+      "description": "What the greenfield pass of /saas-skills:setup could not write yet. Absent on every project whose setup is complete.",
+      "additionalProperties": false,
+      "required": [
+        "deferred"
+      ],
+      "properties": {
+        "deferred": {
+          "type": "array",
+          "description": "The parts left to the first epic because they need an installed toolchain — in practice [\"lint\"], the lint and tsconfig rules. The epic's toolchain task writes them and removes this key; /saas-skills:upgrade reads it to know their absence is not drift.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "lint"
+            ]
+          }
+        }
+      }
+    },
     "guard": {
       "type": "object",
       "description": "Deterministic rule enforced by the PreToolUse hook on Write|Edit, plus the advisory context it injects.",

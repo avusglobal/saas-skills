@@ -32,11 +32,24 @@ ready-made spec.
 
 Read `.claude/saas-skills.json`:
 
-- **The file is missing, or `delivery.linear.teamKey` is missing, empty or
-  still a placeholder such as `<TEAM>`** ⇒ stop. This project has not been
-  set up: tell the operator to run
-  `/saas-skills:setup`, which asks for the Linear team slug and everything
-  else these commands read. Do not guess a team and do not create anything.
+- **The file is missing and the repository has code** (a package manifest or
+  a source tree) ⇒ stop. This project was never set up: tell the operator to
+  run `/saas-skills:setup`, which surveys what is already there. Do not guess
+  a team and do not create anything.
+- **The file is missing and the repository is empty** — no package manifest,
+  no source tree ⇒ **this command is the entry point.** Do not send them to
+  `/saas-skills:setup`: there is nothing there to survey, and it would only
+  ask for a stack nobody has decided yet. Ask for the Linear team here (list
+  the teams through the MCP and offer them as the options), keep it for the
+  handoff in 0.1, and carry on. `riskLabels`, `riskDomains` and `commands`
+  are the handoff's to settle too, so read nothing from a file that does not
+  exist.
+- **The file exists and carries `setup.deferred`** ⇒ a greenfield pass already
+  ran; the lint rules are still owed to the epic. Otherwise this is an
+  ordinary project.
+- **`delivery.linear.teamKey` present but empty or still a placeholder such as
+  `<TEAM>`** ⇒ ask for it, and write it through `/saas-skills:setup`; never
+  guess one from the repository name.
 - Otherwise take `teamKey`, `riskLabels`, `riskDomains` and `commands` from
   it; they drive the risk sweep, the labels and the test scenarios below.
 
@@ -45,10 +58,82 @@ GraphQL with `LINEAR_API_KEY`. None available ⇒ stop and say which one to
 connect.
 
 Then read, before planning: `AGENTS.md`, `docs/README.md`, and the docs the
-request touches. **Never plan work that `/saas-skills:setup` already does** —
+request touches — on an empty repository none of them exist yet, and that is
+the greenfield path, not an error. **Never plan work that `/saas-skills:setup` already does** —
 CI workflows, the docs system, lint and tsconfig rules, the capability table.
 A request that amounts to "set the project up" is answered by pointing at that
-command.
+command. The one exception is the greenfield case below: on an empty
+repository this command decides the stack and then runs setup itself with the
+answers.
+
+---
+
+## 0.1 Greenfield — this command is the entry point, and it calls setup
+
+Applies to an empty repository, and to one whose `.claude/saas-skills.json`
+carries `setup.deferred`. The order is **plan first, scaffold second**: the
+stack is decided here, next to what the product has to do, and
+`/saas-skills:setup` is then run with those decisions instead of asking for
+them.
+
+### Deciding the stack
+
+- **Never ask "which framework do you prefer".** Propose. Hold every candidate
+  to the `dependencies` reference of the `code-standard` skill — a commit in
+  the last two years, adopted beyond its author, runs on the production
+  runtime, ships its own types, permissive licence, one responsibility, a
+  transitive tree you would read — and to the stack bias the kit ships: easy
+  to use, easy to configure, cheap to leave, **provisioned infrastructure over
+  serverless while the project is small**. Verify each candidate against its
+  repository; never propose one from memory.
+- Decide it inside `## Plan` (step 7), one capability per question, comparison
+  and recommendation separated, in the same approval-in-parts flow as
+  everything else. Only the core rows of the capability table are in play; a
+  row the product does not need yet stays `<...>`.
+- Settle in the same pass, because setup writes them: the **package manager**,
+  and the **install, typecheck, lint, format and test commands** the skeleton
+  task will create as scripts; the **module layout** and where tests live
+  (measured as in step 7 — on an empty repository every signal reads zero, so
+  the answer is the default, package by feature, and you say the numbers
+  anyway); the **risk labels and risk domains**; and the **deploy target, or
+  none**.
+
+### Handing off to setup — after the plan is approved, before the issues exist
+
+Read `${CLAUDE_PLUGIN_ROOT}/commands/setup.md` and execute its greenfield pass
+(its section 0b), passing everything above as the handoff: the capability
+table rows with the bar each one cleared, the package manager and the five
+commands, the module layout and test location, the Linear team, the risk
+labels and domains, and the deploy target or none. It writes the docs system,
+`AGENTS.md`, the CI workflows and `.claude/saas-skills.json`, and delivers
+them as the initial commit.
+
+**It runs before the issues are created**, for two reasons worth remembering:
+the stack ADR needs a `docs/` to live in, and the child workspaces need
+`AGENTS.md` and the configuration from their very first write.
+
+**Setup never asks the operator anything already approved here.** A question
+coming back from it means the handoff was incomplete — answer it from the
+plan, not by putting it to the operator twice.
+
+### What the epic must then contain
+
+- The stack as one **ADR** (`docs/templates/adr.md`), written into the `docs/`
+  setup just created — hard to reverse, a real trade-off, exactly what an ADR
+  is for.
+- The **tracer bullet**: the runnable skeleton — the chosen framework, one
+  end-to-end behavior with its test, and the package scripts named exactly as
+  the workflows setup just wrote call them. Nothing else in that task.
+- A **toolchain task**, blocked by the tracer bullet, that finishes what could
+  not exist before a linter did: merge
+  `${CLAUDE_PLUGIN_ROOT}/templates/lint/*` into the project's linter config
+  and `tsconfig.json` following `templates/lint/README.md`, verifying every
+  rule name against the installed versions and dropping what does not resolve;
+  fill `sessionStart.commands`; then remove `setup.deferred` from
+  `.claude/saas-skills.json`. It is the only task allowed to touch that file.
+- CI is red until the tracer bullet merges, because the workflows call scripts
+  that do not exist yet. Say it once, plainly: that is what the first task
+  turns green.
 
 ---
 
@@ -318,6 +403,9 @@ TSK-12 ------------------------ TSK-15
 
 3. One line per lane naming the dependency that shaped it.
 4. The line ready for the next step: `/implement <parent-id>`.
+5. **On a greenfield epic**, the line after it: restart Claude Code before
+   `/implement`, so the hooks pick up the configuration setup just wrote.
+   There is no second run of setup — the toolchain task owns what was left.
 
 ---
 
@@ -333,7 +421,9 @@ TSK-12 ------------------------ TSK-15
   recorded.
 - **Every plan ends with the lane diagram.**
 - **Linear is the plan's only home** — never files in the repository.
-- **Never plan what `/saas-skills:setup` installs.**
+- **Never plan what `/saas-skills:setup` installs**, except on a greenfield
+  project — there this command decides the stack, runs setup with those
+  decisions, and plans the skeleton and the toolchain task.
 - **Solo-maintainer bias:** if the breakdown needs a diagram to explain the
   diagram, simplify it.
 - Everything recorded is English, whatever language the conversation uses.

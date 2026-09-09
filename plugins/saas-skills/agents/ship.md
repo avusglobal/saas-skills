@@ -81,6 +81,11 @@ Final line: `PREFLIGHT OK` or `PREFLIGHT BLOCKED <reason>`.
 1. **Gates.** CI green (`gh pr checks <url> --json name,state`), no merge
    conflicts, the approve evidence the briefing requires, a
    Conventional-Commit PR title, and the issue link in the body.
+   A repository with **no check at all** — the command reports none and
+   `.github/workflows/` is empty — is a project whose CI has not been
+   installed yet, not a red build: say so in one line, name
+   `/saas-skills:setup` as what installs it, and treat this gate as passed.
+   One check that is red, pending or failed is always `SHIP BLOCKED`.
 2. **Merge.** Squash-merge, delete the branch.
 3. **Issue.** Move it to the state whose type is `completed`.
 4. **Deploy**, only when the base is the default branch and
