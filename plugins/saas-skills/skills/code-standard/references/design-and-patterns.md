@@ -30,10 +30,11 @@ file conversion, PDF generation, image processing, analytics, error tracking,
 payments. Each of those is somebody's whole product; a hand-built version is a
 second product you maintain alone, forever, in the gaps between other projects.
 
-**Stack bias (AGENTS.md rule #0):** managed and auto-scaling over anything that
-must be provisioned, patched, monitored or resized by hand. There is no ops
-team, so a service that needs a machine kept alive is a no unless an ADR argues
-the case.
+**Stack bias (AGENTS.md rule #0):** a provisioned instance over a serverless
+one while the project is small — it costs less to keep running, and the bill
+does not move with traffic. Serverless earns its place when the load is spiky
+enough that the instance sits idle most of the time, or when one instance stops
+being enough.
 
 **Take the external option when** it covers the responsibility whole, its
 failure mode is visible (a status page, an alert you receive), its pricing at

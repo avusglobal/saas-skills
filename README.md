@@ -6,8 +6,8 @@ so a project installs them instead of copying them.
 
 The kit assumes a specific operating model — **one developer, many projects**.
 Everything favors *simple to build now, simple to re-understand two months
-from now*: fewer moving parts over elegant ones, managed and serverless over
-anything that must be provisioned or patched by hand, and every unit of work
+from now*: fewer moving parts over elegant ones, provisioned infrastructure
+over serverless while a project is small, and every unit of work
 understandable on its own without tribal knowledge.
 
 ## Start a new project
