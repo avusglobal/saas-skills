@@ -122,6 +122,32 @@ not required to know how it is built, which decisions it hides, or where it
 usually breaks. Research those, decide what the evidence supports, and record
 the call as an assumption when it could not be verified.
 
+### Play it back before writing anything
+
+Discovery closes with a **readback**: what you understood, in your own words,
+before the spec exists. A misunderstanding costs one message here and a whole
+epic later.
+
+**Never play it back by quoting the request.** Repeating the operator's own
+sentence proves nothing. Say the same thing in different words, in terms of
+what a person using it would see, and a mismatch surfaces on its own.
+
+Six lines, in the operator's language, plain words:
+
+- **Building** — the thing in one sentence, as someone using it would describe
+  it.
+- **For whom, doing what** — who touches it, and what they walk away with.
+- **Different afterwards** — what is observably true once it ships and is not
+  true today.
+- **Not building** — the nearest thing someone would assume is included.
+- **Decided for you** — every call you made on their behalf, one line each,
+  while reversing it is still free.
+- **Still unclear** — what you could not settle, named. Never smoothed over,
+  never left for the spec to reveal.
+
+Wait for confirmation or correction. A correction reopens discovery; it is
+never patched into the spec afterwards.
+
 ---
 
 ## 3. Before writing the spec
@@ -182,6 +208,10 @@ changed one, or a new assumption.
 Scope → assumptions → criteria → decided counterpoints → plan → tasks. **One
 part per message.** Never everything at once. Issues are created only after
 the last part is explicitly approved.
+
+**Every part opens with one line of what you understood it to mean**, in your
+own words and before its content. What is approved is the understanding, not
+the wording.
 
 ---
 
@@ -295,8 +325,10 @@ TSK-12 ------------------------ TSK-15
 
 ## Inviolable rules
 
-- **Fixed order:** closing gate → counterpoint → approval → creation. Never
-  reversed.
+- **Fixed order:** worth building → readback → closing gate → counterpoint →
+  approval → creation. Never reversed.
+- **Play your understanding back in your own words** — after discovery, and at
+  the top of every approval part. Never by quoting the request.
 - **Approval always in parts.**
 - **spec-critic compares, the operator picks.** It never delivers its own
   keep, change or drop; every comparison waits for a decision before it is
