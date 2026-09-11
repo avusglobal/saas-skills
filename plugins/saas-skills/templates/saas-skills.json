@@ -14,7 +14,8 @@
     "watchPaths": [
       "docs/adrs/",
       "docs/learnings/",
-      "docs/runbooks/"
+      "docs/runbooks/",
+      "docs/sessions/"
     ]
   },
   "sessionStart": {

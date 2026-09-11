@@ -38,7 +38,7 @@ Partial, by nature — a linter checks shape, never meaning:
 | Callback props are `onX` | `react/jsx-handler-names`. |
 
 **Everything else — roughly thirty-four rules — is judgment and stays with the
-readability workflow and the reviewer.** Whether a dependency already does
+`simplify` agent and the reviewers inside `/saas-skills:implement`.** Whether a dependency already does
 this, whether an abstraction earns its keep, whether a name says what the thing
 is, whether a comment explains an invisible *why*, whether a failure is
 expected or unexpected, whether a type is derived or mirrored. No linter

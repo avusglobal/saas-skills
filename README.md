@@ -84,7 +84,7 @@ machine only needs the last command.
 
 | Piece | What it gives you |
 |---|---|
-| Skills | `code-standard` (with the design, dependency and frontend/backend references), `tdd`, `communication`. |
+| Skills | `code-standard` (with the design, dependency and frontend/backend references), `tdd`, `not-overengineering`, `communication`. |
 | Commands | `/saas-skills:setup`, `:upgrade`, `:spec` (also `/spec`), `:implement` (also `/implement`). |
 | Agents | `spec-critic`, `bug-reviewer`, `spec-verifier`, `simplify`, `approver`, `ship`. |
 | Hooks | The deterministic write guard, the docs INDEX reminder, the session bootstrap. |

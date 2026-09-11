@@ -34,6 +34,11 @@ second product you maintain alone, forever, in the gaps between other projects.
 project is small, and pieces that are easy to use, easy to configure and cheap
 to leave. It is stated there once; reuse it, do not restate it.
 
+**Stage before either option:** whether the responsibility is needed at all
+at the stage the project is measurably in — in-process before a service, no
+compliance work before real users' data — is the `not-overengineering`
+skill. Read it before choosing between building and buying.
+
 **Take the external option when** it covers the responsibility whole, its
 failure mode is visible (a status page, an alert you receive), its pricing at
 your real volume is known, and leaving it later means rewriting one module
