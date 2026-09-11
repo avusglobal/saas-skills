@@ -31,6 +31,12 @@ criteria, and the plan section when one already exists.
 
 ## What to do
 
+Read `${CLAUDE_PLUGIN_ROOT}/skills/not-overengineering/SKILL.md` first. A
+piece the spec asks for that the project's measured stage has not earned — a
+queue, a cache service, a compliance flow before real users' data, an option
+nobody hit — is always an option B: the in-process or out-of-scope version,
+with the trigger that would bring the piece back.
+
 For each part — scope, out of scope, each assumption, each group of related
 acceptance criteria, and the plan if present — read the relevant code
 (Bash/Read/Grep/Glob) and produce a **comparison**: **option A** (what the

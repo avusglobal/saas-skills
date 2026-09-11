@@ -283,8 +283,8 @@ line — a deviation is reported, never hidden.
 
 | Template | Installs at | On conflict |
 |---|---|---|
-| `templates/github/workflows/*.yml` | `.github/workflows/` | Keep the existing file; show the diff and ask which parts to port. |
-| `templates/docs/` | `docs/` | Merge — never drop existing documents; the template's conventions win only where the repository has none. The tree ships complete: `README.md`, `INDEX.md`, one `INDEX.md` per folder (`adrs/`, `learnings/`, `runbooks/`) and `templates/`. |
+| `templates/github/workflows/*.yml` | `.github/workflows/` | Keep the existing file; show the diff and ask which parts to port. The kit ships `ci.yml` and `format.yml` only — code review runs inside `/saas-skills:implement`, never as a workflow. |
+| `templates/docs/` | `docs/` | Merge — never drop existing documents; the template's conventions win only where the repository has none. The tree ships complete: `README.md`, `INDEX.md`, one `INDEX.md` per folder (`adrs/`, `learnings/`, `runbooks/`, `sessions/`) and `templates/`. |
 | `templates/AGENTS.md` | `AGENTS.md` | If one exists, merge the sections it lacks — never overwrite written content. Keep the capability table filled in step 2. |
 | `templates/saas-skills.json` | `.claude/saas-skills.json` | Never overwrite — that path is the stop condition above. |
 
@@ -425,8 +425,6 @@ without the operator knowing why:
 
 ## 10. Report what only the operator can do
 
-- Create the `CLAUDE_CODE_OAUTH_TOKEN` repository secret, needed by the two AI
-  analysis workflows: `claude setup-token`.
 - Authenticate any MCP server proposed in step 4: `claude mcp login <name>`.
 - Restart the session so the newly written hook configuration is picked up.
 

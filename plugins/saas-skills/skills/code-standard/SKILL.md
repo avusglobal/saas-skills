@@ -27,7 +27,8 @@ example appears only where the rule has a shape that is easy to get wrong.
 configuration `/saas-skills:setup` writes. Those sixteen are stated here so the
 standard is complete in one place, not so you check them by hand; a violation
 is a failed build, not a review comment. Everything unmarked is judgment, and
-the readability workflow and the reviewer are its backstop.
+the `simplify` agent and the reviewers inside `/saas-skills:implement` are its
+backstop.
 
 ---
 
@@ -40,6 +41,7 @@ code, and act on the ones that match — all of them, in this order.
 |---|---|
 | **The code changes behavior** — anything but a rename, a comment or a copy change | **Load the `tdd` skill.** The failing test comes first; this page only governs the code that turns it green. |
 | The change spans more than one function — a new module, a feature with several moving parts, a refactor that moves boundaries | Read [`references/design-and-patterns.md`](references/design-and-patterns.md) |
+| The change adds infrastructure (a queue, a cache, a worker, a second instance), a compliance or hardening measure, or an option, role or edge case nobody has hit yet | **Load the `not-overengineering` skill.** The project's measured stage decides whether the piece is built at all. |
 | You are about to add a package, or to write logic that is not this product's own domain rules | Read [`references/dependencies.md`](references/dependencies.md) |
 | You are writing a React component, a handler, a service or data access | Read [`references/frontend-and-backend.md`](references/frontend-and-backend.md) |
 

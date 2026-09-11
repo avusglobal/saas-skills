@@ -120,11 +120,13 @@ Commands (also wired as package scripts and used verbatim by CI):
    what ships that functionality (and closes the Linear issue) — nothing
    lands on the default branch except through its PR.
 4. **After every push, watch CI until the `verify` job is green.** It is the
-   only blocking check. The `format` workflow may push a formatting commit,
-   and the two analysis workflows (`bug-analysis`, `readability`) only post
-   comments — read them, they never gate. Do not report work as done, move to
-   the next task, or ask for review while `verify` is red or still running.
-   If it fails, fix it and push again — the loop ends green.
+   only blocking check. The `format` workflow may push a formatting commit.
+   Code review is not a workflow: the `bug-reviewer`, `spec-verifier` and
+   `simplify` agents run inside `/saas-skills:implement`, in the child
+   workspace, so CI never pays for a second copy of that review. Do not
+   report work as done, move to the next task, or ask for review while
+   `verify` is red or still running. If it fails, fix it and push again — the
+   loop ends green.
 
 ## Planning
 
@@ -150,6 +152,12 @@ TSK-2 ------------------------ TSK-5
 - **Libraries over hand-rolled complexity** — searching for a library is the
   default, not an option; the bar it must clear is in the skill's
   `dependencies` reference. We don't grow bespoke logic in-repo.
+- **Stage before scale** — the `not-overengineering` skill. The project is
+  at the stage its numbers prove, never the one it hopes for: everything
+  in-process on one instance until traffic is measured, no compliance work
+  (LGPD, GDPR, audit, retention) until real users' data is held, no option
+  or edge case until someone hits it. Current stage: <0 — no users | 1 —
+  first users | 2 — measured load>, measured by <what proves it>.
 - **Self-documenting** — descriptive names over comments; comment only a
   non-obvious *why*.
 - **Module layout** — package by feature: one directory per subdomain holding
@@ -188,7 +196,13 @@ PR.
 ## Docs
 
 `docs/README.md` describes the system: ADRs for decisions, learnings for
-surprises, runbooks for operations, INDEX.md files regenerated after every
-docs change (the docs hook reminds).
+surprises, runbooks for operations, sessions for the story of an important
+session, INDEX.md files regenerated after every docs change (the docs hook
+reminds).
 Record a learning whenever something genuinely surprised you. **Linear is the
 standard for all task state** — plans and task lists never live in docs/.
+
+**At the end of a session that produced a decision, a dead end or a change
+across several files, ask once whether to save it under `docs/sessions/`**
+(`docs/templates/session.md`). Never save without a yes, and never ask after
+a one-line exchange.

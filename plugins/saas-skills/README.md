@@ -21,6 +21,7 @@ that must live inside your repository, and the Linear-driven delivery pipeline
 | `commands/implement.md` | `/saas-skills:implement` (also `/implement`) — orchestrates the tree in Orca child workspaces through review, simplify, the merge gate and ship. |
 | `skills/code-standard/` | The whole code standard, routing by condition to the design step, the dependency bar, and the frontend and backend deltas. |
 | `skills/tdd/` | The failing test first, traced to what the task asked for, and the mutation pass that proves the tests are real. |
+| `skills/not-overengineering/` | The project's measured stage decides what gets built: in-process before any service, no compliance work before real users' data, no option nobody hit. Read by `/spec`, the spec-critic and every `/implement` briefing. |
 | `skills/communication/` | How the agent talks to you: your language, plain words, one question per turn with a full comparison. |
 | `agents/` | `spec-critic`, `bug-reviewer`, `spec-verifier`, `simplify`, `approver`, `ship`. |
 | `hooks/` | The write guard (PreToolUse), the docs INDEX reminder (PostToolUse), the environment bootstrap (SessionStart). |
@@ -71,7 +72,7 @@ guarantee:
 | The lint and `tsconfig` rules `/saas-skills:setup` merges in | Absolute — sixteen rules fail the build |
 | `guard.advisoryContext` (injected on every allowed write) | Deterministically in context, still a judgment call |
 | The skill, loaded by description | None — the model decides to read it |
-| `readability-analysis.yml` reviewing the diff | Independent second opinion, not deterministic |
+| The `simplify` agent inside `/saas-skills:implement` | Independent second read of every PR, not deterministic |
 
 [`templates/lint/README.md`](templates/lint/README.md) is the rule-by-rule
 mapping, including what each linter cannot cover — on a Biome project eight of

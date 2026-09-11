@@ -26,4 +26,4 @@ the skill was loaded — read it when a message is more than one line:
 
 Everything written in this repository is in English, whatever language the
 conversation is in. The standards this kit ships — `code-standard`, `tdd`,
-`communication` — apply to this repository too.
+`not-overengineering`, `communication` — apply to this repository too.

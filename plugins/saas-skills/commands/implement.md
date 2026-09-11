@@ -7,7 +7,8 @@ description: >-
   commits and the whole code against the issue, the epic and the docs, and
   either requests changes or approves and hands the merge to ship. Keeps
   Linear status up to date; asks the operator only for issues carrying a
-  configured risk label; when the root issue closes, opens and merges the
+  configured risk label; hands the epic to a new top-level workspace before
+  its own context runs out; when the root issue closes, opens and merges the
   working branch into the default branch the same way.
 argument-hint: <issue identifier (e.g. TSK-12) or Linear URL>
 name: implement
@@ -82,6 +83,9 @@ merges.
   latency between an event and your reaction stays around 30 seconds.
 - Work autonomously until the whole tree is Done and merged, or until you are
   blocked on something only the operator can resolve.
+- **Hand off before the context runs out.** This session's limit is its
+  context window; the section **Reaching the limit** says when and how the
+  epic continues in a new top-level workspace. Never let compaction decide.
 
 ---
 
@@ -90,6 +94,18 @@ merges.
 1. `orca worktree current --json` — confirm you are in an Orca-managed
    worktree. Record the path, the repo and the current branch. That branch is
    **BASE**: every child PR uses `--base BASE`.
+
+   **A resumed run** — the root issue carries a `## Handoff` comment — takes
+   `BASE` from that comment, **never from the current branch**: this
+   workspace was created from `BASE` by the previous manager and sits on a
+   branch of its own. Read the whole comment before Phase 1: it carries the
+   cycles used per open task, the next task, and every child still in
+   flight. `git fetch origin <BASE>` first; from here on create children
+   from `origin/<BASE>` and refresh with `git fetch`, never `git pull`.
+   Adopt each child the comment lists by its worktree name
+   (`orca worktree list --json`, `orca terminal list --json`) and go straight
+   to Phase 3 for it; a child whose worktree or terminal is gone is
+   recreated from Phase 2, and that counts as one of its two recreations.
 2. `gh auth status` must work.
 3. Linear access: the MCP, else `orca linear`, else GraphQL with
    `LINEAR_API_KEY`. None ⇒ stop.
@@ -146,6 +162,13 @@ merges.
      function, the dependency reference before adding a package, both under
      the same `references/` folder. Apply it to the files touched before
      every commit;
+   - **the stage rules**: read
+     `${CLAUDE_PLUGIN_ROOT}/skills/not-overengineering/SKILL.md` and follow
+     it. The stage recorded in the epic's `## Assumptions` is the ceiling:
+     in-process before any service, no compliance work before real users'
+     data, no option or edge case the issue does not name. A piece the
+     stage has not earned is left out and said so in the PR body, never
+     added "while at it";
    - every entry of `delivery.riskDomains` the task touches, with what tends
      to break there;
    - **the knowledge chain**: codebase → repository docs → installed library
@@ -268,8 +291,9 @@ paths of every reviewer report in the worktree.
 Launch it, wait with `orca terminal wait --for exit` (in parallel with Phase 3
 — it reads whole modules and may run a while), then act on the last line:
 
-- `APPROVER: MERGED <sha> <rest>` → `git pull` in the manager workspace,
-  `orca worktree rm --worktree name:impl-<ID>`, next task.
+- `APPROVER: MERGED <sha> <rest>` → `git pull` in the manager workspace
+  (`git fetch origin <BASE>` on a resumed run — this workspace is on its own
+  branch), `orca worktree rm --worktree name:impl-<ID>`, next task.
 - `APPROVER: CHANGES REQUESTED <n>` → send the child one consolidated message
   with the findings, each with its `file:line` and what the issue or doc says
   instead. On the next `ORCA_PR_READY`, go back to **Phase 4 in full**. Counts
@@ -310,8 +334,57 @@ sit idle.
    push `BASE`, open or reuse the PR from `BASE` to the default branch, and
    run it through Phase 5 exactly like any other PR — the approver briefed
    with the epic body as both task and epic, and every child PR URL listed.
-5. Pausing mid-epic ⇒ write a `## Handoff` comment on the parent: cycles used
-   per open task, which gates failed and why, and the next task to resume.
-   Read it first on resume.
+5. Pausing mid-epic ⇒ write the `## Handoff` comment described in
+   **Reaching the limit** below, and nothing else; the next manager reads it
+   first.
 6. Final report: a short table of issue → PR → status, what stayed pending and
    why, and the URL and status of the final PR into the default branch.
+7. Then one question, in chat: save this epic's session under
+   `docs/sessions/` (`docs/templates/session.md` — goal, what merged,
+   decisions taken on the operator's behalf, dead ends, what stayed open)?
+   Write it only on a yes, on `BASE`, and regenerate `docs/sessions/INDEX.md`.
+
+---
+
+## Reaching the limit — hand off to a new workspace
+
+This session has a hard limit: its context window. When the conversation is
+summarized, the tree, the cycle counts and the terminal handles go with it,
+and a manager that guesses them merges the wrong thing. **Hand off before the
+limit, never through it.**
+
+**When:** the moment the context is about to be summarized — or the moment
+you find it already was: the conversation opens with a summary instead of
+`$ARGUMENTS`. Prefer a task boundary: finish the task in flight through
+Phase 5 when there is room; otherwise hand off with it open and say so.
+
+**How — in this order, no step skipped:**
+
+1. Write the `## Handoff` comment on the root issue, in English: `BASE`, the
+   cycles used per open task, which gates failed and why, the next task to
+   start, and every child still in flight — its issue id, its worktree name
+   (`impl-<ID>`), its terminal handle and its last known state
+   (`ORCA_PR_READY <url>`, `ORCA_BLOCKED`, or working).
+2. Create the new workspace **as a top-level workspace, never as a child of
+   this one** — a child is listed under this workspace and removed with it,
+   and the new manager has to outlive this session:
+   ```bash
+   orca worktree create --name "impl-<ROOT>-manager-<n>" --no-parent \
+     --base-branch "<BASE>" --linear-issue "<ROOT>" --json
+   ```
+   `<n>` is one more than the highest `impl-<ROOT>-manager-` that
+   `orca worktree list --json` already shows; the first handoff is `2`.
+3. Launch the new manager there and send it the command that started this
+   session:
+   ```bash
+   orca terminal create --worktree "name:impl-<ROOT>-manager-<n>" \
+     --title "IMPL <ROOT> manager <n>" \
+     --command "claude --model claude-opus-5 --effort high --dangerously-skip-permissions" --json
+   orca terminal send --terminal <handle> --text "/saas-skills:implement <ROOT>" --enter
+   ```
+   Wait a few seconds before sending; if the text does not appear,
+   `orca terminal read` and resend.
+4. Tell the operator in one line where the epic continues — the worktree
+   name and the terminal — then stop. This session does nothing more: no
+   monitoring, no merges, no answers to children. The new manager takes over
+   from Phase 0 as a resumed run.

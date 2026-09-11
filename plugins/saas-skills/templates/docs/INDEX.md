@@ -20,4 +20,5 @@ list to four or five steps.
 | [adrs/](./adrs/INDEX.md) | Architecture Decision Records |
 | [learnings/](./learnings/INDEX.md) | Non-obvious lessons, surprise-only |
 | [runbooks/](./runbooks/INDEX.md) | Operational procedures |
+| [sessions/](./sessions/INDEX.md) | Records of important sessions, saved on the operator's yes |
 | [templates/](./templates/) | Fill-in formats |

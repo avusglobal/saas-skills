@@ -46,6 +46,13 @@ For each installed path, compare what the repository has against
 Classify every difference before touching anything:
 
 - **Template gained something this repository lacks** → port it in.
+- **The plugin dropped a template this repository still carries** → propose
+  deleting the repository's copy, saying what replaced it, and ask before
+  deleting. The known case: `push-bug-analysis.yml` and
+  `readability-analysis.yml` — their reviews now run as agents inside
+  `/saas-skills:implement`, in the child workspace, so the workflow only
+  spent CI minutes on a second copy of the same review. A repository that
+  keeps one on purpose is a local adaptation like any other.
 - **Local adaptation** (filled knobs, project names, real commands, stack
   tables, written documentation, a section deliberately removed) → keep the
   local value. When the template changed the very lines this repository

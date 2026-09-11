@@ -23,6 +23,13 @@ You close a spec with the operator and create **issues in Linear**.
 and follow it. Everything recorded — issues, specs, comments — is English,
 except quoted product copy, which stays in its own language.
 
+**How you size:** read
+`${CLAUDE_PLUGIN_ROOT}/skills/not-overengineering/SKILL.md` and follow it.
+The project's measured stage decides what the spec asks for, what the plan
+provisions and what goes to `## Out of scope` — no compliance work before real
+users' data exists, nothing external before a number says in-process no
+longer holds. Record the stage and its measurement in `## Assumptions`.
+
 Request: `$ARGUMENTS`. A file path is **input for discovery**, never a
 ready-made spec.
 
@@ -261,6 +268,9 @@ the plan, one document. The plan never lives in repository files.
 - Every open question became a decision, or an assumption with a default and a
   rationale in `## Assumptions` — including the gray areas the operator
   declined to settle. `Open questions: none`.
+- The project's stage is in `## Assumptions` with what measures it, and
+  nothing in scope belongs to a later stage — a piece the stage has not
+  earned is moved to `## Out of scope` with the trigger that brings it back.
 - `## Out of scope` and `## Risk sweep` filled — the sweep's dimensions are
   `delivery.riskDomains` plus the generic ones in the template.
 - `AC-1..n` in EARS form, one behavior per criterion, concrete values, never
@@ -406,6 +416,11 @@ TSK-12 ------------------------ TSK-15
 5. **On a greenfield epic**, the line after it: restart Claude Code before
    `/implement`, so the hooks pick up the configuration setup just wrote.
    There is no second run of setup — the toolchain task owns what was left.
+6. Then one question, in chat: save this planning session under
+   `docs/sessions/` (`docs/templates/session.md` — the goal, the decisions
+   taken and the alternatives they beat, the dead ends discovery hit, what
+   stayed open as issues)? Write it only on a yes and regenerate
+   `docs/sessions/INDEX.md`. A Small issue with no spec is never asked about.
 
 ---
 
